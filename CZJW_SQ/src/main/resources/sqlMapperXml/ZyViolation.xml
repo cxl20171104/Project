@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ZyViolationMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.ZyViolation">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="zyName" property="zyName" jdbcType="VARCHAR"/>
+        <result column="zyTime" property="zyTime" jdbcType="VARCHAR"/>
+        <result column="zyResult" property="zyResult" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,zyName,zyTime,zyResult
+    </sql>
+    
+    <insert id="addZyViolation" parameterType="com.alphasta.model.ZyViolation" >
+     insert into ZyViolation(id,reflectedId,zyName,zyTime,zyResult,time)
+     values(#{id},#{reflectedId},#{zyName},#{zyTime},#{zyResult},now(3))
+    
+    </insert>
+    
+    <delete id="deleteZyViolation" parameterType="java.lang.String">
+      
+      delete from ZyViolation where id=#{id}
+    
+    </delete>
+    
+    <update id="updateZyViolation" parameterType="com.alphasta.model.ZyViolation"  >
+    
+    update ZyViolation
+    
+   <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='zyName !=null and zyName !=""'>
+          zyName=#{zyName},
+    </if>
+    <if test='zyTime !=null and zyTime !=""'>
+    
+          zyTime=#{zyTime},
+    </if>
+    <if test='zyResult !=null and zyResult !=""'>
+    
+          zyResult=#{zyResult},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findZyViolationById" parameterType="java.lang.String" resultType="com.alphasta.model.ZyViolation">
+    
+      select  <include refid="paramList"/> from  ZyViolation where id=#{id}  
+    
+    </select>
+    <select id="findZyViolationByRid" parameterType="java.lang.String" resultType="com.alphasta.model.ZyViolation">
+      
+      select  id,reflectedId,zyName,zyTime,zyResult
+      
+      
+      from  ZyViolation p where p.reflectedId=#{rid}
+    
+    </select>
+  
+    
+    <select id="findZyViolation" parameterType="com.alphasta.model.ZyViolation" resultType="com.alphasta.model.ZyViolation">
+      
+      select  <include refid="paramList"/>
+      
+      from  ZyViolation  p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId}    
+    </if>
+    <if test='zyName !=null and zyName !=""'>
+         and p.zyName=#{zyName}
+    </if>
+    <if test='zyTime !=null and zyTime !=""'>
+    
+         and p.zyTime=#{zyTime}
+    </if>
+    <if test='zyResult !=null and zyResult !=""'>
+         and p.zyResult=#{zyResult}
+    </if>
+     and p.time in (select max(time) from ZyViolation t  
+    where 1=1        
+	        <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId}    
+    </if>
+    <if test='zyName !=null and zyName !=""'>
+         and t.zyName=#{zyName}
+    </if>
+    <if test='zyTime !=null and zyTime !=""'>
+    
+         and t.zyTime=#{zyTime}
+    </if>
+    <if test='zyResult !=null and zyResult !=""'>
+         and t.zyResult=#{zyResult}
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

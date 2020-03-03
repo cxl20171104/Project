@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ProStaticesMapper">
+	 <resultMap id="BaseResultMap" type="com.alphasta.model.ProblemClues">
+	  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="clues" property="clues" jdbcType="VARCHAR"/>
+	  	<result column="receiveDate" property="receiveDate" jdbcType="TIMESTAMP"/>
+	  	<result column="beReflectName" property="beReflectName" jdbcType="VARCHAR"/>
+	  	<result column="beReflectDuty" property="beReflectDuty" jdbcType="VARCHAR"/>
+	  	<result column="beReflectRank" property="beReflectRank" jdbcType="VARCHAR"/>
+	  	<result column="beflectName" property="beflectName" jdbcType="VARCHAR"/>
+	  	<result column="problemLand" property="problemLand" jdbcType="VARCHAR"/>
+	  	<result column="problemDescribe" property="problemDescribe" jdbcType="VARCHAR"/>
+	  	<result column="czCompany" property="czCompany" jdbcType="VARCHAR"/>
+	  	<result column="czChildCompany" property="czChildCompany" jdbcType="VARCHAR"/>	  	
+	  	<result column="isSupervise" property="isSupervise" jdbcType="VARCHAR"/>
+	  	<result column="superviseCompany" property="superviseCompany" jdbcType="VARCHAR"/>
+	  	<result column="czMethod" property="czMethod" jdbcType="VARCHAR"/>
+	  	<result column="xxstate" property="xxstate" jdbcType="VARCHAR"/>
+	  	<result column="blResult" property="blResult" jdbcType="VARCHAR"/>
+	  	<result column="blResult_djcf" property="blResult_djcf" jdbcType="VARCHAR"/>
+	  	<result column="blResult_zjcf" property="blResult_zjcf" jdbcType="VARCHAR"/>
+	  	<result column="blResult_zzcl" property="blResult_zzcl" jdbcType="VARCHAR"/>
+	  	<result column="blResult_yjsf" property="blResult_yjsf" jdbcType="VARCHAR"/>
+	  	<result column="blResult_qtcl" property="blResult_qtcl" jdbcType="VARCHAR"/>
+	  	<result column="zyViolation" property="zyViolation" jdbcType="VARCHAR"/>
+	  	<result column="cfTime" property="cfTime" jdbcType="TIMESTAMP"/>
+	  	<result column="zjzr" property="zjzr" jdbcType="VARCHAR"/>
+	  	<result column="collectionMoney" property="collectionMoney" jdbcType="VARCHAR"/>
+	  	<result column="toSaveMoney" property="toSaveMoney" jdbcType="VARCHAR"/>
+	  	<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+	  	<result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+	  	<result column="fields" property="fields" jdbcType="VARCHAR"/>
+	  	<result column="czChildCompany" property="czChildCompany" jdbcType="VARCHAR" />
+	  	<result column="beflectDept" property="beflectDept" jdbcType="VARCHAR" />
+	  	<result column="beflectContact" property="beflectContact" jdbcType="VARCHAR" />
+	  	<result column="fyZyViolation" property="fyZyViolation" jdbcType="VARCHAR" />
+	  	<result column="fourForms" property="fourForms" jdbcType="VARCHAR" />
+	  	<result column="xxstateTime" property="xxstateTime" jdbcType="VARCHAR" />
+	  	<result column="belongToId" property="belongToId" jdbcType="VARCHAR" />
+	  	<result column="duplicate" property="duplicate" jdbcType="VARCHAR" />
+	  	<result column="duplicateId" property="duplicateId" jdbcType="VARCHAR" />
+	  	<result column="dealDepartmentId" property="dealDepartmentId" jdbcType="VARCHAR" />
+	  	<result column="punishId" property="punishId" jdbcType="VARCHAR" />
+	  	<result column="organId" property="organId" jdbcType="VARCHAR" />
+	  	<result column="fbTime" property="fbTime" jdbcType="VARCHAR" />
+	  	<result column="czMethodTime" property="czMethodTime" jdbcType="VARCHAR" />
+	  	<result column="special" property="special" jdbcType="VARCHAR" />
+	 </resultMap>
+	  <sql id="Base_Column_List">
+	  	id,clues,receiveDate,beReflectName,beReflectDuty,beReflectRank,beflectName,problemLand,problemDescribe,czCompany,czChildCompany,isSupervise,
+	  	superviseCompany,czMethod,xxstate,blResult,blResult_djcf,blResult_zjcf,blResult_zzcl,blResult_yjsf,blResult_qtcl,zyViolation,
+	  	cfTime,zjzr,collectionMoney,toSaveMoney,remarks,fields,czChildCompany,beflectDept,beflectContact,fyZyViolation,fourForms,xxstateTime,
+	  	belongToId,duplicate,duplicateId,dealDepartmentId,punishId,organId,fbTime,czMethodTime,special
+	  </sql>
+
+
+  	 <resultMap id="pcount" type="java.util.Map">
+        <result column="thisYear" property="thisYear" jdbcType="VARCHAR"/>
+        <result column="lastYear" property="lastYear" jdbcType="VARCHAR"/>
+    </resultMap>
+ <!-- 根据时间查询总量 --> 
+ 	<select id="probleClueCount"  parameterType="java.util.Map" resultMap="pcount">
+       select (SELECT
+	   count(*) AS counts
+       FROM
+	   ProblemClues p  join progress pro on p.id=pro.causeId and pro.pointValue=25
+       WHERE
+	   receiveDate BETWEEN 
+	   #{start} AND #{end}
+	   
+	   <if test='special!=null and special!=""'>
+               and special is not null and special !="" and LOCATE(#{special},special)!=0		
+		</if>
+	    <if test='czdw!=null and czdw!=""'>
+	       
+	       and pro.detail != '' and pro.detail!=null
+	    
+	    </if>
+	   )as thisYear ,
+	  (SELECT
+		count(*) AS counts
+	  FROM
+		ProblemClues 
+	  WHERE
+		receiveDate BETWEEN #{startLastYear}
+		
+	  AND #{endLastYear}
+	  <if test='special!=null and special!=""'>
+               and special is not null and special !="" and LOCATE(#{special},special)!=0		
+	  </if>
+	  ) as  lastYear   from dual;
+ 
+ 	</select>	
+<!-- 按年分组统计处置情况 -->
+ 	<resultMap id="czqkb" type="java.util.Map">
+ 	 	<result column="${columns}" property="${columns}" jdbcType="VARCHAR"/>
+        <result column="count" property="counts" jdbcType="VARCHAR"/>
+    </resultMap>
+
+ <select id="probleClueByczMethodCount" parameterType="java.util.Map" resultMap="czqkb">
+	SELECT
+	${columns} as ${columns},
+	count(${columns})as count
+    FROM
+	problemclues
+    WHERE
+    receiveDate BETWEEN '2018-01-01'
+    AND '2018-12-31' and xxstate is not null and xxstate!=""
+    <if test='special!=null and special!=""'>
+               and special is not null and special !="" and LOCATE(#{special},special)!=0		
+	</if>
+    GROUP BY
+	xxstate
+ </select>	
+     <resultMap id="lasc" type="java.util.Map">
+ 	 	<result column="${columns}" property="${columns}" jdbcType="VARCHAR"/>
+        <result column="counts" property="counts" jdbcType="VARCHAR"/>
+    </resultMap>
+<!-- 自定义列查询线索来源，督办单位，所属领域 -->
+<select id="probleClueBycolumnsCount" parameterType="java.util.Map" resultMap="lasc">
+ <choose>
+     <when test= 'columns== "fields" or columns== "beReflectRank" or  columns== "zyViolation" or columns== "problemLand"'>
+     <!-- 关联使用字典表， -->
+     SELECT d.`value` as ${columns} , COUNT(p.id)as counts from dict d  
+ 			LEFT  join  problemclues p 
+			on ( d.`value` = p.`${columns}`  or  p.`${columns}` LIKE CONCAT('%',',',d.`value`)  or  p.`${columns}` LIKE CONCAT(d.`value`,',','%') or p.`${columns}` LIKE CONCAT('%',',',d.`value`,',','%') ) 
+			and p.receiveDate between '${start}' and '${end}'
+ 		WHERE  d.dictPid=
+ 		 <choose>
+ 			<when test='columns=="fields"'>'0114'</when> 
+ 			<when test='columns=="zyViolation"'>'0105'</when> 
+ 			<when test='columns=="beReflectRank"'>'0106'</when> 
+ 			<when test='columns=="problemLand"'>'0108'</when> 
+ 		</choose>
+ 		<if test='special!=null and special!=""'>
+               and special is not null and special !="" and LOCATE(#{special},special)!=0		
+		</if>
+ 		GROUP BY d.`value`
+     </when>
+     <otherwise>
+        select 	${columns},count(*) as counts from problemclues  
+			where    receiveDate between '${start}' and '${end}'
+			<if test='special!=null and special!=""'>
+               and special is not null and special !="" and LOCATE(#{special},special)!=0		
+		   </if>
+		group by ${columns}
+    </otherwise>
+</choose>
+</select>
+<!-- 自定义列查询线索来源，督办单位，所属领域 陈晓亮用-->
+<select id="proClueByCount" parameterType="java.util.Map" resultMap="lasc">
+     <!-- 关联使用字典表， -->
+     SELECT d.`name` as ${columns} ,d.`value` as value ,COUNT(p.id)as counts from dict d  
+ 			LEFT  join  problemclues p 
+			on (
+			 d.`value` = p.`${columns}` 
+			 or  p.`${columns}` LIKE CONCAT('%',',',d.`value`)  or  p.`${columns}` LIKE CONCAT(d.`value`,',','%') or p.`${columns}` LIKE CONCAT('%',',',d.`value`,',','%') ) 
+			and p.receiveDate between '${start}' and '${end}'
+			 <if test='special!=null and special!=""'>
+                     and p.special is not null and p.special !="" and LOCATE(#{special},p.special)!=0		
+		     </if>
+ 		WHERE  d.dictPid=
+ 		 <choose>
+ 			<when test='columns=="fields"'>'0114'</when> 
+ 			<when test='columns=="zyViolation"'>'0105'</when> 
+ 			<when test='columns=="beReflectRank"'>'0106'</when> 
+ 			<when test='columns=="problemLand"'>'0108'</when> 
+ 			<when test='columns=="superviseCompany"'>'0108'</when> 
+ 			<when test='columns=="clues"'>'0104'</when> 
+ 			<when test='columns=="fourForms"'>'0109'</when> 
+ 			<when test='columns=="czMethod"'>'0113'</when> 
+ 			<when test='columns=="blResult_qtcl"'>'0116'</when> 
+ 			<when test='columns=="blResult_zzcl"'>'0117'</when> 
+ 			<when test='columns=="blResult_zjcf"'>'0118'</when> 
+ 			<when test='columns=="blResult_djcf"'>'0119'</when> 
+ 			<when test='columns=="blResult_yjsf"'>'0121'</when> 
+ 			
+ 		 </choose>
+ 		
+ 		GROUP BY d.`value`
+ 		ORDER BY cast(d.`remark` AS signed)
+</select>
+
+    <!-- 受处分人员按照 职级和违法行为分组-->
+
+    <resultMap id="cxluse" type="java.util.LinkedHashMap">
+         <result column="name" property="name" jdbcType="VARCHAR"/>
+ 	 	 <result column="A" property="A" jdbcType="VARCHAR"/>
+         <result column="A1" property="A1" jdbcType="VARCHAR"/>
+ 	 	 <result column="B" property="B" jdbcType="VARCHAR"/>
+         <result column="B1" property="B1" jdbcType="VARCHAR"/>
+ 	 	 <result column="C" property="C" jdbcType="VARCHAR"/>
+         <result column="C1" property="C1" jdbcType="VARCHAR"/>
+ 	 	 <result column="D" property="D" jdbcType="VARCHAR"/>
+         <result column="D1" property="D1" jdbcType="VARCHAR"/>
+ 	 	 <result column="E" property="E" jdbcType="VARCHAR"/>
+         <result column="E1" property="E1" jdbcType="VARCHAR"/>
+ 	 	 <result column="F" property="F" jdbcType="VARCHAR"/>
+         <result column="F1" property="F1" jdbcType="VARCHAR"/>
+ 	 	 <result column="G" property="G" jdbcType="VARCHAR"/>
+         <result column="G1" property="G1" jdbcType="VARCHAR"/>
+ 	 	 <result column="H" property="H" jdbcType="VARCHAR"/>
+         <result column="H2" property="H2" jdbcType="VARCHAR"/>
+         <result column="I" property="I" jdbcType="VARCHAR"/>
+         <result column="I1" property="I1" jdbcType="VARCHAR"/>
+         <result column="J" property="J" jdbcType="VARCHAR"/>
+         <result column="J1" property="J1" jdbcType="VARCHAR"/>
+         <result column="K" property="K" jdbcType="VARCHAR"/>
+         <result column="K1" property="K1" jdbcType="VARCHAR"/>
+         <result column="L" property="L" jdbcType="VARCHAR"/>
+         <result column="L1" property="L1" jdbcType="VARCHAR"/>
+         <result column="M" property="M" jdbcType="VARCHAR"/>
+         <result column="M1" property="M1" jdbcType="VARCHAR"/>
+         <result column="N" property="N" jdbcType="VARCHAR"/>
+         <result column="N1" property="N1" jdbcType="VARCHAR"/>
+         <result column="O" property="O" jdbcType="VARCHAR"/>
+         <result column="O1" property="O1" jdbcType="VARCHAR"/>
+         <result column="P" property="P" jdbcType="VARCHAR"/>
+         <result column="P1" property="P1" jdbcType="VARCHAR"/>
+         <result column="Q" property="Q" jdbcType="VARCHAR"/>
+         <result column="Q1" property="Q1" jdbcType="VARCHAR"/>
+         <result column="R" property="R" jdbcType="VARCHAR"/>
+         <result column="R1" property="R1" jdbcType="VARCHAR"/>
+          <result column="S" property="S" jdbcType="VARCHAR"/>
+         <result column="S1" property="S1" jdbcType="VARCHAR"/>
+          <result column="T" property="T" jdbcType="VARCHAR"/>
+         <result column="T1" property="T1" jdbcType="VARCHAR"/>
+          <result column="U" property="U" jdbcType="VARCHAR"/>
+         <result column="U1" property="U1" jdbcType="VARCHAR"/>
+         <result column="total" property="total" jdbcType="VARCHAR"/>
+         <result column="totalA" property="totalA" jdbcType="VARCHAR"/>
+         <result column="totalB" property="totalB" jdbcType="VARCHAR"/>
+         <result column="total1" property="total1" jdbcType="VARCHAR"/>
+         <result column="totalA1" property="totalA1" jdbcType="VARCHAR"/>
+         <result column="totalB1" property="totalB1" jdbcType="VARCHAR"/>
+    </resultMap>
+ 	
+ 	<!-- 新案件线索统计 -->
+    <select id="findCountExcel"  parameterType="String" resultMap="cxluse">
+    
+      ${value}
+	
+    </select>
+</mapper> 

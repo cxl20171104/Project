@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ReflectedUnitMapper">
+	 <resultMap id="BaseResultMap" type="com.alphasta.model.ReflectedUnit">
+	  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="unitName" property="unitName" jdbcType="VARCHAR"/>
+	  	<result column="unitAddress" property="unitAddress" jdbcType="VARCHAR"/>
+	  	<result column="unitType" property="unitType" jdbcType="VARCHAR"/>
+	 </resultMap>
+	 
+	 
+	 
+	 <!-- 关联查询 -->
+	 <select id="getReflectedUnit"  parameterType="java.lang.String" resultType="com.alphasta.model.ReflectedUnit">
+	 
+	       select id,unitName,unitAddress,unitType from reflectedUnit p where id=#{id} 
+	 
+	 </select>
+	 <insert id="addReflectedUnit" parameterType="com.alphasta.model.ReflectedUnit">
+	   insert into reflectedUnit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id != null">id,</if>
+           <if test="unitName != null">unitName,</if>
+           <if test="unitAddress != null">unitAddress,</if>
+           <if test="unitType != null">unitType,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="id != null">#{id},</if>
+            <if test="unitName != null">#{unitName},</if>
+           <if test="unitAddress != null">#{unitAddress},</if>
+           <if test="unitType != null">#{unitType},</if>
+        </trim>
+	 
+	 
+	 </insert>
+	 
+	 
+<update id="updateReflectedUnit" parameterType="com.alphasta.model.ReflectedUnit" >  
+    update reflectedUnit  
+    <set >  
+      <if test="unitName!= null" >  
+        unitName = #{unitName,jdbcType=VARCHAR},  
+      </if>  
+      <if test="unitAddress != null" >  
+        unitAddress = #{unitAddress,jdbcType=VARCHAR},  
+      </if>  
+      <if test="unitType != null" >  
+        unitType = #{unitType,jdbcType=VARCHAR},  
+      </if>  
+    </set>  
+    where id = #{id,jdbcType=VARCHAR}  
+  </update>  
+	 </mapper>

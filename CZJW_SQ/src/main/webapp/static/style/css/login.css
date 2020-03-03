@@ -1,0 +1,111 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	width: 100%;
+	height: 100%;
+}
+.wrap{
+	width: 100%;
+	height: 100%;
+	background: url('${staticPath}/static/images/login_Bg.png');
+	background-size: 100% 100%;
+	overflow: hidden;
+}
+.wrap .loginForm{
+	width: 500px;
+	height: 372px;
+	background-size: 100% 100%;
+	margin-top: 12%;
+	margin-left: 35%;
+	position: relative;
+	overflow: hidden;
+}
+.wrap .loginForm .loginLogo{
+	position: absolute;
+	top: 47px;
+	left: 61px;
+}
+.wrap .loginForm .loginTitle{
+	position: absolute;
+	left: 20%;
+	top: 15%;
+}
+.wrap .loginForm .userBar,
+.wrap .loginForm .pwdBar{
+	display: block;
+	width: 404px;
+	height: 50px;
+	position: relative;
+}
+.wrap .loginForm .userBar .userName,
+.wrap .loginForm .pwdBar .pwd{
+	display: block;
+	width: 404px;
+	height: 50px;
+	border-radius: 10px;
+	border: 1px solid #3f77f1;
+	background: url(../img/login_inptBg.png) repeat-x;
+	background-size: 100% 100%;
+	font-size: 20px;
+	text-indent: 55px;
+}
+.wrap .loginForm .userBar{
+	margin: 130px auto 0;
+}
+.wrap .loginForm .pwdBar{
+	margin: 45px auto 0;
+}
+.wrap .loginForm .userBar i,
+.wrap .loginForm .pwdBar i{
+	position: absolute;
+	width: 23px;
+	height: 27px;
+	left: 11px;
+	top: 11px;
+}
+.wrap .loginForm .userBar i{
+	background: url(../img/login_userIcon.png);
+}
+.wrap .loginForm .pwdBar i{
+	background: url(../img/login_pwdIcon.png);
+}
+.wrap .loginForm .userBar .userName,
+.wrap .loginForm .pwdBar .pwd{
+	color: #fff;
+	font-size: 20px;
+}
+.wrap .loginForm .userBar .userName::-webkit-input-placeholder,
+.wrap .loginForm .pwdBar .pwd::-webkit-input-placeholder{
+    color: #fff;
+}
+.wrap .loginForm .userBar .userName::-ms-input-placeholder,
+.wrap .loginForm .pwdBar .pwd::-ms-input-placeholder{
+    color: #fff;
+}
+.wrap .loginForm .userBar .userName::-moz-placeholder,
+.wrap .loginForm .pwdBar .pwd::-moz-placeholder{
+    color: #fff;
+}
+.wrap .loginForm .btnBox{
+	width: 301px;
+	height: 45px;
+	margin: 30px auto 0;
+}
+.wrap .loginForm .subBtn,
+.wrap .loginForm .resetBtn{
+	width: 132px;
+	height: 45px;
+	background: url(../img/login_btnBg.png);
+	background-size: 100% 100%;
+	border: none;
+	outline: none;
+	float: left;
+	font-size: 16px;
+	color: #fff;
+	font-family: "微软雅黑";
+}
+.wrap .loginForm .resetBtn{
+	margin-left: 37px;
+}

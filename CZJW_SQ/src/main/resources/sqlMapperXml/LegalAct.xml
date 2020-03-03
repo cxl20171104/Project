@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.LegalActMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.LegalAct">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="lawName" property="lawName" jdbcType="VARCHAR"/>
+        <result column="lawTime" property="lawTime" jdbcType="VARCHAR"/>
+        <result column="lawResult" property="lawResult" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,lawName,lawTime,lawResult
+    </sql>
+    
+    <insert id="addLegalAct" parameterType="com.alphasta.model.LegalAct" >
+     insert into LegalAct(id,reflectedId,lawName,lawTime,lawResult,time)
+     values(#{id},#{reflectedId},#{lawName},#{lawTime},#{lawResult},now(3))
+    
+    </insert>
+    
+    <delete id="deleteLegalAct" parameterType="java.lang.String">
+      
+      delete from LegalAct where id=#{id}
+    
+    </delete>
+    
+    <update id="updateLegalAct" parameterType="com.alphasta.model.LegalAct"  >
+    
+    update LegalAct
+    
+   <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='lawName !=null and lawName !=""'>
+          lawName=#{lawName},
+    </if>
+    <if test='lawTime !=null and lawTime !=""'>
+    
+          lawTime=#{lawTime},
+    </if>
+    <if test='lawResult !=null and lawResult !=""'>
+    
+          lawResult=#{lawResult},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findLegalActById" parameterType="java.lang.String" resultType="com.alphasta.model.LegalAct">
+    
+      select  <include refid="paramList"/> from  LegalAct where id=#{id}  
+    
+    </select>
+    <select id="findLegalActByRid" parameterType="java.lang.String" resultType="com.alphasta.model.LegalAct">
+      
+      select  id,reflectedId,lawName,lawTime,lawResult
+      
+      
+      from  LegalAct p where p.reflectedId=#{rid}
+    
+    </select>
+  
+    
+    <select id="findLegalAct" parameterType="com.alphasta.model.LegalAct" resultType="com.alphasta.model.LegalAct">
+      
+      select  <include refid="paramList"/>
+      
+      from  LegalAct p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId}    
+    </if>
+    <if test='lawName !=null and lawName !=""'>
+         and p.lawName=#{lawName}
+    </if>
+    <if test='lawTime !=null and lawTime !=""'>
+    
+         and p.lawTime=#{lawTime}
+    </if>
+    <if test='lawResult !=null and lawResult !=""'>
+         and p.lawResult=#{lawResult}
+    </if>
+    	 and p.time in (select max(time) from LegalAct t  
+    where 1=1        
+	        <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId}    
+    </if>
+    <if test='lawName !=null and lawName !=""'>
+         and t.lawName=#{lawName}
+    </if>
+    <if test='lawTime !=null and lawTime !=""'>
+    
+         and t.lawTime=#{lawTime}
+    </if>
+    <if test='lawResult !=null and lawResult !=""'>
+         and t.lawResult=#{lawResult}
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

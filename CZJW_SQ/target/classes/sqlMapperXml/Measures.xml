@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.MeasuresMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Measures">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="meaState" property="meaState" jdbcType="VARCHAR"/>
+        <result column="meaName" property="meaName" jdbcType="VARCHAR"/>
+        <result column="meaTime" property="meaTime" jdbcType="VARCHAR"/>
+        <result column="meaResult" property="meaResult" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,meaState,meaName,meaTime,meaResult
+    </sql>
+    
+    <insert id="addMeasures" parameterType="com.alphasta.model.Measures" >
+     insert into measures(id,reflectedId,meaState,meaName,meaTime,meaResult,time)
+     values(#{id},#{reflectedId},#{meaState},#{meaName},#{meaTime},#{meaResult},now(3))
+    
+    </insert>
+    
+    <delete id="deleteMeasures" parameterType="java.lang.String">
+      
+      delete from measures where id=#{id}
+    
+    </delete>
+    
+    <update id="updateMeasures" parameterType="com.alphasta.model.Measures"  >
+    
+    update measures
+    
+   <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='meaState!=null and meaState!=""'>
+          meaState=#{meaState},    
+    </if>
+    <if test='meaName !=null and meaName !=""'>
+          meaName=#{meaName},
+    </if>
+    <if test='meaTime !=null and meaTime !=""'>
+    
+          meaTime=#{meaTime},
+    </if>
+    <if test='meaResult !=null and meaResult !=""'>
+    
+          meaResult=#{meaResult},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findMeasuresById" parameterType="java.lang.String" resultType="com.alphasta.model.Measures">
+    
+      select  <include refid="paramList"/> from  measures where id=#{id}  
+    
+    </select>
+    <select id="findMeasuresByRid" parameterType="java.lang.String" resultType="com.alphasta.model.Measures">
+      
+      select  id,reflectedId,meaState,meaName,meaTime,meaResult
+      
+      
+      from  measures p where p.reflectedId=#{rid}
+    
+    </select>
+  
+    
+    <select id="findMeasures" parameterType="com.alphasta.model.Measures" resultType="com.alphasta.model.Measures">
+      
+      select  <include refid="paramList"/>
+      
+      from  measures p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId}    
+    </if>
+    <if test='meaState!=null and meaState!=""'>
+         and p.meaState=#{meaState}    
+    </if>
+    <if test='meaName !=null and meaName !=""'>
+         and p.meaName=#{meaName}
+    </if>
+    <if test='meaTime !=null and meaTime !=""'>
+    
+         and p.meaTime=#{meaTime}
+    </if>
+    <if test='meaResult !=null and meaResult !=""'>
+         and p.meaResult=#{meaResult}
+    </if>
+    	 and p.time in (select max(time) from Measures t  
+    where 1=1        
+	        <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId}    
+    </if>
+    <if test='meaState!=null and meaState!=""'>
+         and t.meaState=#{meaState}    
+    </if>
+    <if test='meaName !=null and meaName !=""'>
+         and t.meaName=#{meaName}
+    </if>
+    <if test='meaTime !=null and meaTime !=""'>
+    
+         and t.meaTime=#{meaTime}
+    </if>
+    <if test='meaResult !=null and meaResult !=""'>
+         and t.meaResult=#{meaResult}
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

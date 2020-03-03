@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ProgressMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Progress">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="causeId" property="causeId" jdbcType="VARCHAR"/>
+        <result column="pointName" property="pointName" jdbcType="VARCHAR"/>
+        <result column="pointValue" property="pointValue" jdbcType="VARCHAR"/>
+        <result column="detail" property="detail" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="lastPoint" property="lastPoint" jdbcType="VARCHAR"/>
+        <result column="organid" property="organId" jdbcType="VARCHAR"/>
+        <result column="timeForday" property="timeForday" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <association property="user" column="userId"  javaType="com.alphasta.model.User" select="com.alphasta.mapper.UserMapper.getUser"></association>
+    </resultMap>
+    <sql id="paramList">
+        id,causeId,pointName,pointValue,detail,time,lastPoint,organId,timeForday,remark,userId,state,type
+    </sql>
+    
+     <insert id="addProgress" parameterType="com.alphasta.model.Progress" >
+     insert into Progress(id,causeId,pointName,pointValue,detail,time,lastPoint,organid,
+     <if test='timeForday!=null and timeForday!=""'>
+     timeForday,
+     </if>
+     remark,userId,state,type)values(#{id},#{causeId},#{pointName},#{pointValue},#{detail},
+    <choose>
+                <when test='time != null and time != ""'>
+                       #{time},  
+                </when>
+                <otherwise>
+                      now(3),  
+                </otherwise>
+        </choose>
+    #{lastPoint},
+    #{organId},
+    <if test='timeForday!=null and timeForday!=""'>
+    #{timeForday},
+    </if>
+    
+    #{remark},
+    #{user.id},
+    #{state},
+    #{type})
+    
+    </insert>
+    
+    <delete id="deleteProgress" parameterType="java.lang.String">
+      
+      delete from Progress where id=#{id}
+    
+    </delete>
+    
+    <update id="updateProgress" parameterType="com.alphasta.model.Progress"  >
+    
+    update Progress
+    
+   <set>
+    <if test='pointName!=null and pointName!=""'>
+          pointName=#{pointName},    
+    </if>
+    <if test='pointValue!=null and pointValue!=""'>
+          pointValue=#{pointValue},
+    </if>
+    <if test='detail!=null and detail!=""'>
+    
+          detail=#{detail},
+    </if>
+    <if test='time!=null and time!=""'>
+    
+          time=#{time},
+    </if>
+    <if test='lastPoint!=null and lastPoint!=""'>
+          lastPoint=#{lastPoint},
+    </if>
+    <if test='organId!=null and organId!=""'>
+          organId=#{organId},
+    </if>
+    <if test='timeForday!=null and timeForday!=""'>
+          timeForday=#{timeForday},
+    </if>
+     <if test='remark!=null and remark!=""'>
+          remark=#{remark},
+    </if>
+    <if test='state!=null and state!=""'>
+          remark=#{remark},
+    </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+    
+    <select id="findProgressById" parameterType="java.lang.String" resultType="com.alphasta.model.Progress">
+    
+      select  <include refid="paramList"/> from  Progress where id=#{id}  
+    
+    </select>
+    <select id="findProgressByCid" parameterType="java.lang.String" resultType="com.alphasta.model.Progress">
+      
+      select  id,causeId,pointName,pointValue,detail,time,
+      
+      (select pointValue from Progress where id=p.lastPoint)as lastPoint ,organId,timeForday,remark
+      
+      
+      from  Progress p where p.causeId=#{cid} order by time desc
+    
+    </select>
+    
+    <select id="getAllSelectProgressByMap"   parameterType="java.util.Map"  resultMap="BaseResultMap">
+    
+     select  <include refid="paramList"/> from  Progress p
+     where 1=1
+     <if test='organId!=null and organId!=""'>
+        and   p.organId=#{organId}
+     </if>
+     <if test='causeId!=null and causeId!=""'>
+       
+        and   p.causeId=#{causeId}
+     </if>
+     <if test='pointValues!=null and pointValues!=""'>
+        and  pointValue in ${pointValues}
+     </if>
+      ORDER BY time 
+    </select> 
+    
+     <select id="getProgressByMap"   parameterType="java.util.Map"  resultMap="BaseResultMap">
+    
+    SELECT
+	t.*
+FROM
+	progress t,
+	(
+		SELECT
+			detail,
+			pointName,
+			MAX(time) time
+		FROM
+			progress
+		 where 1=1
+     <if test='organId!=null and organId!=""'>
+        and   organId=#{organId}
+     </if>
+     <if test='causeId!=null and causeId!=""'>
+       
+        and   causeId=#{causeId}
+     </if>
+     <if test='pointValues!=null and pointValues!=""'>
+        and  pointValue in (${pointValues})
+     </if>
+      <if test='pointName!=null and pointName!=""'>
+        and  pointName =${pointName}
+     </if>
+		GROUP BY
+			detail,
+			pointName,
+			type
+	) a
+WHERE
+	t.pointName = a.pointName
+AND t.time = a.time
+     <if test='organId!=null and organId!=""'>
+        and   t.organId=#{organId}
+     </if>
+     <if test='causeId!=null and causeId!=""'>
+       
+        and   t.causeId=#{causeId}
+     </if>
+     <if test='pointValues!=null and pointValues!=""'>
+        and  t.pointValue in (${pointValues})
+     </if>
+      <if test='pointName!=null and pointName!=""'>
+        and  t.pointName =${pointName}
+     </if>
+     ORDER BY time asc
+    </select> 
+    
+    
+    
+    <select id="findLastProgress" parameterType="java.lang.String" resultType="com.alphasta.model.Progress">
+    
+      select <include refid="paramList"/>  from Progress where causeId=#{cid} and time=(select max(time) from Progress where causeId=#{cid})
+    
+    </select>
+    
+    <select id="findProgress" parameterType="com.alphasta.model.Progress" resultType="com.alphasta.model.Progress">
+      
+      select  <include refid="paramList"/>
+      
+      from  Progress  
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and id  = #{id}
+		 	</if>
+		 	<if test='causeId != null and causeId != ""'>
+		 		and causeId  = #{causeId}
+		 	</if>
+		 	<if test='pointName != null and pointName != ""'>
+		 		and pointName  = #{pointName}
+		 	</if>
+		 	<if test='pointValue != null and pointValue != ""'>
+		 		and pointValue  = #{pointValue}
+		 	</if>
+		 	<if test='detail != null and detail != ""'>
+		 		and detail  = #{detail}
+		 	</if>
+		 	<if test='time != null and time != ""'>
+		 		and time  = #{time}
+		 	</if>
+		 	<if test='lastPoint != null and lastPoint != ""'>
+		 		and lastPoint  = #{lastPoint}
+		 	</if>
+		 	<if test='organId != null and organId != ""'>
+		 		and organId  = #{organId}
+		 	</if>
+		 	<if test='timeForday != null and timeForday != ""'>
+		 		and timeForday  = #{timeForday}
+		 	</if>
+		 	<if test='remark != null and remark != ""'>
+		 		and remark  = #{remark}
+		 	</if>
+    	</where>
+    </select>
+    <select id="XinfindProgress" parameterType="com.alphasta.model.Progress" resultType="com.alphasta.model.Progress">
+      select p.id as id,p.causeId as causeId,p.pointName as pointName,p.pointValue as pointValue,p.time as time,p.lastPoint as lastPoint,p.organId,p.timeForday as timeForday,p.remark as remark from  progress p join (select max(pro.time) as maxtime,pro.causeId as cid  from progress pro 
+      
+       <where>         
+	         <if test='id != null and id != ""'>
+		 		and id  = #{id}
+		 	</if>
+		 	<if test='causeId != null and causeId != ""'>
+		 		and causeId  = #{causeId}
+		 	</if>
+		 	<if test='pointName != null and pointName != ""'>
+		 		and pointName  = #{pointName}
+		 	</if>
+		 	<if test='pointValue != null and pointValue != ""'>
+		 		and pointValue  = #{pointValue}
+		 	</if>
+		 	<if test='detail != null and detail != ""'>
+		 		and detail  = #{detail}
+		 	</if>
+		 	<if test='time != null and time != ""'>
+		 		and time  = #{time}
+		 	</if>
+		 	<if test='lastPoint != null and lastPoint != ""'>
+		 		and lastPoint  = #{lastPoint}
+		 	</if>
+		 	<if test='organId != null and organId != ""'>
+		 		and organId  = #{organId}
+		 	</if>
+		 	<if test='timeForday != null and timeForday != ""'>
+		 		and timeForday  = #{timeForday}
+		 	</if>
+		 	<if test='remark != null and remark != ""'>
+		 		and remark  = #{remark}
+		 	</if>
+    	</where>
+      
+       group by pro.causeId) m on 
+   
+      p.causeId=m.cid and p.time=m.maxtime
+      
+      
+		
+    </select>
+    </mapper>
+    

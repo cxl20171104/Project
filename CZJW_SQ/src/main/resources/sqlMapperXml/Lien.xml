@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.LienMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Lien">
+   
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="lienBasis" property="lienBasis" jdbcType="VARCHAR"/>
+        <result column="lienTime" property="lienTime" jdbcType="VARCHAR"/>
+        <result column="lienRelieveTime" property="lienRelieveTime" jdbcType="VARCHAR"/>
+        <result column="lienDays" property="lienDays" jdbcType="VARCHAR"/>
+        <result column="delayLien" property="delayLien" jdbcType="VARCHAR"/>
+        <result column="delayLienDays" property="delayLienDays" jdbcType="VARCHAR"/>
+        <result column="delayLienTime" property="delayLienTime" jdbcType="VARCHAR"/>
+        <result column="lienReason" property="lienReason" jdbcType="VARCHAR"/>
+         <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,lienBasis,lienTime,lienRelieveTime,lienDays,delayLien,delayLienDays,delayLienTime,lienReason,time
+    </sql>
+    
+    <insert id="addLien" parameterType="com.alphasta.model.Lien" >
+     insert into Lien(id,reflectedId,lienBasis,lienTime,lienRelieveTime,lienDays,delayLien,delayLienDays,delayLienTime,lienReason,time)
+     values(#{id},#{reflectedId},#{lienBasis},#{lienTime},#{lienRelieveTime},#{lienDays},#{delayLien},#{delayLienDays},#{delayLienTime},#{lienReason},now(3))
+    
+    </insert>
+    
+    <delete id="deleteLien" parameterType="java.lang.String">
+      
+      delete from Lien where id=#{id}
+    
+    </delete>
+    <update id="updateLien" parameterType="com.alphasta.model.Lien"  >
+    
+    update Lien
+    
+   <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='lienBasis !=null and lienBasis!=""'>
+          lienBasis=#{lienBasis},
+    </if>
+    <if test='lienTime !=null and lienTime!=""'>
+    
+          lienTime=#{lienTime},
+    </if>
+    <if test='lienRelieveTime!=null and lienRelieveTime!=""'>
+    
+          lienRelieveTime=#{lienRelieveTime},
+    </if>
+    <if test='lienDays!=null and lienDays!=""'>
+    
+          lienDays=#{lienDays},
+    </if>
+    <if test='delayLien !=null and delayLien !=""'>
+          delayLien=#{delayLien},
+    </if>
+    <if test='delayLienDays !=null and delayLienDays !=""'>
+          delayLienDays=#{delayLienDays},
+    </if>
+    <if test='delayLienTime !=null and delayLienTime !=""'>
+          delayLienTime=#{delayLienTime},
+    </if>
+     <if test='lienReason !=null and lienReason !=""'>
+          lienReason=#{lienReason},
+    </if>
+     <if test='time !=null and time !=""'>
+          time=#{time},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findLienById" parameterType="java.lang.String" resultType="com.alphasta.model.Lien">
+    
+      select  <include refid="paramList"/> from  Lien where id=#{id}  
+    
+    </select>
+    
+    <select id="findLienByRid" parameterType="java.lang.String" resultType="com.alphasta.model.Lien">
+      
+      select  id,reflectedId,lienBasis,lienTime,lienRelieveTime,lienDays,delayLien,delayLienDays,delayLienTime,lienReason,time
+      
+      
+      from  Lien p where p.reflectedId=#{rid}  order by delayLienTime desc
+    
+    </select>
+  
+    
+    <select id="findLien" parameterType="com.alphasta.model.Lien" resultType="com.alphasta.model.Lien">
+      
+      select  <include refid="paramList"/>
+      
+      from  Lien p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId},    
+    </if>
+    <if test='lienBasis!=null and lienBasis!=""'>
+         and p.lienBasis=#{lienBasis},
+    </if>
+    <if test='lienTime!=null and lienTime!=""'>
+    
+        and p.lienTime=#{lienTime},
+    </if>
+    <if test='lienRelieveTime!=null and lienRelieveTime!=""'>
+    
+         and p.lienRelieveTime=#{lienRelieveTime},
+    </if>
+     <if test='delayLien !=null and delayLien !=""'>
+         and p.delayLien=#{delayLien},
+    </if>
+     <if test='delayLienTime !=null and delayLienTime !=""'>
+         and p.delayLienTime=#{delayLienTime},
+    </if>
+    	 and p.time in (select max(time) from Lien t  
+    where 1=1        
+	        <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId},    
+    </if>
+    <if test='lienBasis!=null and lienBasis!=""'>
+         and t.lienBasis=#{lienBasis},
+    </if>
+    <if test='lienTime!=null and lienTime!=""'>
+    
+        and t.lienTime=#{lienTime},
+    </if>
+    <if test='lienRelieveTime!=null and lienRelieveTime!=""'>
+    
+         and t.lienRelieveTime=#{lienRelieveTime},
+    </if>
+     <if test='delayLien !=null and delayLien !=""'>
+         and t.delayLien=#{delayLien},
+    </if>
+     <if test='delayLienTime !=null and delayLienTime !=""'>
+         and t.delayLienTime=#{delayLienTime},
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

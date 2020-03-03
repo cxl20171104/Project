@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.AccessoriesMapper" >
+  <resultMap id="BaseResultMap" type="com.alphasta.model.Accessories" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="UPLOADER" property="uploader" jdbcType="VARCHAR" />
+    <result column="UPLOADERNAME" property="uploadername" jdbcType="VARCHAR" />
+    <result column="UPLOADATE" property="uploadate" jdbcType="TIMESTAMP" />
+    <result column="CASEID" property="caseId" jdbcType="VARCHAR" />
+    <result column="ATTCOUNT" property="attcount" jdbcType="INTEGER" />
+    <result column="ISDEL" property="isdel" jdbcType="VARCHAR" />
+    <result column="ATTACNUM" property="attacNum" jdbcType="INTEGER"/>
+    <result column="ORGANID" property="organId" jdbcType="INTEGER"/>
+    <result column="PointValue" property="pointValue" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, NAME, URL, TITLE, CONTENT, UPLOADER, UPLOADERNAME, UPLOADATE, CASEID, ATTCOUNT, 
+    ISDEL,ORGANID,POINTVALUE,TYPE
+  </sql>
+   <sql id="Base_Column_List2" >
+    ID, NAME, URL, TITLE, CONTENT, UPLOADER, UPLOADERNAME, UPLOADATE, CLUESID, ATTCOUNT, 
+    ISDEL,ORGANID,POINTVALUE,TYPE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.alphasta.model.Accessories" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from accessories
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from accessories
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from accessories
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.alphasta.model.Accessories" >
+    insert into accessories (ID, NAME, URL, 
+      TITLE, CONTENT, UPLOADER, 
+      UPLOADERNAME, UPLOADATE, CASEID, 
+      ATTCOUNT, ISDEL,organId,pointValue,TYPE)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
+      #{uploadername,jdbcType=VARCHAR}, #{uploadate,jdbcType=TIMESTAMP}, #{caseId,jdbcType=VARCHAR}, 
+      #{attcount,jdbcType=INTEGER}, #{isdel,jdbcType=VARCHAR},#{organId,jdbcType=INTEGER},#{pointValue,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.alphasta.model.Accessories"  >
+    insert into accessories
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="uploader != null" >
+        UPLOADER,
+      </if>
+      <if test="uploadername != null" >
+        UPLOADERNAME,
+      </if>
+      <if test="uploadate != null" >
+        UPLOADATE,
+      </if>
+      <if test="caseId != null" >
+        CASEID,
+      </if>
+      <if test="attcount != null" >
+        ATTCOUNT,
+      </if>
+      <if test="isdel != null" >
+        ISDEL,
+      </if>
+      <if test="organId != null" >
+        ORGANID,
+      </if>
+      <if test="pointValue != null" >
+        POINTVALUE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="uploader != null" >
+        #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadername != null" >
+        #{uploadername,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadate != null" >
+        #{uploadate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="caseId != null" >
+        #{caseId,jdbcType=VARCHAR},
+      </if>
+      <if test="attcount != null" >
+        #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+      <if test="organId != null" >
+        #{organId,jdbcType=INTEGER},
+      </if>
+      <if test="pointValue != null" >
+        #{pointValue,jdbcType=VARCHAR},
+      </if>
+       <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alphasta.model.Accessories" >
+    update accessories
+    <set >
+      <if test='name != null and name!=""' >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test='url != null and url!=""' >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test='title != null and title!=""' >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test='content != null and content!=""' >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test='uploader != null and uploader!=""' >
+        UPLOADER = #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test='uploadername != null and uploadername!=""' >
+        UPLOADERNAME = #{uploadername,jdbcType=VARCHAR},
+      </if>
+      <if test='uploadate != null and uploadate!=""' >
+        UPLOADATE = #{uploadate,jdbcType=TIMESTAMP},
+      </if>
+      <if test='caseId != null and caseId!=""' >
+        CASEID = #{caseId,jdbcType=VARCHAR},
+      </if>
+      <if test='attcount != null and acccount!=""' >
+        ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test='isdel != null and isdel!=""' >
+        ISDEL = #{isdel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.alphasta.model.Accessories" >
+    update accessories
+    set 
+      NAME = #{name,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      UPLOADER = #{uploader,jdbcType=VARCHAR},
+      UPLOADERNAME = #{uploadername,jdbcType=VARCHAR},
+      UPLOADATE = #{uploadate,jdbcType=TIMESTAMP},
+      CASEID = #{caseId,jdbcType=VARCHAR},
+      ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      ISDEL = #{isdel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCaseid"  resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select (select count(*) from attac a where a.pid=accessories.id) as attacNum,
+          <include refid="Base_Column_List" />
+       from accessories
+       where ISDEL='1' and  CASEID=#{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByExample2" resultMap="BaseResultMap" parameterType="com.alphasta.model.Accessories" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List2" />
+    from accessories
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey2" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List2" />
+    from accessories
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert2" parameterType="com.alphasta.model.Accessories" >
+    insert into accessories (ID, NAME, URL, 
+      TITLE, CONTENT, UPLOADER, 
+      UPLOADERNAME, UPLOADATE, CLUESID, 
+      ATTCOUNT, ISDEL)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
+      #{uploadername,jdbcType=VARCHAR}, #{uploadate,jdbcType=TIMESTAMP}, #{cluesId,jdbcType=VARCHAR}, 
+      #{attcount,jdbcType=INTEGER}, #{isdel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective2" parameterType="com.alphasta.model.Accessories" useGeneratedKeys="true" keyProperty="id" >
+    insert into accessories
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="uploader != null" >
+        UPLOADER,
+      </if>
+      <if test="uploadername != null" >
+        UPLOADERNAME,
+      </if>
+      <if test="uploadate != null" >
+        UPLOADATE,
+      </if>
+      <if test="cluesId != null" >
+        CLUESID,
+      </if>
+      <if test="attcount != null" >
+        ATTCOUNT,
+      </if>
+      <if test="isdel != null" >
+        ISDEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="uploader != null" >
+        #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadername != null" >
+        #{uploadername,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadate != null" >
+        #{uploadate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cluesId != null" >
+        #{cluesId,jdbcType=VARCHAR},
+      </if>
+      <if test="attcount != null" >
+        #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        #{isdel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective2" parameterType="com.alphasta.model.Accessories" >
+    update accessories
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="uploader != null" >
+        UPLOADER = #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadername != null" >
+        UPLOADERNAME = #{uploadername,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadate != null" >
+        UPLOADATE = #{uploadate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cluesId != null" >
+        CLUESID = #{cluesId,jdbcType=VARCHAR},
+      </if>
+      <if test="attcount != null" >
+        ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test="isdel != null" >
+        ISDEL = #{isdel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey2" parameterType="com.alphasta.model.Accessories" >
+    update accessories
+    set NAME = #{name,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      UPLOADER = #{uploader,jdbcType=VARCHAR},
+      UPLOADERNAME = #{uploadername,jdbcType=VARCHAR},
+      UPLOADATE = #{uploadate,jdbcType=TIMESTAMP},
+      CLUESID = #{cluesId,jdbcType=VARCHAR},
+      ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      ISDEL = #{isdel,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCaseid2"  resultMap="BaseResultMap" parameterType="java.lang.String">
+        select (select count(*) from attac a where a.pid=accessories.id) as attacNum,
+          <include refid="Base_Column_List2" />
+       from accessories
+       where ISDEL='1' and  CLUESID=#{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  
+  <select id="getAccByMap"   parameterType="java.util.Map" resultMap="BaseResultMap">
+  
+  
+        <if test="count!=null and count!=''">
+              select count(*) as ATTACNUM
+        </if>
+         <if test="count==null or count==''">
+              select   <include refid="Base_Column_List" />
+        </if>
+         from  accessories
+           where isdel!='0'
+       
+        
+         <if test='type!=null and type!=""'>
+           and     type=#{type} 
+        
+          </if>
+        
+         <if test='Accessories.caseId!=null and Accessories.caseId!=""'>
+            and    caseId=#{Accessories.caseId}
+         </if>
+         <if test='Accessories.title!=null and Accessories.title!=""'>
+           and    title like CONCAT('%',#{Accessories.title},'%')
+         </if>
+        
+          <if test='Accessories.organId!=null and Accessories.organId!=""'>
+            and    organId=#{Accessories.organId}
+          </if>
+          
+          <if test='Accessories.content!=null and Accessories.content!=""'>
+            and    content=#{Accessories.content}
+          </if>
+          order by   UPLOADATE desc
+         
+          <if test='count==null or count==""'>
+          <if test='from!=null and size!=null'>
+          limit #{from}, #{size}
+          </if>
+           <if test='from==null and size==null'>
+           limit 0,10
+           </if>
+         </if>
+       
+  </select>
+  <select id="getType" resultMap="BaseResultMap">
+     select  <include refid="Base_Column_List" /> from  accessories group by content;
+  </select>
+</mapper>

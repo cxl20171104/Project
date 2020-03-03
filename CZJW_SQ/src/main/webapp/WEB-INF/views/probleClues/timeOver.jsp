@@ -1,0 +1,57 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/commons/global.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+<%@ include file="/commons/basejs.jsp" %>
+<meta http-equiv="X-UA-Compatible" content="edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <link rel="stylesheet" type="text/css" href="${staticPath }/static/style/css/problelist.css" />
+<title>到期案件</title>
+
+</head>
+<body class="easyui-layout" data-options="fit:true,border:false">
+
+      <%@ include file="/commons/basePage.jsp" %>
+  	<div data-options="region:'north',split:false,border:false" style="height:35px;padding-top:4px;border-bottom:1px solid #d3d3d3">
+  	         <%@ include file="/commons/baseSpecial.jsp" %>
+       		 <a  class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="searchFun2();" >查询</a>
+       		 <a  class="easyui-linkbutton" data-options="iconCls:'icon-tip'" onclick="outExcelFun();" >导出</a>
+       		 <a  class="easyui-linkbutton" data-options="iconCls:'icon-tip'" onclick="holeData();" >全部数据</a>
+			 <input id="total" value=""  type="hidden"/>
+       		<shiro:hasPermission name="/czjy">
+       		<a  style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="change('czjy');" >处置建议到期</a>
+       		</shiro:hasPermission>
+       		<shiro:hasPermission name="/thhx">
+       		<a style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'"  onclick="change('thhx');" >谈话函询到期</a>
+       		</shiro:hasPermission>
+       		<shiro:hasPermission name="/zcdc">
+       		<a id="zcdc" style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'"  onclick="change('zcdc');" >暂存待查到期</a>
+       		</shiro:hasPermission>
+       		<shiro:hasPermission name="/lasc">
+       		<a style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="change('lasc');" >立案审查到期</a>
+       		</shiro:hasPermission>
+       		<shiro:hasPermission name="/ajsl">
+       		<a style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="change('ajsl');">案件审理到期</a>
+	        </shiro:hasPermission>
+	        <!-- 留党察看 -->
+	        <shiro:hasPermission name="/ldck">
+       		<a style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="change('ldck');">留党察看到期</a>
+	        </shiro:hasPermission>
+	        <!-- 处分决定执行期限到期 -->
+	        <shiro:hasPermission name="/takeEffect">
+       		<a style="margin-left:10px;" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="change('takeEffect');">处分决定执行期限到期</a>
+	        </shiro:hasPermission>
+	       
+    </div>
+    <div data-options="region:'center',border:false" id="div_table">
+        <table id="dataGrid" data-options="fit:true,border:false"></table>
+	</div> 
+	<script type="text/javascript" src="${staticPath }/static/page/timeOver.js"></script>
+	<script type="text/javascript">
+	
+	var path='${path }';
+    
+</script> 
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css" />
+	</head>
+
+	<body>
+		<input size="16" type="text" value="" class="form_datetime">
+		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript">
+			$(".form_datetime").datetimepicker({
+				format: 'yyyy-mm-dd', //显示格式
+				todayHighlight: 1, //今天高亮
+				minView: "month", //设置只显示到月份
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1,
+				autoclose: 1 //选择后自动关闭
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.StaticticsMapper">
+    <!-- 
+               资源
+     -->
+  	<insert id="sourceAdd"  parameterType="java.util.Map" >
+
+  	  insert into statictics_source (id,cluesId,stage,isuse,createTime)VALUES(#{id},#{cluesId},#{stage},#{isUse},now())
+
+  	</insert>
+  	<select id="selectSource" parameterType="java.util.Map" resultType="java.util.Map">
+      SELECT id,cluesId,stage,isUse  FROM statictics_source WHERE 1=1
+      <if test="id!=null">
+        and  id=#{id}
+      </if> 
+      <if test="cluesId!=null">
+        and  cluesId=#{cluesId}
+      </if>
+      <if test="stage!=null">
+        and  stage=#{stage}
+      </if>
+      <if test="isUse">
+        and  isUse=#{isUse}
+      </if>
+      order by  createTime 
+  	</select>
+  	<update id="updateSource" parameterType="java.util.Map">
+  	 update statictics_source   
+  	 <set>
+  	 <if test="cluesId!=null"> cluesId=#{cluesId},</if>
+  	 <if test="stage!=null">   stage=#{stage},</if>
+  	 <if test="isUse!=null">   isUse=#{isUse},</if>
+  	 </set>
+  	 <if test="id!=null">
+  	      where  id=#{id}
+  	 </if>
+  	
+  	</update>
+    <!-- 
+    
+             总量 统计
+    
+    -->
+  	<select id="selectTotal" parameterType="java.util.Map"  resultType="java.util.Map">
+  	select  id,total,tb,time from statictics_total
+  	where 1=1
+  	<if test="id!=null">     and id=#{id}</if>
+  	<if test="cluesId!=null">and cluesId=#{cluesId}</if>
+  	<if test="tb!=null">     and tb=#{tb}</if>
+  	<if test="time!=null">   and time=#{time}</if>
+  	<if test="month!=null">  and time like concat(#{month},'%')</if>
+  	 <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+  	
+  	order by time
+  	</select>
+  	<insert id="addTotal"   parameterType="java.util.Map" >
+  	<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+    </selectKey>
+  	insert into statictics_total(total,tb,time)
+  	values(#{total},#{tb},#{time})
+  	</insert>
+  	<update id="updateTotal" parameterType="java.util.Map">
+  	update statictics_total
+  	<set>
+  	<if test="tb!=null">   tb=#{tb},</if>
+  	<if test="total!=null"> total=#{total},</if>
+  	</set>
+  	where id=#{id}
+  	</update>
+  	
+  	
+  	<!-- 
+  	基本统计
+  	 -->
+	<insert id="addBasic"  parameterType="java.util.Map" >
+	<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+    </selectKey>
+	insert into statictics_basic (id,type,`option`,num,tb,zb,time)
+	values(#{id},#{type},#{option},#{num},#{tb},#{zb},#{time})
+	</insert>
+	<select id="selectBasic" parameterType="java.util.Map" resultType="java.util.Map">
+	select id,type,`option`,num,tb,zb,time from statictics_basic
+	where 1=1
+	<if test="id!=null">    and id=#{id}</if>
+	<if test="type!=null">  and type=#{type}</if>
+	<if test="option!=null">and `option`=#{option}</if>
+	<if test="num!=null">   and num=#{num}</if>
+	<if test="tb!=null">    and tb=#{tb}</if>
+	<if test="time!=null">  and time=#{time}</if>
+	 <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+	</select>
+	<update id="updateBasic" parameterType="java.util.Map" >
+	update statictics_basic
+	<set>
+	<if test="type!=null">  type=#{type},</if>
+	<if test="option!=null"> `option`=#{option},</if>
+	<if test="num!=null">  num=#{num},</if>
+	<if test="tb!=null">   tb=#{tb},</if>
+	<if test="zb!=null">   zb=#{zb},</if>
+	<if test="time!=null"> time=#{time}</if>
+	 <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+	</set>
+	where id=#{id}
+	</update>
+  	<!-- 
+  	监督室案件处理统计
+  	 -->
+  	 
+  	<select id="selectCzfs" parameterType="java.util.Map" resultType="java.util.Map">
+  	select id,`option`,num,time,promLand,tb,zb from statictics_cz
+  	where 1=1
+  	<if test="id!=null"> and id=#{id}</if>
+  	<if test="option!=null"> and `option`=#{option}</if>
+  	<if test="num!=null">and num=#{num}</if>
+  	<if test="time!=null">and time=#{time}</if>
+  	<if test="promLand!=null">and promLand=#{promLand}</if>
+  	<if test="tb!=null">and tb=#{tb}</if>
+  	<if test="zb!=null">and zb=#{zb}</if>
+  	 <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+  	</select>
+  	<insert id="addCzfs" parameterType="java.util.Map" >
+  	<selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+  	insert into statictics_cz(`option`,num,time,promLand,tb,zb)
+  	values(#{option},#{num},#{time},#{promLand},#{tb},#{zb})
+  	</insert>
+  	<update id="updateCzfs" parameterType="java.util.Map">
+  	update statictics_cz
+  	<set>
+  	<if test="option!=null"> `option`=#{option},</if>
+  	<if test="num!=null">num=#{num},</if>
+  	<if test="time!=null"> time=#{time},</if>
+  	<if test="promLand!=null"> promLand=#{promLand},</if>
+  	<if test="tb!=null"> tb=#{tb},</if>
+  	<if test="zb!=null"> zb=#{zb}</if>
+  	</set>
+  	where id=#{id}
+  	</update>
+  	
+  	
+  	
+  	
+  	<!-- 
+  	（审查室）立案情况统计
+  	 -->
+    <insert id="addLa" parameterType="java.util.Map">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    insert into statictics_la(num,rank,time,promLand,tb,zb)
+    values(#{num},#{rank},#{time},#{promLand},#{tb},#{zb})
+    </insert>
+    <select id="selectLa" parameterType="java.util.Map" resultType="java.util.Map">
+    select id,num,rank,time,promLand,tb,zb from  statictics_la
+    where 1=1
+    <if test="id!=null">and id=#{id}</if>
+    <if test="rank!=null">and rank=#{rank}</if>
+    <if test="time!=null">and time=#{time}</if>
+    <if test="promLand!=null">and promLand=#{promLand}</if>
+     <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+    </select>
+    <update id="updateLa" parameterType="java.util.Map" >
+    update statictics_la
+    <set>
+    <if test="num!=null"> num=#{num},</if>
+    <if test="tb!=null">  tb=#{tb},</if>
+    <if test="zb!=null">  zb=#{zb},</if>
+    </set>
+    where  id=#{id}
+    </update>
+    
+    
+    
+    
+    <!-- 
+           （审理室）处分统计
+     -->
+     <insert id="addCf" parameterType="java.util.Map">
+     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+     insert into statictics_cf (num,`option`,time,promLand,tb,zb)
+     values(#{num},#{option},#{time},#{promLand},#{tb},#{zb})
+     </insert>
+     <update id="updateCf" parameterType="java.util.Map">
+     update statictics_cf 
+     <set>
+      <if test="num!=null"> num=#{num},</if>
+      <if test="tb!=null">  tb=#{tb},</if>
+      <if test="zb!=null">  zb=#{zb}</if>
+     </set>
+     where id=#{id}
+     </update>
+     <select id="selectCf" parameterType="java.util.Map" resultType="java.util.Map">
+     select id,num,`option`,time,promLand,tb,zb from statictics_cf
+     where 1=1
+     <if test="id!=null">and id=#{id}</if>
+     <if test="num!=null">and num=#{num}</if>
+     <if test="option!=null">and `option`=#{option}</if>
+     <if test="promLand!=null">and promLand=#{promLand}</if>
+     <if test="time!=null">and time=#{time}</if>
+      <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+     </select>
+     
+     <!-- 
+     
+                结案案件
+     
+      -->
+    <insert id="add_ja" parameterType="java.util.Map">
+     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+     insert into statictics_ja (num,rank,time,promLand,tb,zb)
+     values(#{num},#{rank},#{time},#{promLand},#{tb},#{zb})
+     </insert>
+     <update id="update_ja" parameterType="java.util.Map">
+     update statictics_ja 
+     <set>
+      <if test="num!=null"> num=#{num},</if>
+      <if test="tb!=null">  tb=#{tb},</if>
+      <if test="zb!=null">  zb=#{zb}</if>
+     </set>
+     where id=#{id}
+     </update>
+     <select id="select_ja" parameterType="java.util.Map" resultType="java.util.Map">
+     select id,num,rank,time,promLand,tb,zb from statictics_ja
+     where 1=1
+     <if test="id!=null">and id=#{id}</if>
+     <if test="option!=null">and rank=#{rank}</if>
+     <if test="promLand!=null">and promLand=#{promLand}</if>
+     <if test="time!=null">and time=#{time}</if>
+      <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+     </select>
+      <!-- 
+                领域分类统计      
+       -->
+      <insert id="add_field" parameterType="java.util.Map">
+     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+     insert into statictics_field (num,`option`,time,promLand)
+     values(#{num},#{option},#{time},#{promLand})
+     </insert>
+     <update id="update_field" parameterType="java.util.Map">
+     update statictics_field 
+     <set>
+      <if test="num!=null"> num=#{num},</if>
+     </set>
+     where id=#{id}
+     </update>
+     <select id="select_field" parameterType="java.util.Map" resultType="java.util.Map">
+     select id,num,`option`,time,promLand from statictics_field
+     where 1=1
+     <if test="id!=null">and id=#{id}</if>
+     <if test="option!=null">and `option`=#{option}</if>
+     <if test="promLand!=null">and promLand=#{promLand}</if>
+     <if test="time!=null">and time=#{time}</if>
+     <if test='start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+    
+     </select>
+     
+     <!-- 
+     
+              职级违纪行为统计
+     
+      -->
+      <insert id="add_wj" parameterType="java.util.Map">
+     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+     insert into statictics_wj (num,wjxw,time,rank,tb)
+     values(#{num},#{wjxw},#{time},#{rank},#{tb})
+     </insert>
+     <update id="update_wj" parameterType="java.util.Map">
+     update statictics_wj
+     <set>
+      <if test="num!=null"> num=#{num},</if>
+       <if test="tb!=null"> tb=#{tb},</if>
+     </set>
+     where id=#{id}
+     </update>
+     <select id="select_wj" parameterType="java.util.Map" resultType="java.util.Map">
+     select id,num,wjxw,time,rank,tb from statictics_wj
+     where 1=1
+     <if test="id!=null">    and id=#{id}</if>
+     <if test="wjxw!=null">and wjxw=#{wjxw}</if>
+     <if test="rank!=null">and rank=#{rank}</if>
+     <if test="time!=null">    and time=#{time}</if>
+     <if test='start!=null and start==end'>
+              and time=#{start}
+     </if>
+      <if test='start!=end'>
+             <if test="start!=null"> <![CDATA[and str_to_date(time,'%Y-%m')>=str_to_date(#{start},'%Y-%m')]]></if>
+             <if test="end!=null">   <![CDATA[and str_to_date(time,'%Y-%m')<str_to_date(#{end},'%Y-%m')]]></if>     
+     </if>
+    
+     </select>
+</mapper>

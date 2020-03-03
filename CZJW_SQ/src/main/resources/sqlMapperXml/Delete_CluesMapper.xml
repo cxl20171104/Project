@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.Delete_CluesMapper" >
+<select id="getReason"  resultType="com.alphasta.model.Delete_Clues" parameterType="com.alphasta.model.Delete_Clues" >
+
+select id,organId,causeId,createTime,executor,reason from Delete_Clues where causeId=#{causeId} and organId=#{organId}
+
+</select>
+<insert id="addReason" parameterType="com.alphasta.model.Delete_Clues">
+insert into  Delete_Clues (id,organId,causeId,createTime,executor,reason) values(#{id},#{organId},#{causeId},now(),#{executor},#{reason})
+
+</insert>
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.TJMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.clues_tj.TJModel">
+        <id column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="options" property="options" jdbcType="VARCHAR"/>
+        <result column="start_time" property="start_time" jdbcType="VARCHAR"/>
+        <result column="end_time" property="end_time" jdbcType="VARCHAR"/>
+        <result column="field_option" property="field_option" jdbcType="VARCHAR"/>
+        <result column="problemLand_option" property="problemLand_option" jdbcType="VARCHAR"/>
+        <result column="rank_option" property="rank_option" jdbcType="VARCHAR"/>
+        <result column="clues_option" property="clues_option" jdbcType="VARCHAR"/>
+        <result column="organId_option" property="organId_option" jdbcType="VARCHAR"/>
+        <result column="special_option" property="special_option" jdbcType="VARCHAR"/>
+        <result column="num" property="num" jdbcType="VARCHAR"/>
+        </resultMap>
+        
+        <select id="tj" resultMap="BaseResultMap" parameterType="java.util.Map">
+         select IF(p.num is null,0,p.num) AS num,
+          <trim  suffixOverrides="," >
+          d.name as type,
+          <if test='rank_option!=null'>
+          (select	d3.name from dict d3 where  #{rank_option}=d3.value and d3.dictPid='0106') as rank_option ,
+          </if>
+          <if test='problemLand_option!=null'>
+           (select	d3.name from dict d3 where  #{problemLand_option}=d3.value and d3.dictPid='0108')  as problemLand_option,
+         </if>
+          <if test='field_option!=null'>
+          (select	d3.name from dict d3 where  #{field_option}=d3.value and d3.dictPid='0114')  as field_option,
+         </if>
+          <if test='clues_option!=null'>
+          (select	d3.name from dict d3 where  #{clues_option}=d3.value and d3.dictPid='0104')  as clues_option,
+          </if>
+          <if test='special_option!=null'>
+          (select	d3.name from dict d3 where  #{special_option}=d3.value and d3.dictPid='0122')  as special_option,
+          </if>
+          <if test='organId_option!=null'>
+          (select	d3.name from organization d3 where  #{organId_option}=d3.id)  as organId_option,
+          </if>
+         <if test='start_time!=null'>
+          #{start_time} as start_time,
+         </if>
+         <if test='end_time!=null'>
+          #{end_time} as end_time,
+         </if>
+         </trim>
+          from dict d left join
+         (select  count(${type})as num,${type} as txt from ProblemClues p join reflectedperson r on p.reflectedPersonId=r.id where 1=1
+         <if test='rank_option!=null'>
+          and  r.rank=#{rank_option}
+         </if>
+         <if test='problemLand_option!=null'>
+          and p.problemLand=#{problemLand_option}
+         </if>
+         <if test='clues_option!=null'>
+          and p.clues=#{clues_option}
+         </if>
+         <if test='field_option!=null'>
+          and LOCATE(#{field_option},p.fields)
+         </if>
+          <if test='special_option!=null'>
+          and p.special=#{special_option}
+         </if>
+          <if test='organId_option!=null'>
+          and p.organId=#{organId_option}
+          </if>
+          <if test='start_time!=null'>
+           <![CDATA[and DATE_FORMAT(receiveDate,'%Y-%m-%d')>=#{start_time}]]>
+         </if>
+         <if test='end_time!=null'>
+           <![CDATA[and DATE_FORMAT(receiveDate,'%Y-%m-%d')<=#{end_time}]]>
+         </if>
+         
+         group by ${type})p on p.txt=d.value 
+         
+         where 1=1
+         <if test='type=="problemLand"'>
+             and d.dictPid="0108"
+         </if>
+         <if test='type=="clues"'>
+            and d.dictPid="0104"
+         </if>
+         <if test='type=="special"'>
+            and d.dictPid="0122"
+         </if>
+         <if test='type=="rank"'>
+            and  d.dictPid="0106"
+         </if>
+        
+        </select>
+        
+        
+        
+        
+        <select id="tj2" resultMap="BaseResultMap" parameterType="java.util.Map">
+         select  
+         <trim  suffixOverrides="," >
+          count(${type})as num,
+           <if test='type=="problemLand"'>
+          (select	d3.name from dict d3 where  ${type}=d3.value and d3.dictPid='0108') 
+             </if>
+             <if test='type=="clues"'>
+             (select	d3.name from dict d3 where  ${type}=d3.value and d3.dictPid='0104') 
+             </if>
+             <if test='type=="rank"'>
+            (select	d3.name from dict d3 where  ${type}=d3.value and d3.dictPid='0106') 
+            </if>
+            <if test='type=="special"'>
+           (select	d3.name from dict d3 where  ${type}=d3.value and d3.dictPid='0122') 
+           </if>
+            <if test='type=="organId"'>
+           (select	d3.name from organization d3 where  ${type}=d3.id ) 
+           </if>
+           as type,
+          <if test='rank_option!=null'>
+          (select	d3.name from dict d3 where  #{rank_option}=d3.value and d3.dictPid='0106') as rank_option ,
+         </if>
+          <if test='problemLand_option!=null'>
+           (select	d3.name from dict d3 where  #{problemLand_option}=d3.value and d3.dictPid='0108')  as problemLand_option,
+         </if>
+          <if test='field_option!=null'>
+          (select	d3.name from dict d3 where  #{field_option}=d3.value and d3.dictPid='0114')  as field_option,
+         </if>
+         <if test='clues_option!=null'>
+          (select	d3.name from dict d3 where  #{clues_option}=d3.value and d3.dictPid='0104')  as clues_option,
+         </if>
+          <if test='special_option!=null'>
+          (select	d3.name from dict d3 where  #{special_option}=d3.value and d3.dictPid='0122')  as special_option,
+         </if>
+          <if test='organId_option!=null'>
+          (select	d3.name from organization d3 where  #{organId_option}=d3.id )  as organId_option,
+         </if>
+         <if test='start_time!=null'>
+          #{start_time} as start_time,
+         </if>
+         <if test='end_time!=null'>
+          #{end_time} as end_time,
+         </if>
+         </trim>
+          from ProblemClues p join reflectedperson r on p.reflectedPersonId=r.id where 1=1
+         <if test='rank_option!=null'>
+          and  r.rank=#{rank_option}
+         </if>
+         <if test='problemLand_option!=null'>
+          and p.problemLand=#{problemLand_option}
+         </if>
+         <if test='clues_option!=null'>
+          and p.clues=#{clues_option}
+         </if>
+         <if test='special_option!=null'>
+          and p.special=#{special_option}
+         </if>
+         <if test='organId_option!=null'>
+          and p.organId=#{organId_option}
+         </if>
+         <if test='field_option!=null'>
+          and LOCATE(#{field_option},p.fields)
+         </if>
+         <if test='start_time!=null'>
+         <![CDATA[and DATE_FORMAT(receiveDate,'%Y-%m-%d')>=#{start_time}]]>
+         </if>
+         <if test='end_time!=null'>
+           <![CDATA[and DATE_FORMAT(receiveDate,'%Y-%m-%d')<=#{end_time}]]>
+         </if>
+         group by ${type}
+        </select>
+</mapper>

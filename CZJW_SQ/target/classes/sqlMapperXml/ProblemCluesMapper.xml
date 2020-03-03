@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ProblemCluesMapper">
+	 <resultMap id="BaseResultMap" type="com.alphasta.model.ProblemClues">
+	  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="clues" property="clues" jdbcType="VARCHAR"/>
+	  	<result column="receiveDate" property="receiveDate" jdbcType="TIMESTAMP"/>
+	  	<result column="problemLand" property="problemLand" jdbcType="VARCHAR"/>
+	  	<result column="problemDescribe" property="problemDescribe" jdbcType="VARCHAR"/>
+	  	<result column="whereFrom" property="whereFrom" jdbcType="VARCHAR"/>
+	  	<result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+	  	<result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+	  	<result column="fields" property="fields" jdbcType="VARCHAR"/>
+	  	<result column="belongToId" property="belongToId" jdbcType="VARCHAR" />
+	  	<result column="duplicate" property="duplicate" jdbcType="VARCHAR" />
+	  	<result column="duplicateId" property="duplicateId" jdbcType="VARCHAR" />
+	  	<result column="organId" property="organId" jdbcType="VARCHAR" />
+	  	<result column="special" property="special" jdbcType="VARCHAR" />
+	  	<result column="cluesNum" property="cluesNum" jdbcType="VARCHAR" />
+		<result column="isResult" property="isResult" jdbcType="VARCHAR" />
+		<result column="isImport" property="isImport" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="resultTime" property="resultTime" jdbcType="VARCHAR" />
+		<result column="isResult_jds" property="isResult_jds" jdbcType="VARCHAR" />
+		<result column="resultTime_jds" property="resultTime_jds" jdbcType="VARCHAR" />
+		<result column="fromId" property="fromId" jdbcType="VARCHAR" />
+		<result column="superviseTestTime" property="superviseTestTime" jdbcType="VARCHAR" />
+		<result column="isGet" property="isGet" jdbcType="VARCHAR" />
+		<result column="finalState" property="finalState" jdbcType="VARCHAR" />
+		<!-- 最近的到期时间 -->
+		<result column="expireTime" property="expireTime" jdbcType="VARCHAR" />
+		<!-- 来文编号 -->
+		<result column="lwbh" property="lwbh" jdbcType="VARCHAR" />
+		<!-- 来往通信ip -->
+		<result column="isXf" property="isXf" jdbcType="VARCHAR" />
+        <!-- 留存状态 -->
+	  	<result column="state" property="state" jdbcType="VARCHAR" />
+	  	<result column="cbr_now" property="cbr_now" jdbcType="VARCHAR" />
+	  	<result column="isDel" property="isDel" jdbcType="VARCHAR" />
+	  	<!-- 关联 -->
+	  	<association property="reflectedPerson" column="reflectedPersonId"  javaType="com.alphasta.model.ReflectedPerson" select="com.alphasta.mapper.ReflectedPersonMapper.getReflectedPerson"></association>
+	  	<association property="reflectedUnit" column="reflectedUnitId"  javaType="com.alphasta.model.ReflectedUnit" select="com.alphasta.mapper.ReflectedUnitMapper.getReflectedUnit"></association>
+	  	<association property="reflectingPerson" column="reflectingPersonId"  javaType="com.alphasta.model.ReflectingPerson" select="com.alphasta.mapper.ReflectingPersonMapper.getReflectingPerson"></association>
+
+	 </resultMap>
+	  <sql id="Base_Column_List">
+	  	id,clues,receiveDate,problemLand,problemDescribe,
+	  	whereFrom,
+	  	remarks,fields,
+	  	belongToId,duplicate,duplicateId,organId,special,reflectedPersonId,reflectedUnitId,reflectingPersonId,cluesNum,
+
+	  	isResult,isImport,type,resultTime,isResult_jds,resultTime_jds,giveTime_jds,givePersion_jds,superviseTestTime,fromId,isGet,finalState,lwbh,isXf,state,cbr_now,isDel
+	  </sql>
+     <!-- 查询出所有线索 -->
+    <select id="findProblemClues" resultMap="BaseResultMap">
+          select
+          <include refid="Base_Column_List"/>
+          from ProblemClues p
+          where 1=1 
+          and p.duplicateId is null or p.duplicateId =''
+    </select>
+     <!-- 导出查询 -->
+    <select id="findProblemCluesOnimpExcl" resultMap="BaseResultMap" parameterType="PageInfo">
+        select
+    		id,${condition.lm}
+         from ProblemClues 
+        <where>
+         <if test='condition.choseIds!=null and condition.choseIds!=""'>
+          and id in 
+            <foreach item="item" index="index" collection="condition.choseIds" open="(" separator="," close=")">  
+                     #{item}  
+           </foreach> 
+         
+         </if>
+         <if test='condition.receiveDate != null and condition.receiveDate != ""'>
+	 		and receiveDate  = #{condition.receiveDate}
+	 	</if>
+	 	<if test='condition.clues != null and condition.clues != ""  and condition.clues != "no"'>
+	 		and clues  = #{condition.clues}
+	 	</if>
+	 	<if test='condition.problemLand != null and condition.problemLand != ""'>
+	 		and problemLand  = #{condition.problemLand}
+	 	</if>
+	 	<if test='condition.problemDescribe != null and condition.problemDescribe != "" '>
+	 		and problemDescribe like '%${condition.problemDescribe}%'
+	 	</if>
+	 	<if test='condition.whereFrom != null and condition.whereFrom != ""'>
+	 		and whereFrom  = #{condition.whereFrom}
+	 	</if> 
+	 	<if test='condition.remarks != null and condition.remarks != ""'>
+	 		and remarks like '%${condition.remarks}%'
+	 	</if>
+        <if test='condition.fields != null and condition.fields != ""'>
+       		 and (fields  = ${condition.fields}  or  fields LIKE CONCAT('%',',', ${condition.fields} )  or  fields LIKE CONCAT( ${condition.fields} ,',','%') or fields LIKE CONCAT('%',',', ${condition.fields} ,',','%')) 
+        </if>
+	 	<choose>
+                <when test='condition.special != null and condition.special != ""'>
+                      and special = #{condition.special}
+                </when>
+                <otherwise>
+                       and (special is null or special ='')
+                </otherwise>
+        </choose>
+	 		and (belongToId is null or belongToId ='')
+        </where>
+    </select>
+<!-- 根据ID查询线索 -->
+	 <select id="findProblemCluesById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ProblemClues
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 根据duplicateId查询线索 -->
+	 <select id="findProblemCluesByDuplicateId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ProblemClues
+        where duplicateId = #{id,jdbcType=VARCHAR}
+    </select>
+    
+     <!-- 根据belongToId查询线索 -->
+	 <select id="findProblemCluesByBelongToId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ProblemClues
+        where cluesNum = #{cluesNum,jdbcType=VARCHAR}
+    </select>
+      
+     <!-- 添加 -->
+	 <insert id="insertProblemClues" parameterType="com.alphasta.model.ProblemClues">
+	 	 insert into ProblemClues 
+	 	 (
+	 	 id,clues,receiveDate,problemLand,
+	 	 problemDescribe,whereFrom,remarks,fields,
+	 	 createTime,belongToId,duplicate,duplicateId,
+	 	 organId,special,reflectedPersonId,reflectedUnitId,reflectingPersonId,
+	 	 isResult,cluesNum,isImport,type,
+	 	 resultTime,isResult_jds,resultTime_jds,giveTime_jds,givePersion_jds,superviseTestTime,fromId,isGet,finalState,expireTime,lwbh,isXf,state,isDel
+	 	 )
+	 	 values (#{id,jdbcType=VARCHAR},#{clues,jdbcType=VARCHAR},#{receiveDate,jdbcType=VARCHAR},#{problemLand,jdbcType=VARCHAR},
+      		     #{problemDescribe,jdbcType=VARCHAR},#{whereFrom,jdbcType=VARCHAR},#{remarks,jdbcType=VARCHAR},#{fields,jdbcType=VARCHAR},
+      		     now(),#{belongToId,jdbcType=VARCHAR},#{duplicate,jdbcType=VARCHAR},#{duplicateId,jdbcType=VARCHAR},
+	 	 		#{organId,jdbcType=VARCHAR},#{special,jdbcType=VARCHAR},#{reflectedPerson.id},#{reflectedUnit.id},#{reflectingPerson.id},
+	 	 		#{isResult,jdbcType=VARCHAR},#{cluesNum},#{isImport,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},
+	 	 		#{resultTime,jdbcType=VARCHAR},#{isResult_jds,jdbcType=VARCHAR},#{resultTime_jds,jdbcType=VARCHAR},#{giveTime_jds,jdbcType=VARCHAR},
+	 	 		#{givePersion_jds,jdbcType=VARCHAR},#{superviseTestTime,jdbcType=VARCHAR},#{fromId,jdbcType=VARCHAR},#{isGet,jdbcType=VARCHAR},
+	 	 		#{finalState,jdbcType =VARCHAR},#{expireTime,jdbcType=VARCHAR},#{lwbh,jdbcType=VARCHAR},#{isXf,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{isDel,jdbcType=VARCHAR}
+	 	 		
+	 	 );
+	 </insert>
+<!-- 修改 -->
+	  <update id="update" parameterType="com.alphasta.model.ProblemClues">
+	  	  update ProblemClues 
+	  	  <set>
+	  	  
+	  	  <if test="clues !=null and clues != ''" >
+        		clues = #{clues},
+          </if>
+           <if test="receiveDate !=null and receiveDate != ''">
+        		receiveDate = #{receiveDate},
+          </if>
+           <if test="problemLand !=null and problemLand != ''">
+        		problemLand =  #{problemLand},
+          </if>
+           <if test="problemDescribe !=null and problemDescribe != ''">
+        		problemDescribe = #{problemDescribe,jdbcType=VARCHAR},
+          </if>
+          <if test="whereFrom  !=null and whereFrom != ''">
+        		whereFrom =  #{whereFrom,jdbcType=VARCHAR},
+          </if>
+           <if test="remarks !=null and remarks != ''">
+        		remarks = #{remarks,jdbcType=VARCHAR},
+          </if>
+          <if test="fields!=null and fields != ''">
+         	fields =  #{fields,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ="belongToId !=null and belongToId != ''">
+      		 	belongToId = #{belongToId,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='duplicate !=null and duplicate != ""'>
+      		 	duplicate = #{duplicate,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='duplicateId !=null and duplicateId != ""'>
+      		 	duplicateId = #{duplicateId,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='special !=null and special != ""'>
+      		 	special = #{special,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='organId !=null and organId != ""'>
+      		 	organId = #{organId,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='cluesNum !=null and cluesNum != ""'>
+      		 	cluesNum = #{cluesNum,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='isResult !=null and isResult != ""'>
+      		 	isResult = #{isResult,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='isImport !=null and isImport != ""'>
+      		 	isImport = #{isImport,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='type !=null and type != ""'>
+      		 	type = #{type,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='resultTime !=null and resultTime != ""'>
+      		 	resultTime = #{resultTime,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='isResult_jds !=null and isResult_jds != ""'>
+      		 	isResult_jds = #{isResult_jds,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='resultTime_jds !=null and resultTime_jds != ""'>
+      		 	resultTime_jds = #{resultTime_jds,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='giveTime_jds !=null and giveTime_jds != ""'>
+      		 	giveTime_jds = #{giveTime_jds,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='givePersion_jds !=null and givePersion_jds != ""'>
+      		 	givePersion_jds = #{givePersion_jds,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='superviseTestTime !=null and superviseTestTime != ""'>
+      		 	superviseTestTime = #{superviseTestTime,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='fromId !=null and fromId != ""'>
+      		 	fromId = #{fromId,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='isGet !=null and isGet != ""'>
+      		 	isGet = #{isGet,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='finalState !=null and finalState != ""'>
+      		 	finalState = #{finalState,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='expireTime !=null and expireTime != ""'>
+      		    <if test='expireTime=="del"'>
+      		       expireTime ="",
+      		    </if>
+      		     <if test='expireTime!="del"'>
+      		       expireTime = #{expireTime,jdbcType=VARCHAR},
+      		    </if>
+      		 </if>
+      		 <if test ='lwbh !=null and lwbh != ""'>
+      		 	lwbh = #{lwbh,jdbcType=VARCHAR},
+      		 </if>
+      		 
+      		  <if test ='reflectingPerson!=null and reflectingPerson.id !=null and reflectingPerson.id != ""'>
+      		 	reflectingPersonId = #{reflectingPerson.id,jdbcType=VARCHAR},
+      		 </if>
+	         <if test ='isXf !=null and isXf != ""'>
+      		 	isXf = #{isXf,jdbcType=VARCHAR},
+      		 </if>
+      		 <if test ='state !=null and state != ""'>
+      		 	state = #{state,jdbcType=VARCHAR},
+      		 </if>
+      		  <if test ='isDel !=null and isDel != ""'>
+      		 	isDel = #{isDel,jdbcType=VARCHAR},
+      		 </if>
+      		 createTime = now()
+	  	  </set>
+	  	where id = #{id,jdbcType=VARCHAR}
+	  </update>
+	
+<!-- 删除 -->
+    <delete id="deleteByids" parameterType="java.lang.String">
+	    delete from ProblemClues
+	    where id in
+	    <foreach item="ids" index="index" collection="array"
+			open="(" separator="," close=")" >
+			#{ids}
+		</foreach>
+  	</delete>
+ <!-- 同案人员删除 -->
+   <delete id="deleteBelongToIdByids" parameterType="java.lang.String">
+     delete from ProblemClues
+	    where belongToId in
+	    <foreach item="ids" index="index" collection="array"
+			open="(" separator="," close=")" >
+			#{ids}
+		</foreach>		
+  	</delete> 
+ <!-- 重复件删除 --> 	
+  <delete id="deleteRepeatByids" parameterType="java.lang.String">
+	    delete from ProblemClues
+	    where duplicateId in
+	    <foreach item="ids" index="index" collection="array"
+			open="(" separator="," close=")" >
+			#{ids}
+		</foreach>
+  </delete> 	  
+	<!-- 判断是否是重复案件的存储过程 -->
+  	<parameterMap type="java.util.Map" id="getUserCountMap">
+         <parameter property="bei_fan_ying_ren" mode="IN" jdbcType="VARCHAR"/>
+         <parameter property="zx_special" mode="IN" jdbcType="VARCHAR"/>
+         <parameter property="ida" mode="IN" jdbcType="VARCHAR"/>
+    </parameterMap>
+  	<select id="getUserCount" parameterMap="getUserCountMap" statementType="CALLABLE" resultType="java.lang.String">
+          CALL isDoubleXin(?,?,?);
+    </select>
+
+    <select id="findTorepeat" resultMap="BaseResultMap" parameterType="com.alphasta.model.ProblemClues">
+          select  <include refid="Base_Column_List"/> 
+          from ProblemClues  where duplicateId = #{id }
+    </select>
+    
+     <update id="updateRepeat" parameterType="com.alphasta.model.ProblemClues">
+	  	  update ProblemClues 
+	  	  <set>
+      		 	duplicate = #{duplicate,jdbcType=VARCHAR},
+      		 	duplicateId = #{duplicateId,jdbcType=VARCHAR}
+	  	  </set>
+	  	  where id = #{id,jdbcType=VARCHAR}
+	  </update>
+	  
+	  <!-- 根据CASEID查询线索 -->
+	 <select id="findProblemCluesByCluesNum" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ProblemClues
+        where cluesNum = #{cluesNum,jdbcType=VARCHAR}
+    </select> 
+     <!-- 查询线索 -->
+	 <select id="findProblemCluesRepeat" resultMap="BaseResultMap" parameterType="com.alphasta.model.ProblemClues">
+        select
+        <include refid="Base_Column_List"/>
+        from ProblemClues
+        <where>
+         <if test="id !=null and id != ''" >
+        		and id = #{id} 
+          </if>
+      		 <if test ='special !=null and special != ""'>
+      		 	and special = #{special,jdbcType=VARCHAR}
+      		 </if>
+ 
+        </where>
+    </select> 
+    <select id="findMaxCluesNum"  resultMap="BaseResultMap">
+      SELECT max(cluesNum) as cluesNum from problemClues where cluesNum like  '20%';
+    </select>
+    
+    <select id="find_clues_by_ref" resultMap="BaseResultMap" parameterType="com.alphasta.model.ReflectedPerson">
+    select  <include refid="Base_Column_List"/> from problemClues where  reflectedPersonId=#{id} and duplicateId is null
+    </select>
+</mapper> 

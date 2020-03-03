@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ReflectedPersonMapper">
+	 <resultMap id="BaseResultMap" type="com.alphasta.model.ReflectedPerson">
+	  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="causeId" property="causeId" jdbcType="VARCHAR"/>
+	  	<result column="reflectedName" property="reflectedName" jdbcType="VARCHAR"/>
+	  	<result column="sex" property="sex" jdbcType="VARCHAR"/>
+	  	<result column="nation" property="nation" jdbcType="VARCHAR"/>
+	  	<result column="xl" property="xl" jdbcType="VARCHAR"/>
+	  	<result column="birthday" property="birthday" jdbcType="VARCHAR"/>
+	  	<result column="age" property="age" jdbcType="INTEGER"/>
+	  	<result column="political" property="political" jdbcType="VARCHAR"/>
+	  	<result column="intime" property="intime" jdbcType="VARCHAR"/>
+	  	<result column="duty" property="duty" jdbcType="VARCHAR"/>
+	  	<result column="position" property="position" jdbcType="VARCHAR"/>	  	
+	  	<result column="rank" property="rank" jdbcType="VARCHAR"/>
+	  	<result column="cadre" property="cadre" jdbcType="VARCHAR"/>
+	  	<result column="worktime" property="worktime" jdbcType="VARCHAR"/>
+	  	<result column="np" property="np" jdbcType="VARCHAR"/>
+	  	<result column="zx" property="zx" jdbcType="VARCHAR"/>
+	  	<result column="civilServant" property="civilServant" jdbcType="VARCHAR"/>
+	  	<result column="iSupervision" property="iSupervision" jdbcType="VARCHAR"/>
+	  	<result column="departmenType" property="departmenType" jdbcType="VARCHAR"/>
+	  	<result column="natureOfenterprise" property="natureOfenterprise" jdbcType="VARCHAR"/>
+	  	<result column="classOfenterprise" property="classOfenterprise" jdbcType="VARCHAR"/>
+	  	<result column="post" property="post" jdbcType="VARCHAR"/>
+	  	<result column="posType" property="posType" jdbcType="VARCHAR"/>
+	  	<result column="charge" property="charge" jdbcType="VARCHAR"/>
+	  	<result column="crime" property="crime" jdbcType="VARCHAR"/>
+	  	<result column="measures" property="measures" jdbcType="VARCHAR"/>
+	  	<result column="crimeCharge" property="crimeCharge" jdbcType="VARCHAR"/>
+	  	<result column="escape" property="escape" jdbcType="VARCHAR"/>
+	  	<result column="wanted" property="wanted" jdbcType="VARCHAR"/>
+	  	<result column="ysTime" property="ysTime" jdbcType="VARCHAR"/>
+	  	<result column="ysPartyOrgan" property="ysPartyOrgan" jdbcType="VARCHAR"/>
+	  	<result column="wantedTime" property="wantedTime" jdbcType="VARCHAR"/>
+	  	<result column="involvedMoney" property="involvedMoney" jdbcType="VARCHAR"/>
+	  	<result column="searchTime" property="searchTime" jdbcType="VARCHAR"/>
+	  	<result column="partyMember" property="partyMember" jdbcType="VARCHAR"/>
+		<result column="isPMSupervisoryObject" property="isPMSupervisoryObject" jdbcType="VARCHAR"/>
+		<result column="pMSupervisoryObject" property="pMSupervisoryObject" jdbcType="VARCHAR"/>
+		<result column="documentType" property="documentType" jdbcType="VARCHAR"/>
+		<result column="identificationNumber" property="identificationNumber" jdbcType="VARCHAR"/>
+		<result column="partyRepresent" property="partyRepresent" jdbcType="VARCHAR"/>
+		<result column="dwMember" property="dwMember" jdbcType="VARCHAR"/>
+		<result column="jwMember" property="jwMember" jdbcType="VARCHAR"/>
+		<result column="eightSpirit" property="eightSpirit" jdbcType="VARCHAR"/>
+		<result column="supervision" property="supervision" jdbcType="VARCHAR"/>
+		<result column="isOtherTransfer" property="isOtherTransfer" jdbcType="VARCHAR"/>
+		<result column="otherTransfer" property="otherTransfer" jdbcType="VARCHAR"/>
+    	<result column="firstViolationTime" property="firstViolationTime" jdbcType="VARCHAR"/>
+    	<result column="finalViolationTime" property="finalViolationTime" jdbcType="VARCHAR"/>
+    	<result column="otherViolationTime" property="otherViolationTime" jdbcType="VARCHAR"/>
+    	<result column="researchEndTime" property="researchEndTime" jdbcType="VARCHAR"/>
+        <result column="collectionMoney" property="collectionMoney" jdbcType="VARCHAR"/>
+    	<result column="toSaveMoney" property="toSaveMoney" jdbcType="VARCHAR"/>
+    	<result column="isAccountability" property="isAccountability" jdbcType="VARCHAR"/>    	
+    	<result column="takeEffectTime" property="takeEffectTime" jdbcType="VARCHAR"/>
+    	<result column="relievePunishment" property="relievePunishment" jdbcType="VARCHAR"/>
+    	<result column="recoveryPower" property="recoveryPower" jdbcType="VARCHAR"/>
+    	<result column="stayTerm" property="stayTerm" jdbcType="VARCHAR"/>
+    	<result column="researchRegainTime" property="researchRegainTime" jdbcType="VARCHAR"/>
+    	<result column="stayTermEndTime" property="stayTermEndTime" jdbcType="VARCHAR"/>
+    	<result column="fyzvviolation" property="fyzvviolation" jdbcType="VARCHAR"/>
+    	<result column="isChu" property="isChu" jdbcType="VARCHAR"/>
+    	<result column="chuStartime" property="chuStartime" jdbcType="VARCHAR"/>
+    	<result column="chuendtime" property="chuendtime" jdbcType="VARCHAR"/>
+    	<result column="fylegalAct" property="fylegalAct" jdbcType="VARCHAR"/>
+	 </resultMap>
+	 
+	 
+	 
+	 <!--被反映人详情用-->
+	  <select id="getReflectedPerson"  parameterType="java.lang.String" resultType="com.alphasta.model.ReflectedPerson">
+	       select id,causeId,reflectedName,sex,nation,xl,birthday,age,political,intime,duty,position,cadre,worktime,np,zx,civilServant,iSupervision
+	       ,departmenType,natureOfenterprise,classOfenterprise,post,posType,topDiscipline,
+	  	   rank,xl,workPosition,charge,crime,measures,crimeCharge,escape,wanted,ysTime,ysPartyOrgan,wantedTime,involvedMoney,searchTime,partyMember,isPMSupervisoryObject,
+	  	   pMSupervisoryObject,documentType,identificationNumber,partyRepresent,dwMember,jwMember,eightSpirit,supervision,isOtherTransfer,otherTransfer,
+	  	   firstViolationTime,finalViolationTime,otherViolationTime,researchEndTime,collectionMoney,toSaveMoney,isAccountability,takeEffectTime,relievePunishment,recoveryPower,stayTerm,researchRegainTime,stayTermEndTime,fyzvviolation,isChu,chuStartime,chuendtime,fylegalAct from reflectedPerson p where id=#{id} 
+	 </select>
+	 <!-- 列表页显示用 -->
+	 <select id="getReflectedPerson2"  parameterType="java.lang.String" resultType="com.alphasta.model.ReflectedPerson">
+	 
+	       select  reflectedName,duty,
+	  	   (select	d3.name from dict d3 where  p.rank=d3.value and d3.dictPid='0106') as rank from reflectedPerson p where id=#{id} 
+	 
+	 </select>
+	 
+	 <!-- 添加被反映人 -->
+	 <insert id="addReflectedPerson" parameterType="com.alphasta.model.ReflectedPerson">
+	   insert into reflectedPerson
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id != null">id,</if>
+           <if test="causeId != null">causeId,</if>
+           <if test="reflectedName != null">reflectedName,</if>
+           <if test="sex != null">sex,</if>
+           <if test="nation != null">nation,</if>
+           <if test="xl != null">xl,</if>
+           <if test="birthday != null">birthday,</if>
+           <if test="age != null">age,</if>
+           <if test="political != null">political,</if>
+           <if test="intime != null">intime,</if>
+           <if test="duty != null">duty,</if>
+           <if test="position != null">position,</if>
+           <if test="rank != null">rank,</if>
+           <if test="cadre != null">cadre,</if>
+           <if test="worktime != null">worktime,</if>
+           <if test="np != null">np,</if>
+           <if test="zx != null">zx,</if>
+           <if test="civilServant != null">civilServant,</if>
+           <if test="iSupervision != null">iSupervision,</if>
+           <if test="departmenType != null">departmenType,</if>
+           <if test="natureOfenterprise != null">natureOfenterprise,</if>
+           <if test="classOfenterprise != null">classOfenterprise,</if>
+           <if test="post != null">post,</if>
+           <if test="posType != null">posType,</if>
+           <if test="topDiscipline != null">topDiscipline,</if>
+           <if test="workPosition != null">workPosition,</if>
+           <if test="charge != null">charge,</if>
+           <if test="crime != null">crime,</if>
+           <if test="measures != null">measures,</if>
+           <if test="crimeCharge != null">crimeCharge,</if>
+           <if test="escape != null">escape,</if>
+           <if test="wanted != null">wanted,</if>
+           <if test="ysTime != null">ysTime,</if>
+           <if test="ysPartyOrgan != null">ysPartyOrgan,</if>
+           <if test="wantedTime != null">wantedTime,</if>      
+           <if test="involvedMoney != null">involvedMoney,</if>           
+           <if test="searchTime != null">searchTime,</if>           
+	  	   <if test="partyMember != null">partyMember,</if>       
+	  	   <if test="isPMSupervisoryObject != null">isPMSupervisoryObject,</if>       
+	  	   <if test="pMSupervisoryObject != null">pMSupervisoryObject,</if>       
+	  	   <if test="documentType != null">documentType,</if>       
+	  	   <if test="identificationNumber != null">identificationNumber,</if>       
+	  	   <if test="partyRepresent != null">partyRepresent,</if>    
+	  	   <if test="dwMember != null">dwMember,</if>       
+	  	   <if test="jwMember != null">jwMember,</if>       
+	  	   <if test="eightSpirit != null">eightSpirit,</if>       
+	  	   <if test="supervision != null">supervision,</if>   
+	  	   <if test="isOtherTransfer != null">isOtherTransfer,</if>    
+	  	   <if test="otherTransfer != null">otherTransfer,</if>    
+	  	   <if test="firstViolationTime != null">firstViolationTime,</if>       
+	  	   <if test="finalViolationTime != null">finalViolationTime,</if>   
+	  	   <if test="otherViolationTime != null">otherViolationTime,</if>    
+	  	   <if test="researchEndTime != null">researchEndTime,</if>    
+	  	   <if test="collectionMoney != null">collectionMoney,</if>    
+	  	   <if test="toSaveMoney != null">toSaveMoney,</if>    
+	  	   <if test="isAccountability != null">isAccountability,</if> 
+	  	   <if test="takeEffectTime != null">takeEffectTime,</if>    
+	  	   <if test="relievePunishment != null">relievePunishment,</if>    
+	  	   <if test="recoveryPower != null">recoveryPower,</if> 
+	  	   <if test="stayTerm != null">stayTerm,</if> 
+	  	   <if test="researchRegainTime != null">researchRegainTime,</if>  
+	  	   <if test='stayTermEndTime != null and stayTermEndTime!=""'>stayTermEndTime,</if> 
+	  	   <if test="fyzvviolation != null">fyzvviolation,</if>
+	  	   <if test="isChu != null">isChu,</if>
+	  	   <if test='chuStartime != null and chuStartime!=""'>chuStartime,</if>
+	  	   <if test='chuendtime != null and chuendtime!=""'>chuendtime,</if>
+	  	   <if test='fylegalAct != null and fylegalAct!=""'>fylegalAct,</if>
+	  	      
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="id != null">#{id},</if>
+            <if test="causeId != null">#{causeId},</if>
+           <if test="reflectedName != null">#{reflectedName},</if>
+           <if test="sex != null">#{sex},</if>
+           <if test="nation != null">#{nation},</if>
+           <if test="xl != null">#{xl},</if>
+           <if test="birthday != null">#{birthday},</if>
+           <if test="age != null">#{age},</if>
+           <if test="political != null">#{political},</if>
+           <if test="intime != null">#{intime},</if>
+           <if test="duty != null">#{duty},</if>
+           <if test="position != null">#{position},</if>
+           <if test="rank != null">#{rank},</if>
+           <if test="cadre != null">#{cadre},</if>
+           <if test="worktime != null">#{worktime},</if>
+           <if test="np != null">#{np},</if>
+           <if test="zx != null">#{zx},</if>
+           <if test="civilServant != null">#{civilServant},</if>
+           <if test="iSupervision != null">#{iSupervision},</if>
+           <if test="departmenType != null">#{departmenType},</if>
+           <if test="natureOfenterprise != null">#{natureOfenterprise},</if>
+           <if test="classOfenterprise != null">#{classOfenterprise},</if>
+           <if test="post != null">#{post},</if>
+           <if test="posType != null">#{posType},</if>
+           <if test="topDiscipline != null">#{topDiscipline},</if>
+           <if test="workPosition != null">#{workPosition},</if>
+           <if test="charge != null">#{charge},</if>
+           <if test="crime != null">#{crime},</if>
+           <if test="measures != null">#{measures},</if>
+           <if test="crimeCharge != null">#{crimeCharge},</if>
+           <if test="wanted != null">#{wanted},</if>
+           <if test="ysTime != null">ysTime,</if>
+           <if test="ysPartyOrgan != null">ysPartyOrgan,</if>
+           <if test="wantedTime != null">#{wantedTime},</if>
+           <if test="involvedMoney != null">#{involvedMoney},</if>
+           <if test="searchTime != null">#{searchTime},</if>
+	  	   <if test="partyMember != null">#{partyMember},</if>
+	  	   <if test="isPMSupervisoryObject != null">#{isPMSupervisoryObject},</if>
+	  	   <if test="pMSupervisoryObject != null">#{pMSupervisoryObject},</if>
+	  	   <if test="documentType != null">#{documentType},</if>
+	  	   <if test="identificationNumber != null">#{identificationNumber},</if>
+	  	  <if test="partyRepresent != null">#{partyRepresent},</if> 
+	  	   <if test="dwMember != null">#{dwMember},</if>
+	  	   <if test="jwMember != null">#{jwMember},</if>
+	  	   <if test="eightSpirit != null">#{eightSpirit},</if>	  	   
+	  	   <if test="supervision != null">#{supervision},</if>
+	  	   <if test="isOtherTransfer != null">#{isOtherTransfer},</if>
+	  	   <if test="otherTransfer != null">#{otherTransfer},</if>
+	  	   <if test="firstViolationTime != null">#{firstViolationTime},</if>	  	   
+	  	   <if test="finalViolationTime != null">#{finalViolationTime},</if>
+	  	   <if test="otherViolationTime != null">#{otherViolationTime},</if>
+	  	   <if test="researchEndTime != null">#{researchEndTime},</if>
+	  	   <if test="collectionMoney != null">#{collectionMoney},</if>
+	  	   <if test="toSaveMoney != null">#{toSaveMoney},</if>
+	  	   <if test="isAccountability != null">#{isAccountability},</if>
+	  	   <if test="takeEffectTime != null">#{takeEffectTime},</if>
+	  	   <if test="relievePunishment != null">#{relievePunishment},</if>
+	  	   <if test="recoveryPower != null">#{recoveryPower},</if>
+	  	   <if test="stayTerm != null">#{stayTerm},</if>
+	  	   <if test="researchRegainTime != null">#{researchRegainTime},</if>
+	  	   <if test="stayTermEndTime != null">#{stayTermEndTime},</if>
+	  	   <if test="fyzvviolation != null">#{fyzvviolation},</if>
+	  	   <if test="isChu != null">#{isChu},</if>
+	  	   <if test="chuStartime != null">#{chuStartime},</if>
+	  	   <if test="chuendtime != null">#{chuendtime},</if>
+	  	   <if test="fylegalAct != null">#{fylegalAct},</if>
+	  	   
+        </trim>
+	 
+	 
+	 </insert>
+	 
+<!-- 修改被反映人 --> 
+<update id="updateReflectedPerson" parameterType="com.alphasta.model.ReflectedPerson" >  
+    update reflectedPerson  
+    <set > 
+      <if test="id!= null" >  
+       id = #{id,jdbcType=VARCHAR},  
+      </if>  
+      <if test="reflectedName!= null" >  
+        reflectedName = #{reflectedName,jdbcType=VARCHAR},  
+      </if>  
+      <if test="sex!= null" >  
+        sex = #{sex,jdbcType=VARCHAR},  
+      </if>  
+      <if test="nation!= null" >  
+        nation = #{nation,jdbcType=VARCHAR},  
+      </if>  
+      <if test="birthday!= null" >  
+        birthday = #{birthday,jdbcType=VARCHAR},  
+      </if>  
+      <if test="age!= null" >  
+        age = #{age,jdbcType=INTEGER},  
+      </if>  
+      <if test="political!= null" >  
+        political = #{political,jdbcType=VARCHAR},  
+      </if>  
+      <if test="intime!= null" >  
+        intime = #{intime,jdbcType=VARCHAR},  
+      </if>  
+      <if test="duty != null" >  
+        duty = #{duty,jdbcType=VARCHAR},  
+      </if>  
+      <if test="position != null" >  
+        position = #{position,jdbcType=VARCHAR},  
+      </if>  
+      <if test="rank!= null" >  
+        rank = #{rank,jdbcType=VARCHAR},  
+      </if>  
+      <if test="cadre != null" >  
+        cadre = #{cadre,jdbcType=VARCHAR},  
+      </if>  
+      <if test="worktime!= null" >  
+        worktime = #{worktime,jdbcType=VARCHAR},  
+      </if>  
+      <if test="np != null" >  
+        np = #{np,jdbcType=VARCHAR},  
+      </if>  
+      <if test="zx != null" >  
+        zx = #{zx,jdbcType=VARCHAR},  
+      </if>  
+      <if test="xl != null" >  
+        xl = #{xl,jdbcType=VARCHAR},  
+      </if>  
+      <if test="civilServant != null" >  
+        civilServant = #{civilServant,jdbcType=VARCHAR},  
+      </if>  
+      <if test="iSupervision != null" >  
+        iSupervision = #{iSupervision,jdbcType=VARCHAR},  
+      </if>  
+      <if test="departmenType != null" >  
+        departmenType = #{departmenType,jdbcType=VARCHAR},  
+      </if>  
+      <if test="natureOfenterprise != null" >  
+        natureOfenterprise = #{natureOfenterprise,jdbcType=VARCHAR},  
+      </if>  
+      <if test="classOfenterprise != null" >  
+        classOfenterprise = #{classOfenterprise,jdbcType=VARCHAR},  
+      </if>  
+      <if test="post != null" >  
+        post = #{post,jdbcType=VARCHAR},  
+      </if>  
+      <if test="posType != null" >  
+        posType = #{posType,jdbcType=VARCHAR},  
+      </if>  
+      <if test="topDiscipline != null" >  
+        topDiscipline = #{topDiscipline,jdbcType=VARCHAR},  
+      </if>  
+      <if test="workPosition!= null" >  
+        workPosition = #{workPosition,jdbcType=VARCHAR},  
+      </if>  
+      <if test="charge!= null" >  
+        charge = #{charge,jdbcType=VARCHAR},  
+      </if>  
+      <if test="crime!= null" >  
+        crime = #{crime,jdbcType=VARCHAR},  
+      </if>  
+      <if test="measures!= null" >  
+        measures = #{measures,jdbcType=VARCHAR},  
+      </if>  
+      <if test="crimeCharge!= null" >  
+        crimeCharge = #{crimeCharge,jdbcType=VARCHAR},  
+      </if>  
+      <if test="escape!= null" >  
+        escape = #{escape,jdbcType=VARCHAR},  
+      </if>  
+      <if test="wanted!= null" >  
+        wanted = #{wanted,jdbcType=VARCHAR},  
+      </if>  
+       <if test="ysTime != null">
+        ysTime = #{ysTime,jdbcType=VARCHAR},
+       </if>
+       <if test="ysPartyOrgan != null">
+        ysPartyOrgan = #{ysPartyOrgan,jdbcType=VARCHAR},
+       </if> 
+       <if test="wantedTime != null" >  
+        wantedTime = #{wantedTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="involvedMoney != null" >  
+        involvedMoney = #{involvedMoney,jdbcType=VARCHAR},  
+       </if>
+       <if test="searchTime != null" >  
+        searchTime = #{searchTime,jdbcType=VARCHAR},  
+       </if>
+	   <if test="partyMember != null" >  
+        partyMember = #{partyMember,jdbcType=VARCHAR},  
+       </if>
+       <if test="isPMSupervisoryObject != null" >  
+        isPMSupervisoryObject = #{isPMSupervisoryObject,jdbcType=VARCHAR},  
+       </if>
+       <if test="pMSupervisoryObject != null" >  
+        pMSupervisoryObject = #{pMSupervisoryObject,jdbcType=VARCHAR},  
+       </if>
+       <if test="documentType != null" >  
+        documentType = #{documentType,jdbcType=VARCHAR},  
+       </if>
+       <if test="identificationNumber != null" >  
+        identificationNumber = #{identificationNumber,jdbcType=VARCHAR},  
+       </if>
+        <if test="partyRepresent != null" >  
+        partyRepresent = #{partyRepresent,jdbcType=VARCHAR},  
+       </if> 
+       <if test="dwMember != null" >  
+        dwMember = #{dwMember,jdbcType=VARCHAR},  
+       </if>
+       <if test="jwMember != null" >  
+        jwMember = #{jwMember,jdbcType=VARCHAR},  
+       </if>
+       <if test="eightSpirit != null" >  
+        eightSpirit = #{eightSpirit,jdbcType=VARCHAR},  
+       </if>
+       <if test="supervision != null" >  
+        supervision = #{supervision,jdbcType=VARCHAR},  
+       </if>
+	   <if test="isOtherTransfer != null" >  
+        isOtherTransfer = #{isOtherTransfer,jdbcType=VARCHAR},  
+       </if>
+       <if test="otherTransfer != null" >  
+        otherTransfer = #{otherTransfer,jdbcType=VARCHAR},  
+       </if>
+	  	<if test="firstViolationTime != null" >  
+        firstViolationTime = #{firstViolationTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="finalViolationTime != null" >  
+        finalViolationTime = #{finalViolationTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="otherViolationTime != null" >  
+        otherViolationTime = #{otherViolationTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="researchEndTime != null" >  
+        researchEndTime = #{researchEndTime,jdbcType=VARCHAR},  
+       </if>
+	   <if test="collectionMoney != null" >  
+        collectionMoney = #{collectionMoney,jdbcType=VARCHAR},  
+       </if>
+       <if test="toSaveMoney != null" >  
+        toSaveMoney = #{toSaveMoney,jdbcType=VARCHAR},  
+       </if>
+       <if test="isAccountability != null" >  
+        isAccountability = #{isAccountability,jdbcType=VARCHAR},  
+       </if>
+	   <if test="takeEffectTime != null" >  
+        takeEffectTime = #{takeEffectTime,jdbcType=VARCHAR},  
+       </if>
+        <if test="relievePunishment != null" >  
+        relievePunishment = #{relievePunishment,jdbcType=VARCHAR},  
+       </if>
+        <if test="recoveryPower != null" >  
+        recoveryPower = #{recoveryPower,jdbcType=VARCHAR},  
+       </if>
+       <if test="stayTerm != null" >  
+        stayTerm = #{stayTerm,jdbcType=VARCHAR},  
+       </if>
+       <if test="researchRegainTime != null" >  
+        researchRegainTime = #{researchRegainTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="stayTermEndTime != null" >  
+        stayTermEndTime = #{stayTermEndTime,jdbcType=VARCHAR},  
+       </if>
+       <if test="fyzvviolation != null" >  
+        fyzvviolation = #{fyzvviolation,jdbcType=VARCHAR},  
+       </if>
+       <if test="isChu != null" >  
+        isChu = #{isChu,jdbcType=VARCHAR},  
+       </if>
+       <if test="chuStartime != null" >  
+        chuStartime = #{chuStartime,jdbcType=VARCHAR},  
+       </if>
+       <if test="chuendtime != null" >  
+        chuendtime = #{chuendtime,jdbcType=VARCHAR},  
+       </if>
+        <if test="fylegalAct != null" >  
+        fylegalAct = #{fylegalAct,jdbcType=VARCHAR},  
+       </if>
+       
+       
+    </set>  
+    where id = #{id,jdbcType=VARCHAR}  
+  </update>  
+  <!-- 判断是否有重复件 -->
+  <select id="has_repeat"  resultType="com.alphasta.model.ReflectedPerson" parameterType="com.alphasta.model.ReflectedPerson">
+  select p.id,causeId,reflectedName,sex,nation,xl,birthday,age,political,intime,duty,position,cadre,worktime,np,zx,civilServant,iSupervision
+	       ,departmenType,natureOfenterprise,classOfenterprise,post,posType,topDiscipline,
+	  	   (select	d4.name from dict d4 where  p.rank=d4.value and d4.dictPid='0106') as rank,
+	  	   xl,workPosition,charge,crime,measures,crimeCharge,escape,wanted,ysTime,ysPartyOrgan,wantedTime,involvedMoney,searchTime,partyMember,isPMSupervisoryObject,
+	  	   pMSupervisoryObject,documentType,identificationNumber,partyRepresent,dwMember,jwMember,eightSpirit,supervision,isOtherTransfer,otherTransfer,
+	  	   firstViolationTime,finalViolationTime,otherViolationTime,researchEndTime,collectionMoney,toSaveMoney,isAccountability,takeEffectTime,relievePunishment,recoveryPower,stayTerm,researchRegainTime
+	  	   ,stayTermEndTime from ReflectedPerson p  join problemclues pro  on p.id=pro.reflectedPersonId and pro.isDel is null
+	  	   
+	  	   where p.reflectedName=#{reflectedName}
+  
+   </select>
+   <!-- 删除被反映人 -->
+   <delete id="delReflected" parameterType="java.lang.String" >
+         delete from  ReflectedPerson where id in(#{id})
+   </delete>
+	 </mapper>

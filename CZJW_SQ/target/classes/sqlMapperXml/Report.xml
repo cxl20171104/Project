@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ReportMapper">
+         <resultMap id="BaseResultMap" type="com.alphasta.model.Report">
+         <id column="id" property="id" jdbcType="VARCHAR"/>
+         <result column="reportOrganId" property="reportOrganId" jdbcType="VARCHAR"/>
+         <result column="cluesId" property="cluesId" jdbcType="VARCHAR"/>
+         <result column="submitOrganId" property="submitOrganId" jdbcType="VARCHAR"/>
+         </resultMap>
+        
+<insert id="addReport"   parameterType="com.alphasta.model.Report">
+INSERT INTO Report (id,reportOrganId,cluesId,submitOrganId)
+VALUES(#{id},#{reportOrganId},#{cluesId},#{submitOrganId});
+</insert> 
+<delete id="delReport"  parameterType="com.alphasta.model.Report">
+DELETE FROM Report where reportOrganId=#{reportOrganId} and cluesId=#{cluesId}
+</delete>        
+</mapper>

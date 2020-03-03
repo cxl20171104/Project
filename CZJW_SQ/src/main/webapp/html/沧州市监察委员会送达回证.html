@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-select.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap-datetimepicker.min.css"/>
+		<style type="text/css">
+			.table>tbody>tr>th{ line-height: 2.42857143;vertical-align:middle;text-align: center; }
+		</style>
+	</head>
+	<body>
+		<form action="">
+			<h1 style="text-align: center;" class="page-header">沧州市监察委员会送达回证</h1>
+			<table class="table  table-bordered table-hover">
+				<tr>
+					<th>收件人:</th>
+					<td><input type="text" class="form-control" placeholder=""></td>
+					<th>案由	:</th>
+					<td><input type="text" class="form-control" placeholder=""></td>
+				</tr>
+				<tr>
+					<th>送达单位	:</th>
+					<td colspan="3"><input type="text" class="form-control" placeholder=""></td>
+				</tr>
+				<tr>
+					<th>送达地址 :</th>
+					<td colspan="3"><input type="text" class="form-control" placeholder=""></td>
+				</tr>
+				<table class="table  table-bordered table-hover">
+					<tr>
+						<th>文件名称</th>
+						<th>收到时间</th>
+						<th>收件人</th>
+						<th>不能送达理由</th>
+					</tr>
+					<tr>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td>
+							<a class='input-group date' id='c1'> 
+								<input name="receiveDate" type='text' class="form-control" id='receiveDate' style="width: 150px; height: 30px;" /> 
+								<span class="input-group-addon" style="width: 50px; height: 30px;">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</a>
+						</td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td>
+							<a class='input-group date' id='c1'> 
+								<input name="receiveDate" type='text' class="form-control" id='receiveDate' style="width: 150px; height: 30px;" /> 
+								<span class="input-group-addon" style="width: 50px; height: 30px;">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</a>
+						</td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td>
+							<a class='input-group date' id='c1'> 
+								<input name="receiveDate" type='text' class="form-control" id='receiveDate' style="width: 150px; height: 30px;" /> 
+								<span class="input-group-addon" style="width: 50px; height: 30px;">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</a>
+						</td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td>
+							<a class='input-group date' id='c1'> 
+								<input name="receiveDate" type='text' class="form-control" id='receiveDate' style="width: 150px; height: 30px;" /> 
+								<span class="input-group-addon" style="width: 50px; height: 30px;">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</a>
+						</td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td>
+							<a class='input-group date' id='c1'> 
+								<input name="receiveDate" type='text' class="form-control" id='receiveDate' style="width: 150px; height: 30px;" /> 
+								<span class="input-group-addon" style="width: 50px; height: 30px;">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</span>
+							</a>
+						</td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<th>备注 :</th>
+						<td colspan="3"><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+					<tr>
+						<th>签发人:</th>
+						<td><input type="text" class="form-control" placeholder=""></td>
+						<th>送达人:</th>
+						<td><input type="text" class="form-control" placeholder=""></td>
+					</tr>
+				</table>
+			</table>
+		</form>
+		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../js/bootstrap-select.min.js"></script>
+		<script type="text/javascript" src="../js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript">
+			$("#receiveDate").datetimepicker({
+				format: 'yyyy-mm-dd', //显示格式
+				todayHighlight: 1, //今天高亮
+				minView: "month", //设置只显示到月份
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1,
+				autoclose: 1 //选择后自动关闭
+			});
+		</script>
+	</body>
+</html>

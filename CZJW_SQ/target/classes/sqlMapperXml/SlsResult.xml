@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.SlsResultMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.SlsResult">
+    	<id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="ysCharge" property="ysCharge" jdbcType="VARCHAR"/>
+        <result column="ysChargeTime" property="ysChargeTime" jdbcType="VARCHAR"/>
+        <result column="ysChargeMoney" property="ysChargeMoney" jdbcType="VARCHAR"/>
+        <result column="handlingTime" property="handlingTime" jdbcType="VARCHAR"/>
+        <result column="handlingContent" property="handlingContent" jdbcType="VARCHAR"/>
+        <result column="handlingContentJT" property="handlingContentJT" jdbcType="VARCHAR"/>
+        <result column="imprisonmentYear" property="imprisonmentYear" jdbcType="VARCHAR"/>
+        <result column="imprisonmentMonth" property="imprisonmentMonth" jdbcType="VARCHAR"/>
+        <result column="slowDownYear" property="slowDownYear" jdbcType="VARCHAR"/>
+		<result column="slowDownMonth" property="slowDownMonth" jdbcType="VARCHAR"/>
+        <result column="verdictAmount" property="verdictAmount" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="takeEffectEndTime" property="takeEffectEndTime" jdbcType="VARCHAR"/>
+        <result column="influencePeriod" property="influencePeriod" jdbcType="VARCHAR"/>
+        <result column="takeEffectTimeZW" property="takeEffectTimeZW" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,ysCharge,ysChargeTime,ysChargeMoney,handlingTime,handlingContent,handlingContentJT,imprisonmentYear,imprisonmentMonth,slowDownYear,slowDownMonth,verdictAmount,time,takeEffectEndTime,influencePeriod,takeEffectTimeZW
+    </sql>
+    
+    <insert id="addSlsResult" parameterType="com.alphasta.model.SlsResult" >
+     insert into slsResult
+     (id,
+     reflectedId,
+     ysCharge,
+     ysChargeTime,
+     ysChargeMoney,
+     handlingTime,
+     handlingContent,
+     handlingContentJT,
+     imprisonmentYear,
+     imprisonmentMonth,
+     slowDownYear,
+     slowDownMonth,
+     verdictAmount,
+     time,
+     takeEffectEndTime,
+     influencePeriod,takeEffectTimeZW)
+     values
+     (#{id},
+     #{reflectedId},
+     #{ysCharge},
+     #{ysChargeTime},
+     #{ysChargeMoney},
+     #{handlingTime},
+     #{handlingContent},
+     #{handlingContentJT},
+     #{imprisonmentYear},
+     #{imprisonmentMonth},
+     #{slowDownYear},
+     #{slowDownMonth},
+     #{verdictAmount},
+     now(3),
+     #{takeEffectEndTime},
+     #{influencePeriod}, #{takeEffectTimeZW})
+    </insert>
+    
+    <delete id="deleteSlsResult" parameterType="java.lang.String">
+      
+      delete from slsResult where id=#{id}
+    
+    </delete>
+    
+    <update id="updateSlsResult" parameterType="com.alphasta.model.SlsResult"  >
+    
+    update slsResult
+    <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='ysCharge!=null and ysCharge!=""'>
+          ysCharge=#{ysCharge},    
+    </if>
+    <if test='ysChargeTime !=null and ysChargeTime !=""'>
+          ysChargeTime=#{ysChargeTime},
+    </if>
+    <if test='ysChargeMoney !=null and ysChargeMoney !=""'>
+    
+          ysChargeMoney=#{ysChargeMoney},
+    </if>
+    <if test='handlingTime !=null and handlingTime !=""'>
+    
+          handlingTime=#{handlingTime},
+    </if>
+    <if test='handlingContent !=null and handlingContent !=""'>
+    
+          handlingContent=#{handlingContent},
+    </if>
+    <if test='handlingContentJT !=null and handlingContentJT !=""'>
+    
+          handlingContentJT=#{handlingContentJT},
+    </if>
+     <if test='imprisonmentYear !=null and imprisonmentYear !=""'>
+    
+          imprisonmentYear=#{imprisonmentYear},
+    </if>
+    <if test='imprisonmentMonth !=null and imprisonmentMonth !=""'>
+    
+          imprisonmentMonth=#{imprisonmentMonth},
+    </if>
+     <if test='slowDownYear !=null and slowDownYear !=""'>
+    
+          slowDownYear=#{slowDownYear},
+    </if>
+    <if test='slowDownMonth !=null and slowDownMonth !=""'>
+    
+          slowDownMonth=#{slowDownMonth},
+    </if>
+     <if test='verdictAmount !=null and verdictAmount !=""'>
+    
+          verdictAmount=#{verdictAmount},
+    </if>
+    <if test='time !=null and time !=""'>
+    
+          time=#{time},
+    </if> 
+     <if test='takeEffectEndTime !=null and takeEffectEndTime !=""'>
+    
+          takeEffectEndTime=#{takeEffectEndTime},
+    </if> 
+    <if test='influencePeriod !=null and influencePeriod !=""'>
+    
+          influencePeriod=#{influencePeriod},
+    </if> 
+    <if test='takeEffectTimeZW !=null and takeEffectTimeZW !=""'>
+    
+          takeEffectTimeZW=#{takeEffectTimeZW},
+    </if> 
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findSlsResultById" parameterType="java.lang.String" resultType="com.alphasta.model.SlsResult">
+    
+      select  <include refid="paramList"/> from  slsResult where id=#{id}  
+    
+    </select>
+    <select id="findSlsResultByRid" parameterType="java.lang.String" resultType="com.alphasta.model.SlsResult">
+      
+      select  
+      id,
+      reflectedId,
+      ysCharge,
+      ysChargeTime,
+      ysChargeMoney,
+      handlingTime,
+      handlingContent,
+      handlingContentJT,
+      imprisonmentYear,
+      imprisonmentMonth,
+      slowDownYear,
+      slowDownMonth,
+      verdictAmount,
+      time,
+      takeEffectEndTime,
+      influencePeriod,
+      takeEffectTimeZW
+  
+      from  slsResult p where p.reflectedId=#{rid} and p.time in (select max(time) from slsResult t where p.reflectedId=t.reflectedId  group by t.reflectedId)
+       group by p.reflectedId
+    
+    </select>
+  
+    
+    <select id="findSlsResult" parameterType="com.alphasta.model.SlsResult" resultType="com.alphasta.model.SlsResult">
+      
+      select  <include refid="paramList"/>
+      
+      from  slsResult p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId}    
+    </if>
+     
+    <if test='ysCharge!=null and ysCharge!=""'>
+         and p.ysCharge=#{ysCharge}    
+    </if>
+    <if test='ysChargeTime !=null and ysChargeTime !=""'>
+         and p.ysChargeTime=#{ysChargeTime}
+    </if>
+    <if test='ysChargeMoney !=null and ysChargeMoney !=""'>
+    
+         and p.ysChargeMoney=#{ysChargeMoney}
+    </if>
+    <if test='handlingTime !=null and handlingTime !=""'>
+         and p.handlingTime=#{handlingTime}
+    </if>
+     <if test='handlingContent !=null and handlingContent !=""'>
+         and p.handlingContent=#{handlingContent}
+    </if>
+     <if test='handlingContentJT !=null and handlingContentJT !=""'>
+         and p.handlingContentJT=#{handlingContentJT}
+    </if>
+    <if test='imprisonmentYear !=null and imprisonmentYear !=""'>
+         and p.imprisonmentYear=#{imprisonmentYear}
+    </if>
+    <if test='imprisonmentMonth !=null and imprisonmentMonth !=""'>
+         and p.imprisonmentMonth=#{imprisonmentMonth}
+    </if>
+    <if test='slowDownYear !=null and slowDownYear !=""'>
+         and p.slowDownYear=#{slowDownYear}
+    </if>
+    <if test='slowDownMonth !=null and slowDownMonth !=""'>
+         and p.slowDownMonth=#{slowDownMonth}
+    </if>
+    <if test='verdictAmount !=null and verdictAmount !=""'>
+         and p.verdictAmount=#{verdictAmount}
+    </if>
+    <if test='takeEffectEndTime !=null and takeEffectEndTime !=""'>
+         and p.takeEffectEndTime=#{takeEffectEndTime}
+    </if>
+    <if test='influencePeriod !=null and influencePeriod !=""'>
+         and p.influencePeriod=#{influencePeriod}
+    </if>
+    <if test='takeEffectTimeZW !=null and takeEffectTimeZW !=""'>
+         and p.takeEffectTimeZW = #{ takeEffectTimeZW }
+    </if>
+    	 and p.time in (select max(time) from SlsResult t  
+    where 1=1        
+	        <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId}    
+    </if>
+   
+    <if test='ysCharge!=null and ysCharge!=""'>
+         and t.ysCharge=#{ysCharge}    
+    </if>
+    <if test='ysChargeTime !=null and ysChargeTime !=""'>
+         and t.ysChargeTime=#{ysChargeTime}
+    </if>
+    <if test='ysChargeMoney !=null and ysChargeMoney !=""'>
+    
+         and t.ysChargeMoney=#{ysChargeMoney}
+    </if>
+    <if test='handlingTime !=null and handlingTime !=""'>
+         and t.handlingTime=#{handlingTime}
+    </if>
+    <if test='handlingContent !=null and handlingContent !=""'>
+         and t.handlingContent=#{handlingContent}
+    </if>
+    <if test='handlingContentJT !=null and handlingContentJT !=""'>
+         and t.handlingContentJT=#{handlingContentJT}
+    </if>
+    <if test='imprisonmentYear !=null and imprisonmentYear !=""'>
+         and t.imprisonmentYear=#{imprisonmentYear}
+    </if>
+    <if test='imprisonmentMonth !=null and imprisonmentMonth !=""'>
+         and t.imprisonmentMonth=#{imprisonmentMonth}
+    </if>
+     <if test='slowDownYear !=null and slowDownYear !=""'>
+         and t.slowDownYear=#{slowDownYear}
+    </if>
+    <if test='slowDownMonth !=null and slowDownMonth !=""'>
+         and t.slowDownMonth=#{slowDownMonth}
+    </if>
+     <if test='verdictAmount !=null and verdictAmount !=""'>
+         and t.verdictAmount=#{verdictAmount}
+    </if>
+     <if test='takeEffectEndTime !=null and takeEffectEndTime !=""'>
+         and p.takeEffectEndTime=#{takeEffectEndTime}
+    </if>
+    <if test='influencePeriod !=null and influencePeriod !=""'>
+         and p.influencePeriod=#{influencePeriod}
+    </if>
+    <if test = 'takeEffectTimeZW != null and takeEffectTimeZW != "" '>
+         and p.takeEffectTimeZW = #{ takeEffectTimeZW }
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

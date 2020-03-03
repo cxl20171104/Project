@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ZjkMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Zjk">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="OVER_UNIT" property="over_unit" jdbcType="VARCHAR"/>
+        <result column="EDUCATION" property="education" jdbcType="VARCHAR"/>
+        <result column="MAJOR" property="major" jdbcType="VARCHAR"/>
+        <result column="SPECIALTY" property="specialty" jdbcType="VARCHAR"/>
+        <result column="PLACE" property="place" jdbcType="VARCHAR"/>
+        <result column="WORKING_TIME" property="working_time" jdbcType="VARCHAR"/>
+        <result column="PARTY_MEMBER" property="party_member" jdbcType="VARCHAR"/>
+        <result column="GRADUATED" property="graduated" jdbcType="VARCHAR"/>
+        <result column="EXPERIENCE" property="experience" jdbcType="VARCHAR"/>
+        <result column="DELETE_STATUS" property="delete_status" jdbcType="VARCHAR"/>
+        <result column="POST" property="post" jdbcType="VARCHAR"/>
+        <result column="RANK" property="rank" jdbcType="TIMESTAMP"/>
+        <result column="BIRTHDAY" property="birthday" jdbcType="VARCHAR"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="FATHER" property="father" jdbcType="VARCHAR"/>
+        <result column="MOTHER" property="mother" jdbcType="VARCHAR"/>
+        <result column="FATHER_UNIT" property="father_unit" jdbcType="VARCHAR"/>
+        <result column="MOTHER_UNIT" property="mother_unit" jdbcType="VARCHAR"/>
+        <result column="SPOUSE" property="spouse" jdbcType="VARCHAR"/>
+        <result column="SPOUSE_UNIT" property="spouse_unit" jdbcType="VARCHAR"/>
+        <result column="CHILDREN" property="children" jdbcType="VARCHAR"/>
+        <result column="RELATIVE" property="relative" jdbcType="VARCHAR"/>
+        <result column="FILEPATH" property="filePath" jdbcType="VARCHAR"/>
+         <result column="bir_place" property="bir_place" jdbcType="VARCHAR"/>
+         <result column="party_time" property="party_time" jdbcType="VARCHAR"/>
+         <result column="is_health" property="is_health" jdbcType="VARCHAR"/>
+         <result column="tell" property="tell" jdbcType="VARCHAR"/>
+         <result column="quan_ri_zhi" property="quan_ri_zhi" jdbcType="VARCHAR"/>
+         <result column="zai_zhi" property="zai_zhi" jdbcType="VARCHAR"/>
+         <result column="ji_lv_shen_cha" property="ji_lv_shen_cha" jdbcType="VARCHAR"/>
+         <result column="jiang_cheng" property="jiang_cheng" jdbcType="VARCHAR"/>
+         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+          <result column="nation" property="nation" jdbcType="VARCHAR"/>
+          <result column="sex" property="sex" jdbcType="VARCHAR"/>
+          <result column="nowstate" property="nowstate" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+    	id,name,over_unit,education,major,specialty,place,working_time,party_member,graduated,
+    	experience,delete_status,createrId,createTime,post,rank,birthday,title,father,mother,
+    	father_unit,mother_unit,spouse,spouse_unit,children,relative,filePath,bir_place,
+    	party_time,is_health,tell,quan_ri_zhi,zai_zhi,ji_lv_shen_cha,jiang_cheng,remark,nation,sex,nowstate
+  	</sql>
+    
+    
+    
+    <!-- 查询制定人才 -->
+ 	<select id="findZjkById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from czjw_zjk
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    
+    <!-- 根据指定条件查询人才 -->
+    <select id="findCompanyPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from czjw_zjk 
+        <where>
+       <if test="condition.name != null and condition.name != ''">
+        		and name like '%${condition.name}%'
+        	</if>
+        	<if test="condition.sex != null and condition.sex != ''">
+        		and sex = '${condition.sex}'
+        	</if>
+        	<if test="condition.delete_status != null and condition.delete_status != ''">
+        		and delete_status = '${condition.delete_status}'
+        	</if>
+        	<if test="condition.education != null and condition.education != ''">
+        		and education = '${condition.education}'
+        	</if>
+        	<if test="condition.major != null and condition.major != ''">
+        		and major = '${condition.major}'
+        	</if>
+        	<if test="condition.birthday_s != null and condition.birthday_s != ''">
+        		and birthday &gt;= '${condition.birthday_s}'
+        	</if>
+        	<if test="condition.birthday_e != null and condition.birthday_e != ''">
+        		and birthday &lt;= '${condition.birthday_e}'
+        	</if>
+        	<if test="condition.nation != null and condition.nation != ''">
+        		and nation = '${condition.nation}'
+        	</if>
+        	<if test="condition.place != null and condition.place != ''">
+        		and place = '${condition.place}'
+        	</if>
+        	<if test="condition.bir_place != null and condition.bir_place != ''">
+        		and bir_place = '${condition.bir_place}'
+        	</if>
+        	<if test="condition.graduated != null and condition.graduated != ''">
+        		and graduated = '${condition.graduated}'
+        	</if>
+        	<if test="condition.major != null and condition.major != ''">
+        		and major = '${condition.major}'
+        	</if>
+        	<if test="condition.zai_zhi != null and condition.zai_zhi != ''">
+        		and zai_zhi = '${condition.zai_zhi}'
+        	</if>
+        	<if test="condition.is_health != null and condition.is_health != ''">
+        		and is_health = '${condition.is_health}'
+        	</if>
+        	<if test="condition.working_time_s != null and condition.working_time_s != ''">
+        		and  working_time &gt;= '${condition. working_time_s}'
+        	</if>
+        	<if test="condition.working_time_e != null and condition.working_time_e != ''">
+        		and  working_time &lt;= '${condition. working_time_e}'
+        	</if>
+        	<if test="condition.over_unit != null and condition.over_unit != ''">
+        		and  over_unit = '${condition.over_unit}'
+        	</if>
+        	<if test="condition.post != null and condition.post != ''">
+        		and  post = '${condition. post}'
+        	</if>
+        	<if test="condition.rank != null and condition.rank != ''">
+        		and  rank = '${condition. rank}'
+        	</if>
+        	<if test="condition.party_member != null and condition.party_member != ''">
+        		and  party_member = '${condition.party_member}'
+        	</if>
+        	<if test="condition.party_time_s != null and condition.party_time_s != ''">
+        		and  party_time &gt;= '${condition.party_time_s}'
+        	</if>
+        	<if test="condition.party_time_e != null and condition.party_time_e != ''">
+        		and  party_time  &gt;= '${condition.party_time_e}'
+        	</if>
+        	<if test="condition.tell != null and condition.tell != ''">
+        		and  tell = '${condition.tell}'
+        	</if>
+        	<if test="condition.quan_ri_zhi != null and condition.quan_ri_zhi != ''">
+        		and  quan_ri_zhi = '${condition.quan_ri_zhi}'
+        	</if>
+        </where>
+        order by ${sort} ${order}
+        limit #{from}, #{size}
+    </select>
+    
+    
+    <!-- 根据指定条件统计人才数量 -->
+    <select id="findCompanyPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+	    select 
+	    count(*) count
+	    from czjw_zjk
+	    <where>	 
+					  
+        	<if test="condition.name != null and condition.name != ''">
+        		and name like '%${condition.name}%'
+        	</if>
+        	<if test="condition.sex != null and condition.sex != ''">
+        		and sex = '${condition.sex}'
+        	</if>
+        	<if test="condition.delete_status != null and condition.delete_status != ''">
+        		and delete_status = '${condition.delete_status}'
+        	</if>
+        	<if test="condition.education != null and condition.education != ''">
+        		and education = '${condition.education}'
+        	</if>
+        	<if test="condition.major != null and condition.major != ''">
+        		and major = '${condition.major}'
+        	</if>
+        	<if test="condition.birthday != null and condition.birthday != ''">
+        		and birthday = '${condition.birthday}'
+        	</if>
+        	<if test="condition.nation != null and condition.nation != ''">
+        		and nation = '${condition.nation}'
+        	</if>
+        	<if test="condition.place != null and condition.place != ''">
+        		and place = '${condition.place}'
+        	</if>
+        	<if test="condition.bir_place != null and condition.bir_place != ''">
+        		and bir_place = '${condition.bir_place}'
+        	</if>
+        	<if test="condition.graduated != null and condition.graduated != ''">
+        		and graduated = '${condition.graduated}'
+        	</if>
+        	<if test="condition.major != null and condition.major != ''">
+        		and major = '${condition.major}'
+        	</if>
+        	<if test="condition.zai_zhi != null and condition.zai_zhi != ''">
+        		and zai_zhi = '${condition.zai_zhi}'
+        	</if>
+        	<if test="condition.is_health != null and condition.is_health != ''">
+        		and is_health = '${condition.is_health}'
+        	</if>
+        	<if test="condition.working_time != null and condition.working_time != ''">
+        		and  working_time = '${condition. working_time}'
+        	</if>
+        	<if test="condition.over_unit != null and condition.over_unit != ''">
+        		and  over_unit = '${condition.over_unit}'
+        	</if>
+        	<if test="condition.post != null and condition.post != ''">
+        		and  post = '${condition. post}'
+        	</if>
+        	<if test="condition.rank != null and condition.rank != ''">
+        		and  rank = '${condition. rank}'
+        	</if>
+        	<if test="condition.party_member != null and condition.party_member != ''">
+        		and  party_member = '${condition.party_member}'
+        	</if>
+        	<if test="condition.party_time != null and condition.party_time != ''">
+        		and  party_time = '${condition.party_time}'
+        	</if>
+        	<if test="condition.tell != null and condition.tell != ''">
+        		and  tell = '${condition.tell}'
+        	</if>
+        	<if test="condition.quan_ri_zhi != null and condition.quan_ri_zhi != ''">
+        		and  quan_ri_zhi = '${condition.quan_ri_zhi}'
+        	</if>
+        </where>
+  	</select>
+  	
+  	
+  	<!-- 插入人才 -->
+  	<insert id="insert" parameterType="com.alphasta.model.Zjk">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into czjw_zjk 
+        (name,over_unit,education,major,specialty,place,working_time,
+         party_member,graduated,experience,createrId,createTime,post,
+         rank,birthday,title,father,mother,father_unit,mother_unit,
+         spouse,spouse_unit,children,relative,filePath,bir_place,
+    	 party_time,is_health,tell,quan_ri_zhi,zai_zhi,ji_lv_shen_cha,
+    	 jiang_cheng,remark,nation,sex,nowstate)
+ values (#{name},  #{over_unit}, 
+         
+         <choose>
+               <when test='education=="博士"'>
+                 '1',
+               </when>
+               <when test='education=="硕士"'>
+                 '2',
+               </when>
+               <when test='education=="本科"'>
+                 '3',
+               </when>
+               <when test='education=="大专"'>
+                 '4',
+               </when>
+               <when test='education=="其他"'>
+                 '5',
+               </when>
+               <otherwise>
+                 #{education},      
+               </otherwise>
+         </choose>
+          
+         
+         
+         <choose>
+              <when test='major=="计算机"'>
+              '0',
+              </when>
+              <when test='major=="法律"'>
+              '1',
+              </when>
+              <when test='major=="文学"'>
+              '2',
+              </when>
+              <when test='major=="财务"'>
+              '3',
+              </when>
+              <when test='major=="其他"'>
+              '4',
+              </when>
+              <otherwise>
+               #{major},     
+              </otherwise>
+         </choose>
+          
+         
+         
+         #{specialty}, 
+         #{place}, #{working_time}, 
+         
+         <choose>
+             <when test='party_member=="是"'>
+             '1',
+             </when>
+             <when test='party_member=="否"'>
+             '0',
+             </when>
+             <otherwise>
+             
+             #{party_member},
+             </otherwise>
+         </choose>
+          
+         
+         
+         
+         #{graduated}, 
+         #{experience}, #{createrId}, now(), #{post},
+         <choose>
+              <when test='rank=="厅局级"'>
+              '0',
+              </when>
+              <when test='rank=="县处级"'>
+              '1',
+              </when>
+              <when test='rank=="乡科级"'>
+              '2',
+              </when>
+              <when test='rank=="其他"'>
+              '3',
+              </when>
+              <otherwise>
+              #{rank},     
+              </otherwise>
+         </choose>
+         
+         
+         
+         #{birthday},
+         #{title},#{father},#{mother},#{father_unit},#{mother_unit},
+         #{spouse},#{spouse_unit},#{children},#{relative},#{filePath},
+         #{bir_place}, #{party_time},
+         
+         <choose>
+              <when test='is_health=="是"'>
+              '1',
+              </when>
+              <when test='is_health=="否"'>
+              '2',
+              </when>
+              <otherwise>
+               #{is_health},     
+              </otherwise>
+         </choose>
+          
+         
+         
+         #{tell}, #{quan_ri_zhi}, 
+         #{zai_zhi}, #{ji_lv_shen_cha}, #{jiang_cheng}, #{remark},#{nation},
+         
+         
+        <choose>
+            <when test='sex=="男"'>
+              '1'
+            </when>
+            <when test='sex=="女"'>
+              '2'
+            </when>
+            <otherwise>
+            
+             #{sex},#{nowstate}   
+            </otherwise>        
+        </choose>
+         
+         
+         
+         
+         )
+    </insert>
+    
+  	<insert id="insertData" parameterType="com.alphasta.model.Zjk">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into czjw_zjk 
+        (name,over_unit,education,major,specialty,place,working_time,party_member,
+         graduated,experience,createrId,createTime,post,rank,birthday,title,
+         father,mother,father_unit,mother_unit,spouse,spouse_unit,children,
+         relative,filePath,nowstate)
+        values (#{name}, #{over_unit}, #{education}, #{major}, #{specialty}, #{place}, #{working_time}, #{party_member}, #{graduated}, #{experience}, #{createrId}, now(), #{post},#{rank},#{birthday},#{title},#{father},#{mother},#{father_unit},#{mother_unit},#{spouse},#{spouse_unit},#{children},#{relative},#{filePath})
+    </insert>
+     
+     
+     
+    <!-- 删除人才 -->
+    <delete id="deleteByIds" parameterType="java.lang.String">
+	    update czjw_zjk
+        <set>
+	        delete_status = '1'
+        </set>
+        where id in (${_parameter})
+  	</delete>
+  	<!-- 更新人才 -->
+  	<update id="update" parameterType="com.alphasta.model.Zjk">
+        update czjw_zjk
+        <set>
+	        name = #{name},
+	        over_unit = #{over_unit},
+	        education = #{education},
+	        major = #{major},
+	        specialty = #{specialty},
+	        place = #{place},
+	        working_time = #{working_time},
+	        party_member = #{party_member},
+	        graduated = #{graduated},
+	        experience = #{experience},
+	        post= #{post},
+	        rank= #{rank},
+	        title= #{title},
+	        father= #{father},
+	        mother= #{mother},
+	        father_unit= #{father_unit},
+	        mother_unit= #{mother_unit},
+	        spouse= #{spouse},
+	        spouse_unit= #{spouse_unit},
+	        children= #{children},
+	        relative= #{relative},
+	        filePath=#{filePath},
+	        bir_place=#{bir_place}, 
+	        party_time=#{party_time}, 
+	        is_health=#{is_health}, 
+	        tell=#{tell}, 
+	        quan_ri_zhi=#{quan_ri_zhi}, 
+            zai_zhi=#{zai_zhi}, 
+            ji_lv_shen_cha=#{ji_lv_shen_cha}, 
+            jiang_cheng=#{jiang_cheng}, 
+            remark=#{remark},
+            nation=#{nation},
+            sex=#{sex},
+            nowstate=#{nowstate},
+        </set>
+        where id = #{id}
+    </update>
+    
+    <select id="findZjk" resultMap="BaseResultMap" parameterType="PageInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from czjw_zjk 
+        <where>
+        	<if test="condition.name != null and condition.name != ''">
+        		and name like '%${condition.name}%'
+        	</if>
+        	<if test="condition.delete_status != null and condition.delete_status != ''">
+        		and delete_status = '${condition.delete_status}'
+        	</if>
+        	<if test="condition.xl != null and condition.xl != ''">
+        		and education = '${condition.xl}'
+        	</if>
+        	<if test="condition.zy != null and condition.zy != ''">
+        		and major = '${condition.zy}'
+        	</if>
+        	<if test="condition.starttime != null and condition.starttime != ''">
+        		and birthday &gt;= '${condition.starttime}'
+        	</if>
+        	<if test="condition.endtime != null and condition.endtime != ''">
+        		and birthday &lt;= '${condition.endtime}'
+        	</if>
+        </where>
+        order by name asc
+    </select>
+    <!-- 根据时间段和检索条件统计人才 -->   
+    <resultMap id="cxl2" type="java.util.Map">
+        <result  column="${js}" property="${js}" jdbcType="VARCHAR"/>
+        <result  column="count" property="count" jdbcType="VARCHAR"/>         
+    </resultMap>
+    <select id="groupCaseByjsAndTime"  parameterType="java.util.Map" resultMap="cxl2" >
+       select 
+       <choose>
+           <when test='js=="months"'>
+            DATE_FORMAT(receiveDate,'%Y年%m月') as ${js},
+           </when>
+           <otherwise>
+           ${js} as ${js},
+           </otherwise>
+       </choose>
+       
+       
+       count(id) as count  from czjw_zjk 
+       <where>
+        <if test="start!=null">
+        <![CDATA[
+        and DATE_FORMAT(receiveDate,'%Y-%m-%d')>=#{start}
+       ]]>   
+       </if> 
+       <if test="end!=null">
+        <![CDATA[
+        and DATE_FORMAT(receiveDate,'%Y-%m-%d') <= #{end}
+        ]]>   
+       </if>
+       </where>
+       group by ${js} order by ${js} 
+    </select>
+</mapper>

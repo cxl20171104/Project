@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.RemindMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Remind">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="modifierId" property="modifierId" jdbcType="VARCHAR"/>
+        <result column="problemId" property="problemId" jdbcType="VARCHAR"/>
+        <result column="remindContent" property="remindContent" jdbcType="VARCHAR"/>
+        <result column="remindTime" property="remindTime" jdbcType="VARCHAR"/>
+        <result column="sendState" property="sendState" jdbcType="VARCHAR"/>
+         </resultMap>
+    <sql id="Base_Column_List">
+	  	id,modifierId,problemId,remindContent,remindTime,sendState
+	  </sql>
+   <!-- 查询消息 -->
+    <select id="messageList" resultMap="BaseResultMap" parameterType="com.alphasta.model.Remind">
+        select
+        <include refid="Base_Column_List"/>
+        from remind 
+        <where>
+         <if test='modifierId != null and modifierId != ""'>
+	 		and modifierId  = #{modifierId}
+	 	</if> 
+	 	 <if test='problemId != null and problemId != ""'>
+	 		and problemId  = #{problemId}
+	 	</if>
+	 	 <if test='remindContent != null and remindContent != ""'>
+	 		and remindContent like '%${remindContent}%'
+	 	</if>
+	 	 <if test='remindTime != null and remindTime != ""'>
+	 		and remindTime  = #{remindTime}
+	 	</if>
+	 	<if test='sendState != null and sendState != ""'>
+	 		and sendState  = #{sendState}
+	 	</if>
+	 	order by remindTime desc
+	 	</where>
+    </select>
+    
+    <!-- 分页查询 -->
+	  <select id="allMessageListPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+	 	select
+	 	<include refid="Base_Column_List"/>
+	 	from remind
+	 	<!-- <where>
+	 	<if test='condition.modifierId != null and condition.modifierId != ""'>
+	 		and modifierId  = #{condition.modifierId}
+	 	</if>	 	
+	 	<if test='condition.problemId != null and condition.problemId != ""'>
+	 		and problemId  = #{condition.problemId}
+	 	</if>
+	 	<if test='condition.remindContent != null and condition.remindContent != ""'>
+	 		and remindContent like '%${condition.remindContent}%'
+	 	</if>	 
+	 	<if test='condition.remindTime != null and condition.remindTime != ""'>
+	 		and remindTime  = #{condition.remindTime}
+	 	</if>
+	 	<if test='condition.sendState != null and condition.sendState != ""'>
+	 		and sendState  = #{condition.sendState}
+	 	</if>	 
+	 	</where> -->
+	 	<!-- order by ${sort} ${order} -->
+	 	order by sendState asc,remindTime desc
+        limit #{from}, #{size}
+	  </select>
+<!-- 分页查询统计数量 -->
+	  <select id="allMessageListPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+	  	select 
+	    count(*) count
+	 	from remind
+	 <!-- <where>
+	 	<if test='condition.modifierId != null and condition.modifierId != ""'>
+	 		and modifierId  = #{condition.modifierId}
+	 	</if>	 	
+	 	<if test='condition.problemId != null and condition.problemId != ""'>
+	 		and problemId  = #{condition.problemId}
+	 	</if>
+	 	<if test='condition.remindContent != null and condition.remindContent != ""'>
+	 		and remindContent like '%${condition.remindContent}%'
+	 	</if>	 
+	 	<if test='condition.remindTime != null and condition.remindTime != ""'>
+	 		and remindTime  = #{condition.remindTime}
+	 	</if>
+	 	<if test='condition.sendState != null and condition.sendState != ""'>
+	 		and sendState  = #{condition.sendState}
+	 	</if>	 
+	 	</where> -->
+	  </select>
+  	
+  	 <update id="updateState" parameterType="com.alphasta.model.Remind">
+	  	  update remind 
+	  	  <set>
+	  	  <if test='modifierId != null and modifierId != ""'>
+	 		modifierId  = #{modifierId,jdbcType=VARCHAR},
+	 	</if> 
+	 	 <if test='problemId != null and problemId != ""'>
+	 		problemId  = #{problemId,jdbcType=VARCHAR},
+	 	</if>
+	 	 <if test='remindContent != null and remindContent != ""'>
+	 		remindContent =#{remindContent,jdbcType=VARCHAR},
+	 	</if>
+	 	 <if test='remindTime != null and remindTime != ""'>
+	 		remindTime  = #{remindTime,jdbcType=VARCHAR},
+	 	</if>
+	 	<if test='sendState != null and sendState != ""'>
+	 		sendState  = #{sendState,jdbcType=VARCHAR},
+	 	</if>           
+	  	  </set>
+	  	where id = #{id,jdbcType=VARCHAR}
+	  </update>
+	   <insert id="insert" parameterType="com.alphasta.model.Remind">
+	 	 insert into remind (
+	 	 id,modifierId,problemId,remindContent,remindTime,sendState
+	 	 )
+	 	 values (#{id,jdbcType=VARCHAR},#{modifierId,jdbcType=VARCHAR},#{problemId,jdbcType=VARCHAR},
+	 	 #{remindContent,jdbcType=VARCHAR},#{remindTime,jdbcType=VARCHAR},
+	 	 #{sendState,jdbcType=VARCHAR})
+	 	 </insert>
+</mapper>

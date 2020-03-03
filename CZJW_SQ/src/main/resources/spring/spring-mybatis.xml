@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- 扫描service -->
+    <context:component-scan base-package="com.alphasta.service"/>
+
+    <!-- base dataSource -->
+    <bean name="baseDataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="100" />
+        <property name="minIdle" value="10" />
+        <property name="maxWait" value="60000" />
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="true" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="1800" />
+        <property name="logAbandoned" value="true" />
+        <property name="filters" value="mergeStat" />
+    </bean>
+
+    <!-- 1主库 -->
+    <bean name="master-dataSource" parent="baseDataSource" init-method="init">
+        <property name="url" value="${master_driverUrl}" />
+        <property name="username" value="${master_username}" />
+        <property name="password" value="${master_password}" />
+    </bean>
+    <!-- 2沧县 -->
+    <bean name="cx" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${cx_driverUrl}" />
+        <property name="username" value="${cx_username}" />
+        <property name="password" value="${cx_password}" />
+    </bean>
+     <!-- 3任丘-->
+     <bean name="rq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${rq_driverUrl}" />
+        <property name="username" value="${rq_username}" />
+        <property name="password" value="${rq_password}" />
+    </bean>
+    <!-- 4献县-->
+    <bean name="xx" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${xx_driverUrl}" />
+        <property name="username" value="${xx_username}" />
+        <property name="password" value="${xx_password}" />
+    </bean>
+    <!-- 5吴桥-->
+    <bean name="wq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${wq_driverUrl}" />
+        <property name="username" value="${wq_username}" />
+        <property name="password" value="${wq_password}" />
+    </bean>
+    <!-- 6河间-->
+    <bean name="hj" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${hj_driverUrl}" />
+        <property name="username" value="${hj_username}" />
+        <property name="password" value="${hj_password}" />
+    </bean>
+    <!-- 7南皮-->
+    <bean name="np" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${np_driverUrl}" />
+        <property name="username" value="${np_username}" />
+        <property name="password" value="${np_password}" />
+    </bean>
+    <!-- 8孟村-->
+    <bean name="mc" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${mc_driverUrl}" />
+        <property name="username" value="${mc_username}" />
+        <property name="password" value="${mc_password}" />
+    </bean>
+    <!-- 9盐山-->
+    <bean name="ys" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${ys_driverUrl}" />
+        <property name="username" value="${ys_username}" />
+        <property name="password" value="${ys_password}" />
+    </bean>
+    <!-- 10海兴-->
+    <bean name="hx" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${hx_driverUrl}" />
+        <property name="username" value="${hx_username}" />
+        <property name="password" value="${hx_password}" />
+    </bean>
+    <!-- 11开发区-->
+    <bean name="kfq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${kfq_driverUrl}" />
+        <property name="username" value="${kfq_username}" />
+        <property name="password" value="${kfq_password}" />
+    </bean>
+    <!-- 12运河区-->
+    <bean name="yhq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${yhq_driverUrl}" />
+        <property name="username" value="${yhq_username}" />
+        <property name="password" value="${yhq_password}" />
+    </bean>
+    <!-- 13新华区-->
+    <bean name="xhq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${xhq_driverUrl}" />
+        <property name="username" value="${xhq_username}" />
+        <property name="password" value="${xhq_password}" />
+    </bean>
+    <!-- 14高新区-->
+    <bean name="gxq" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${gxq_driverUrl}" />
+        <property name="username" value="${gxq_username}" />
+        <property name="password" value="${gxq_password}" />
+    </bean>
+     <!-- 15泊头市-->
+      <bean name="bt" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${bt_driverUrl}" />
+        <property name="username" value="${bt_username}" />
+        <property name="password" value="${bt_password}" />
+    </bean> 
+      <!-- 16黄骅市-->
+     <bean name="hh" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${hh_driverUrl}" />
+        <property name="username" value="${hh_username}" />
+        <property name="password" value="${hh_password}" />
+    </bean> 
+       <!-- 17东光-->
+    <bean name="dg" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${dg_driverUrl}" />
+        <property name="username" value="${dg_username}" />
+        <property name="password" value="${dg_password}" />
+    </bean> 
+        <!-- 18肃宁-->
+        <bean name="sn" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${sn_driverUrl}" />
+        <property name="username" value="${sn_username}" />
+        <property name="password" value="${sn_password}" />
+        </bean> 
+         <!-- 19青县-->
+    <bean name="qx" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${qx_driverUrl}" />
+        <property name="username" value="${qx_username}" />
+        <property name="password" value="${qx_password}" />
+    </bean> 
+        <!-- 20黄骅港-->
+     <bean name="hhg" parent="baseDataSource" lazy-init="true">
+        <property name="url" value="${hhg_driverUrl}" />
+        <property name="username" value="${hhg_username}" />
+        <property name="password" value="${hhg_password}" />
+    </bean>
+    <!--数据源切面注入spring-->
+    <bean id="dsChangeAspect" class="com.alphasta.commons.aspect.DataSourceAspect"/>
+
+    <!--主从库选择-->
+    <bean id="dynamicDataSource" class="com.alphasta.dataSource.DynamicDataSource">
+        <property name ="targetDataSources">    
+                <map key-type ="java.lang.String">    
+                      <entry value-ref ="master-dataSource" key= "master-dataSource"></entry >
+                      <!-- 沧县 -->    
+                      <entry value-ref ="cx" key= "156.4.184.58"></entry >
+                      <!-- 任丘 -->   
+                      <entry value-ref ="rq" key= "156.4.182.58"></entry > 
+                      <!-- 献县 --> 
+                      <entry value-ref ="xx" key= "156.4.183.123"></entry >
+                      <!-- 吴桥   -->  
+                      <entry value-ref ="wq" key= "156.4.183.186"></entry >    
+                      <!-- 河间 -->
+                      <entry value-ref ="hj" key= "156.4.182.123"></entry >
+                      <!--   南皮   -->  
+                      <entry value-ref ="np" key= "156.4.184.186"></entry > 
+                      <!--   孟村   --> 
+                      <entry value-ref ="mc" key= "156.4.184.250"></entry >
+                     <!--    盐山 -->    
+                      <entry value-ref ="ys" key= "156.4.185.58"></entry >
+                      <!--   海兴 -->    
+                      <entry value-ref ="hx" key= "156.4.185.123"></entry > 
+                      <!--   开发区  -->  
+                      <entry value-ref ="kfq" key= "156.4.186.123"></entry > 
+                      <!--   运河区 -->
+                      <entry value-ref ="yhq" key= "156.4.185.186"></entry > 
+                      <!--   新华区 -->
+                      <entry value-ref ="xhq" key= "156.4.185.250"></entry >
+                      <!--   黄骅 -->
+                      <entry value-ref ="hh" key= "156.4.182.250"></entry > 
+                      <!--   肃宁 -->
+                      <entry value-ref ="sn" key= "156.4.183.58"></entry > 
+                      <!--  高新区-->   
+                      <entry value-ref ="gxq" key= "156.4.186.186"></entry > 
+                      <!--  黄骅港-->    
+                      <entry value-ref ="hhg" key= "156.4.186.58"></entry > 
+                      <!--  青县-->    
+                      <entry value-ref ="qx" key= "156.4.184.123"></entry > 
+                      <!-- 东光 -->
+                      <entry value-ref ="dg" key= "156.4.183.250"></entry > 
+                      <!-- 泊头 -->
+                      <entry value-ref ="bt" key= "156.4.182.186"></entry > 
+                </map >    
+          </property>    
+          <!-- 默认使用mysql -->    
+          <property name ="defaultTargetDataSource" ref= "master-dataSource"></property >     
+    </bean>
+
+    <!-- spring整合mybatis （mybatis-spring项目提供整合类） -->
+    <bean id="sqlSessionFactory" name="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"></property>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath*:/sqlMapperXml/*.xml"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+
+	 <!-- 共用service  -->
+    <bean id="commonService" class="com.alphasta.commons.base.SqlService">
+        <property name="SqlSessionFactory" ref="SqlSessionFactory"/>
+    </bean>
+
+
+    <!-- MyBatis 动态实现  -->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 对Dao 接口动态实现，需要知道接口在哪  -->
+        <property name="basePackage" value="com.alphasta.mapper"/>
+    </bean>
+
+    <!-- 事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dynamicDataSource"></property>
+    </bean>
+
+    <!-- 事务管理 属性 -->
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="impor*" propagation="REQUIRED" rollback-for="com.alphasta.commons.result.ExcelException"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置切面 -->
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.alphasta.service..*.*(..))"/>
+    </aop:config>
+</beans>

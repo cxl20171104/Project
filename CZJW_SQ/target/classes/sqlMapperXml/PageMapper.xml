@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.PageMapper">
+     
+	 <resultMap id="BaseMap" type="com.alphasta.model.ProblemClues">
+  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="clues" property="clues" jdbcType="VARCHAR"/>
+	  	<result column="receiveDate" property="receiveDate" jdbcType="TIMESTAMP"/>
+	  	<result column="fields" property="fields" jdbcType="VARCHAR"/>
+	  	<result column="problemLand" property="problemLand" jdbcType="VARCHAR"/>
+	  	<result column="duplicate" property="duplicate" jdbcType="VARCHAR"/>
+	  	<result column="special" property="special" jdbcType="VARCHAR"/>
+	  	<result column="organId" property="organId" jdbcType="VARCHAR"/>
+	  	<result column="expireTime" property="expireTime" jdbcType="VARCHAR"/>
+	  	<result column="whereFrom" property="whereFrom" jdbcType="VARCHAR"/>
+	  	<result column="isImport" property="isImport" jdbcType="VARCHAR"/>
+	  	<result column="finalState" property="finalState" jdbcType="VARCHAR"/>
+	  	<result column="state" property="state" jdbcType="VARCHAR"/>
+	  	<result column="isGet" property="isGet" jdbcType="VARCHAR"/>
+	  	<!-- 关联 -->
+	  	<association property="reflectedPerson" column="reflectedPersonId"  javaType="com.alphasta.model.ReflectedPerson" select="com.alphasta.mapper.ReflectedPersonMapper.getReflectedPerson2"></association>
+	  	<association property="reflectingPerson" column="reflectingPersonId"  javaType="com.alphasta.model.ReflectingPerson" select="com.alphasta.mapper.ReflectingPersonMapper.getReflectingPerson"></association>
+	  	
+	 </resultMap>
+	  <!-- [须知：
+	  isGet:案件是否签收  0未签收 1已签收  
+	  
+	  ] -->
+	  <sql id="baseList">
+	  	p.id,whereFrom,p.isImport,
+	  	(select	d2.name from dict d2 where  p.clues=d2.value and d2.dictPid='0104')as clues ,receiveDate,
+	  	(select	d3.name from dict d3 where  p.problemLand=d3.value and d3.dictPid='0108') as problemLand,
+	  	 duplicate,(select	d4.name from dict d4 where  p.special=d4.value and d4.dictPid='0122') as special,
+	  	(select o.name  from organization o where o.id=p. organId) as organId,
+	  	p.reflectedPersonId,
+	  	p.reflectingPersonId,
+	  	p.expireTime as expireTime,
+	  	fromId,
+	  	p.finalState as finalState,
+	  	p.state as state,
+	  	p.isGet,
+	  	p.cluesNum,
+	  	p.isXf as isXf
+	  </sql>
+	  
+	  
+	  
+	  <!-- *********************************************报备案件（监督室报备，党风室报备，干部监督室报备）************************************************** -->
+	  <select id="report" resultMap="BaseMap" parameterType="PageInfo">
+	   select 
+	   <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	   </if>
+	   <if test='condition.count==null or condition.count==""'>
+	    DISTINCT<include refid="baseList"/>
+	   </if>
+	    from  ProblemClues p join report r on r.cluesId=p.id and r.reportOrganId=#{condition.organId} 
+	    JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+	     <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+        </if>
+         <if test='condition.count==null or condition.count==""'>
+           limit #{from}, #{size}
+        </if>
+	  </select>
+	  <!-- ********************************************在办件****************************************************** -->
+	  <select id="heavingPageData" resultMap="BaseMap" parameterType="PageInfo">
+	   select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	    DISTINCT<include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId  
+         <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+         </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+        </if>
+         <if test='condition.count==null or condition.count==""'>
+           limit #{from}, #{size}
+        </if>
+	 </select>
+	 <!-- ********************************************在办件****************************************************** -->
+	 
+	 
+	 
+	 
+	 
+	 
+	 <!-- ********************************************待办件****************************************************** -->
+	<select id="newCluesPageData" resultMap="BaseMap" parameterType="PageInfo">
+	   select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	    DISTINCT<include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+	    
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+        limit #{from}, #{size}
+        </if>
+	 
+	 
+	 </select>
+	  <!-- ********************************************待办件****************************************************** -->
+	  
+	 
+	 <!-- *********************************************办结件******************************************************* -->
+	  <select id="overingPageData"   resultMap="BaseMap" parameterType="PageInfo">
+        select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	    DISTINCT<include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON  p.finalState=-1  and LOCATE('TJ',p.state)!=0 and  rd.id = p.reflectedPersonId and p.reflectedPersonId is not null
+        <if test='condition.sql!="" and condition.sql!=null'>
+                ${condition.sql} 
+        </if>
+		<if test='condition.organId!=null and condition.organId!=""'>
+		JOIN MAKED m ON m.cluesId=p.id and m.organId=#{condition.organId}
+		</if>
+	   <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 
+	 </select>
+	 <!-- *********************************************办结件******************************************************* -->
+	 <!-- 全部案件检索 -->
+	 <select id="libraryPageData" resultMap="BaseMap" parameterType="PageInfo">
+	    	                     select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId  
+         <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 </select>
+	 
+	
+	 <!-- 已办件 -->
+	 <select id="workingPageData"  resultMap="BaseMap" parameterType="PageInfo" >
+	  select DISTINCT
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	     from  ProblemClues p join maked m on p.id=m.cluesId and m.organId=#{condition.problemClues.organId} and LOCATE('TJ',p.state)!=0
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+         <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+         </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 </select>
+	 
+	 
+	 <!-- 初步核实 -->
+	 <select id="initialServiceM"  resultMap="BaseMap" parameterType="PageInfo" >
+	  select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+         <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 
+	 
+	 </select>
+	 
+	 
+	 <!-- 到期案件 -->
+	 <!-- 处置建议到期 最新改正  通过线索的expireTime判断这条线索是否到期-->
+	 <select id="overTimePageData_czjy" resultMap="BaseMap" parameterType="PageInfo">
+	  select
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p  
+            JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+            and LOCATE("处置建议" , p.expireTime ) !=0
+	        <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<5]]>
+	         <if test='condition.sql!="" and condition.sql!=null'>
+             ${condition.sql} 
+             </if> 
+	  	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 </select>
+	 <!-- 立案审查到期 -->
+	 <select id="overTimePageData_lasc" resultMap="BaseMap" parameterType="PageInfo" >
+	   select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+	    JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+	    and LOCATE("立案审查" , p.expireTime ) !=0 
+	     <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<5]]> 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 
+	 </select>
+	 
+	 
+	 <!-- 案件审理到期 -->
+	 <select id="overTimePageData_ajsl" resultMap="BaseMap" parameterType="PageInfo">
+	     
+	                   select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	     from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+	    and LOCATE("案件审理" , p.expireTime ) !=0 
+	    <![CDATA[   and DATEDIFF(RIGHT(p.expireTime, 10),now())<10]]> 
+	     <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	 	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 </select>
+	 <!-- 留党察看到期 （新添）-->
+	 <select id="overTimePageData_ldck" resultMap="BaseMap" parameterType="PageInfo">
+	     
+	                   select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	     from  ProblemClues p 
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+         and LOCATE("留党察看" , p.expireTime ) !=0  
+         <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<10]]> 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>   
+	 	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 </select>
+	 <!-- 处分决定执行期限到期 （新添）-->
+	 <select id="overTimePageData_takeEffect" resultMap="BaseMap" parameterType="PageInfo">
+	 select
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	     from  ProblemClues p 
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId
+         and LOCATE("处分决定执行完毕到期" , p.expireTime ) !=0  
+         <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<10]]> 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>   
+	   
+	 	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 </select>
+	 <!-- 暂存待查到期 -->
+	 <select id="overTimePageData_zcdc" resultMap="BaseMap" parameterType="PageInfo">
+	select
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+         and LOCATE("暂存待查" , p.expireTime ) !=0  
+          <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<5]]> 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 </select>
+	 
+	 <!-- 谈话函询到期 -->
+	 <select id="overTimePageData_thhx"  resultMap="BaseMap" parameterType="PageInfo">
+	 
+	              select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	     from  ProblemClues p 
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+         and LOCATE("谈话函询" , p.expireTime ) !=0  
+		 <![CDATA[  and DATEDIFF(RIGHT(p.expireTime, 10),now())<5]]> 
+		 <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+         </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 </select>
+	 <select id="xqData"  resultMap="BaseMap" parameterType="PageInfo">
+	 
+	  select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/> 
+	  </if>
+	    from  ProblemClues p 
+	    JOIN reflectedperson rd ON rd.id = p.reflectedPersonId  
+       <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 </select>
+	 
+	 <!-- 暂存待查件 -->
+	 <select id="temporaryData" resultMap="BaseMap" parameterType="PageInfo">
+	 
+
+          select 
+	  
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        join 
+        (select  p.detail as detail,p.timeForday AS time, p.pointValue as poi,p.causeId as cid,p.type as type from  progress p
+        
+        , (SELECT max(pro.time) AS time,pro.causeId as causeId FROM progress pro GROUP BY pro.causeId) m where p.causeId=m.causeId and m.time=p.time )
+        
+        
+         pp on p.id=pp.cid  and pp.type='暂存待查'
+         JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+		 <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+         </if>
+	     <if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 </select>
+	 <!-- 案管室在办件AGSZAIBAN -->
+	  <select id="agsWorkingPageData"  resultMap="BaseMap" parameterType="PageInfo" >
+	  select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	    <if test='condition.count==null or condition.count==""'>
+	         order by ${sort} ${order}
+        </if>
+        <if test='condition.count==null or condition.count==""'>
+	        limit #{from}, #{size}
+        </if>
+	 </select>
+	 
+	 <!-- 退还件 -->
+	 <select id="returnServiceM"  resultMap="BaseMap" parameterType="PageInfo" >
+	       select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId  
+        <if test='condition.organId!="" and condition.organId!=null'>
+             and p.organId = #{condition.organId} 
+        </if>
+        and (p.finalState=29 or p.finalState=31)
+		<if test='condition.sql!="" and condition.sql!=null' >
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	    order by ${sort} ${order}
+	    
+        limit #{from}, #{size}
+        </if>
+	 
+	 
+	 
+	 </select>
+	 <!-- 退回到上一部门件 -->
+	 <select id="rtingList"  resultMap="BaseMap" parameterType="PageInfo" >
+	   select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	   p.id as id,b.id as clues,b.reason as receiveDate,b.createTime as problemLand,p.finalState as finalState,
+	   p.reflectedPersonId as reflectedPersonId,
+	   p.reflectingPersonId as reflectingPersonId
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId   
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+		JOIN  back b on b.cluesId=p.id and p.organId = #{condition.organId}  and b.type='TH'
+	  	        <if test='condition.count==null or condition.count==""'>
+	             order by ${sort} ${order}
+                 limit #{from}, #{size}
+        </if>
+	  </select>
+	  <select id="tj_detail"  resultMap="BaseMap" parameterType="PageInfo" >
+	   select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	 </select>
+	 
+	 
+	 
+	 
+	 
+	<select id="xfClues"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+        where 1=1 
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	<select id="repeatList"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	 <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	<select id="repeatAllList"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	<select id="tonganList"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	
+	<select id="holeWeb"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	  <if test='condition.count==null or condition.count==""'>
+	    <if test='condition.ip!=null and condition.ip!="" and condition.ip!="localhost"' >
+	    #{condition.ip} as  isXf,
+	    </if>
+	    p.id,whereFrom,p.isImport,
+	  	(select	d2.name from dict d2 where  p.clues=d2.value and d2.dictPid='0104')as clues ,receiveDate,
+	  	(select	d3.name from dict d3 where  p.problemLand=d3.value and d3.dictPid='0108') as problemLand,
+	  	 duplicate,(select	d4.name from dict d4 where  p.special=d4.value and d4.dictPid='0122') as special,
+	  	(select o.name  from organization o where o.id=p. organId) as organId,
+	  	p.reflectedPersonId,
+	  	p.reflectingPersonId,
+	  	p.expireTime as expireTime,
+	  	fromId,
+	  	p.finalState as finalState,
+	  	p.state as state,
+	  	p.isGet,
+	  	p.cluesNum
+	    </if>
+	    from  ProblemClues p 
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	
+	
+	
+	
+	<select id="del_clues"  resultMap="BaseMap" parameterType="PageInfo">
+           select 
+	  <if test='condition.count!=null and condition.count!=""'>
+	       count(*) as whereFrom
+	  </if>
+	   <if test='condition.count==null or condition.count==""'>
+	  <include refid="baseList"/>
+	  </if>
+	    from  ProblemClues p 
+	    JOIN  delete_clues dc ON dc.causeId=p.id and dc.organId=#{condition.organId}
+        JOIN reflectedperson rd ON rd.id = p.reflectedPersonId 
+        <if test='condition.sql!="" and condition.sql!=null'>
+              ${condition.sql} 
+        </if>
+        where 1=1 
+	  	<if test='condition.count==null or condition.count==""'>
+	            order by ${sort} ${order}
+                limit #{from}, #{size}
+        </if>
+	</select>
+	 </mapper>

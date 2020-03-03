@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.MakedMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Maked">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="organId" property="makedOrganId" jdbcType="VARCHAR"/>
+        <result column="cluesId" property="cluesId" jdbcType="VARCHAR"/>
+         </resultMap>
+        
+<insert id="addMaked"   parameterType="com.alphasta.model.Maked">
+INSERT INTO maked (id,organId,cluesId)
+VALUES(#{id},#{makedOrganId},#{cluesId});
+</insert> 
+<delete id="delMaked"  parameterType="com.alphasta.model.Maked">
+DELETE FROM maked where organId=#{makedOrganId} and cluesId=#{cluesId}
+</delete>  
+<select id="findMakedByCidAndOrganId" resultType="com.alphasta.model.Maked" parameterType="com.alphasta.model.Maked">
+select organId,cluesId from maked where cluesId=#{cluesId} and organId=#{makedOrganId}
+</select>      
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.DictMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Dict">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="dictId" property="dictId" jdbcType="VARCHAR"/>
+        <result column="dictPid" property="dictPid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="createrId" property="createrId" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="name" property="text" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    	id, name, dictId, dictPid, value, remark, createrId, createTime
+  	</sql>
+
+    <select id="findDictByDictPid" resultMap="BaseResultMap">
+        select 
+        <include refid="Base_Column_List"/>
+        ,(select case when count(*)=0 then 'open' else 'closed' end from dict d where d.dictPid = t.dictId  ) as state
+        from dict t where t.dictPid = #{dictPid}
+        <if test="dictId != null and dictId != ''">
+        	and dictId = #{dictId}
+        </if>
+        order by remark asc
+    </select>
+    
+    <select id="findDictById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from dict
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <select id="findDictCountByDictPid" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select
+        count(dictId)
+        from dict
+        where dictPid = #{_parameter}
+    </select>
+
+    <insert id="insert" parameterType="com.alphasta.model.Dict">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into dict (dictId, dictPid, name, value, remark, createrId, createTime)
+        values (#{dictId}, #{dictPid}, #{name}, #{value}, #{remark}, #{createrId}, now())
+    </insert>
+
+    <update id="update" parameterType="com.alphasta.model.Dict">
+        update dict
+        <set>
+	        dictId = #{dictId},
+	        dictPid = #{dictPid},
+	        name = #{name},
+	        value = #{value},
+	        remark = #{remark},
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <delete id="deleteByIds" parameterType="java.lang.String">
+	    delete from dict
+	    where id in (${_parameter})
+  	</delete>
+  	
+  	<select id="findByDictPid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select
+  		<include refid="Base_Column_List"/>
+  		from dict where dictPid = #{dictPid}
+  	</select>
+  	
+  	
+  	<select id="findByDict" resultMap="BaseResultMap" parameterType="com.alphasta.model.Dict">
+  		select
+  		<include refid="Base_Column_List"/>
+  		from dict
+  		 <where>  
+	 	<if test='id != null and id != ""'>
+	 		and id  = #{id}
+	 	</if>     
+	 	<if test='dictId != null and dictId != ""'>
+	 		and dictId  = #{dictId}
+	 	</if>
+         <if test='dictPid != null and dictPid != ""'>
+	 		and dictPid  = #{dictPid}
+	 	</if>
+	 	<if test='value != null and value != ""'>
+	 		and value  = #{value}
+	 	</if>
+	 	<if test='remark != null and remark != ""'>
+	 		and remark  = #{remark}
+	 	</if>
+	 	<if test='name != null and name != ""'>
+	 		and name  = #{name}
+	 	</if>
+	 	<if test='createrId != null and createrId != ""'>
+	 		and createrId  = #{createrId}
+	 	</if>
+	 	<if test='createTime != null and createTime != ""'>
+	 		and createTime  = #{createTime}
+	 	</if>
+	 	</where>
+  	</select>
+  	<select id="findLikeByDictPid" resultMap="BaseResultMap" parameterType="java.lang.String">
+  		select
+  		<include refid="Base_Column_List"/>
+  		from dict where dictPid like '%${dictPid}%'
+  	</select>
+</mapper>

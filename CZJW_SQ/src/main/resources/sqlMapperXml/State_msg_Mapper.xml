@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.State_msg_Mapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.State_msg">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="caseid" property="caseid" jdbcType="VARCHAR"/>
+        <result column="isOut" property="isOut" jdbcType="VARCHAR"/>
+        <association property="caseClue" column="caseid"  javaType="com.alphasta.model.CaseClue" select="com.alphasta.mapper.CaseClueMapper.findCaseClueById"></association>
+    </resultMap>
+   
+    <select id="findState_msg" resultMap="BaseResultMap">
+        select id,caseid,style,msgfor from STATE_MSG where isOUT=0
+    </select>
+    
+    <delete id="deleteState_msg" parameterType="java.lang.String">
+    
+       delete from State_msg
+	    where id in (${_parameter})
+    
+    </delete>
+    
+   <insert id="insert"  parameterType="com.alphasta.model.State_msg">
+   <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    SELECT LAST_INSERT_ID()
+   </selectKey>
+   insert int State_msg(caseid,isOut)values(#{caseid},#{isOut})
+   </insert>
+   
+
+   <update id="update"  parameterType="com.alphasta.model.State_msg">
+    update State_msg
+    <set>
+      caseid=#{caseid},
+      isOut=#{isOut}
+    </set>
+     where id=#{id,jdbcType=BIGINT}
+   
+   
+   </update>
+
+
+  	
+</mapper>

@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Created>2006-09-16T00:00:00Z</Created>
+  <LastSaved>2017-11-02T14:56:47Z</LastSaved>
+  <Version>14.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+  <RemovePersonalInformation/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>8010</WindowHeight>
+  <WindowWidth>14805</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>105</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s63">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>   
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="14" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s64">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s94">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/> 
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>  
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s66">
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>    
+  </Style>
+  <Style ss:ID="s67">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s70">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s72">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+  <Style ss:ID="s73">  
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+  </Style>
+  <Style ss:ID="s75">
+   <Alignment ss:Vertical="Bottom"/>
+   </Style>
+  <Style ss:ID="s76">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
+ 
+  </Style>
+  <Style ss:ID="s77">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+  <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Color="#000000"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="35" ss:ExpandedRowCount="7" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="33.75" ss:DefaultRowHeight="13.5">
+   <Column ss:AutoFitWidth="0" ss:Width="54"/>
+   <Row ss:AutoFitHeight="0" ss:Height="21">
+    <Cell ss:MergeAcross="34" ss:StyleID="s63"><Data ss:Type="String">纪律审查情况分析表</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ><!-- 
+    <Cell ss:MergeAcross="16"><Data ss:Type="String">统计日期：</Data></Cell> -->
+     <Cell ss:MergeAcross="17" ss:StyleID="s64"><Data ss:Type="String">统计日期：
+        从${start}到${end}
+     </Data></Cell>
+    <Cell ss:MergeAcross="18" ss:StyleID="s64"><Data ss:Type="String">统计单位：件（次、人）</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="18" ss:StyleID="s66">
+    <Cell ss:MergeDown="3" ss:StyleID="s67"/>
+    <Cell ss:MergeAcross="1" ss:StyleID="s70"><Data ss:Type="String">信访情况</Data></Cell>
+    <Cell ss:MergeAcross="14" ss:StyleID="s70"><Data ss:Type="String">线索处置情况（次，同一线索多次处置的多次计算）</Data></Cell>
+    <Cell ss:MergeAcross="6" ss:StyleID="s70"><Data ss:Type="String">立案情况</Data></Cell>
+    <Cell ss:MergeAcross="5" ss:StyleID="s72"><Data ss:Type="String">处分情况</Data></Cell>
+    <Cell ss:MergeAcross="5" ss:StyleID="s72"><Data ss:Type="String">结案情况</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="21" ss:StyleID="s66">
+    <Cell ss:Index="2" ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">接受信访举报</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率  %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">处置件数</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">四种处置方式次数</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">予以了结</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">谈话提醒</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">暂存待查</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">移送有关党组织处理</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">诫勉谈话</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">其他</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">立案数</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeAcross="3" ss:StyleID="s70"><Data ss:Type="String">其中</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">处分人数</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeAcross="3" ss:StyleID="s70"><Data ss:Type="String">其中</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">结案数</Data></Cell>
+    <Cell ss:MergeDown="1" ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:MergeAcross="3" ss:StyleID="s70"><Data ss:Type="String">其中</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="68.25" ss:StyleID="s75">
+   <Cell ss:Index="22" ss:StyleID="s73"><Data ss:Type="String">厅局级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">县处级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:Index="28" ss:StyleID="s73"><Data ss:Type="String">厅局级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">县处级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:Index="34" ss:StyleID="s73"><Data ss:Type="String">厅局级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">县处级</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="String">比上年同期增减率 %</Data></Cell>   
+   </Row>
+   <Row ss:AutoFitHeight="0" ss:Height="12" >
+    <Cell ss:Index="2"><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">3</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">4</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">5</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">6</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">7</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">8</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">9</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">10</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">11</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">12</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">13</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">14</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">15</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">16</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">17</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">18</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">19</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">20</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">21</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">22</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">23</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">24</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">25</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">26</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">27</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">28</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">29</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">30</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">31</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">32</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">33</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">34</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">35</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="Number">36</Data></Cell>
+   </Row>
+    <Row ss:AutoFitHeight="0" ss:Height="27">
+   <Cell ss:Index="1" ss:StyleID="s94"><Data ss:Type="String">合计</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.total}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.total1}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalA}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalA1}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalB}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalB1}%</Data></Cell>
+     
+     
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.A}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.A1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.B}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.B1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.C}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.C1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.D}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.D1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.E}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.E1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.F}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.F1}%</Data></Cell>
+    
+      <Cell ss:Index="20" ss:StyleID="s94"><Data ss:Type="String">${mm.total2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.total12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.A2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.A12}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.B2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.B12}%</Data></Cell>
+     
+     
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalA2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalA12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.C2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.C12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.D2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.D12}%</Data></Cell>
+     
+     
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalB2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.totalB12}%</Data></Cell>
+    
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.E2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.E12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.F2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${mm.F12}%</Data></Cell>
+     
+  
+   
+    </Row>
+     
+    </Row>  
+     <#list listLeft  as map>   
+    <Row ss:AutoFitHeight="0" ss:Height="27">
+    
+	 
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.name}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.total}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.total1}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalA}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalA1}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalB}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalB1}%</Data></Cell>
+     
+     
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.A}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.A1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.B}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.B1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.C}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.C1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.D}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.D1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.E}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.E1}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.F}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.F1}%</Data></Cell>
+    
+      <Cell ss:Index="20" ss:StyleID="s94"><Data ss:Type="String">${map.total2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.total12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.A2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.A12}%</Data></Cell>
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${map.B2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.B12}%</Data></Cell>
+     
+     
+      <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalA2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalA12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.C2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.C12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.D2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.D12}%</Data></Cell>
+     
+     
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalB2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.totalB12}%</Data></Cell>
+    
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.E2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.E12}%</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.F2}</Data></Cell>
+     <Cell ss:StyleID="s94"><Data ss:Type="String">${map.F12}%</Data></Cell>
+     
+  
+   
+    </Row>
+    </#list>
+    
+    
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>600</HorizontalResolution>
+    <VerticalResolution>600</VerticalResolution>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>6</ActiveRow>
+     <ActiveCol>16</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
+   <Row ss:AutoFitHeight="0"/>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Unsynced/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

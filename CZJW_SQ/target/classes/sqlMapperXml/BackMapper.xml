@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.BackMapper">
+<insert id="add_back"  parameterType="com.alphasta.model.Back" >
+insert into back(id,cluesId,reason,type,executor,organId,remark,createTime)values(#{id},#{cluesId},#{reason},#{type},#{executor},#{organId},#{remark},now())
+</insert>
+<select id="select_back" parameterType="com.alphasta.model.Back" resultType="com.alphasta.model.Back">
+select id,cluesId,reason,type,executor,organId,createTime,remark from back where 1=1
+<if test="executor!=null">and executor=#{executor}</if>
+<if test="type!=null">and type=#{type}</if>
+<if test="cluesId!=null"> and cluesId=#{cluesId}</if>
+order by createTime desc
+</select>
+<select id="select_back_id" parameterType="java.lang.String" resultType="com.alphasta.model.Back">
+select id,cluesId,reason,type,executor,organId,remark,createTime from back where 1=1
+<if test="id!=null "> and id=#{id}</if>
+</select>
+</mapper>

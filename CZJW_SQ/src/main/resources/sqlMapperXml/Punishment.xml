@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.PunishmentMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Punishment">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="reflectedId" property="reflectedId" jdbcType="VARCHAR"/>
+        <result column="cfName" property="cfName" jdbcType="VARCHAR"/>
+        <result column="cfTime" property="cfTime" jdbcType="VARCHAR"/>
+        <result column="cfResult" property="cfResult" jdbcType="VARCHAR"/>
+         <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,reflectedId,cfName,cfTime,cfResult
+    </sql>
+    
+    <insert id="addPunishment" parameterType="com.alphasta.model.Punishment" >
+     insert into Punishment(id,reflectedId,cfName,cfTime,cfResult,time)
+     values(#{id},#{reflectedId},#{cfName},#{cfTime},#{cfResult},now(3))
+    
+    </insert>
+    
+    <delete id="deletePunishment" parameterType="java.lang.String">
+      
+      delete from Punishment where id=#{id}
+    
+    </delete>
+    
+    <update id="updatePunishment" parameterType="com.alphasta.model.Punishment"  >
+    
+    update Punishment
+    
+   <set>
+    <if test='reflectedId!=null and reflectedId!=""'>
+          reflectedId=#{reflectedId},    
+    </if>
+    <if test='cfName!=null and cfName!=""'>
+          cfName=#{cfName},
+    </if>
+    <if test='cfTime!=null and cfTime!=""'>
+    
+          cfTime=#{cfTime},
+    </if>
+    <if test='cfResult!=null and cfResult!=""'>
+    
+          cfResult=#{cfResult},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findPunishmentById" parameterType="java.lang.String" resultType="com.alphasta.model.Punishment">
+    
+      select  <include refid="paramList"/> from  Punishment where id=#{id}  
+    
+    </select>
+    <select id="findPunishmentByRid" parameterType="java.lang.String" resultType="com.alphasta.model.Punishment">
+      
+      select  id,reflectedId,cfName,cfTime,cfResult
+      
+      
+      from  Punishment p where p.reflectedId=#{rid}
+    
+    </select>
+  
+    
+    <select id="findPunishment" parameterType="com.alphasta.model.Punishment" resultType="com.alphasta.model.Punishment">
+      
+      select  <include refid="paramList"/>
+      
+      from  Punishment p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and p.reflectedId=#{reflectedId}    
+    </if>
+    <if test='cfName!=null and cfName!=""'>
+         and p.cfName=#{cfName}
+    </if>
+    <if test='cfTime!=null and cfTime!=""'>
+    
+         and p.cfTime=#{cfTime}
+    </if>
+    <if test='cfResult!=null and cfResult!=""'>
+         and p.cfResult=#{cfResult}
+    </if>
+    	 and p.time in (select max(time) from Punishment t  
+    where 1=1        
+	         <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='reflectedId!=null and reflectedId!=""'>
+         and t.reflectedId=#{reflectedId}    
+    </if>
+    <if test='cfName!=null and cfName!=""'>
+         and t.cfName=#{cfName}
+    </if>
+    <if test='cfTime!=null and cfTime!=""'>
+    
+         and t.cfTime=#{cfTime}
+    </if>
+    <if test='cfResult!=null and cfResult!=""'>
+         and t.cfResult=#{cfResult}
+    </if>
+     group by t.reflectedId
+)
+
+    	</where>
+    	group by p.reflectedId
+    </select>
+    </mapper>
+    

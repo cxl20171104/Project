@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ReflectingPersonMapper">
+	 <resultMap id="BaseResultMap" type="com.alphasta.model.ReflectingPerson">
+	  	<id column="id" property="id" jdbcType="VARCHAR"/>
+	  	<result column="causeId" property="causeId" jdbcType="VARCHAR"/>
+	  	<result column="reflectingName" property="reflectingName" jdbcType="VARCHAR"/>
+	  	<result column="tell" property="tell" jdbcType="VARCHAR"/>
+	  	<result column="reflectProblem" property="reflectProblem" jdbcType="VARCHAR"/>
+	  	<result column="reflectingDept" property="reflectingDept" jdbcType="VARCHAR"/>
+	  	</resultMap>
+	  	 <!-- 关联查询 -->
+	 <select id="getReflectingPerson"  parameterType="java.lang.String" resultType="com.alphasta.model.ReflectingPerson">
+	       select * from ReflectingPerson where id=#{id}
+	 </select>
+	 <!-- 添加反映人 -->
+	  <insert id="addReflectingPerson" parameterType="com.alphasta.model.ReflectingPerson">
+        insert ReflectingPerson
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id != null">id,</if>
+           <if test="causeId != null">causeId,</if>
+           <if test="reflectingName != null">reflectingName,</if>
+           <if test="tell != null">tell,</if>
+           <if test="reflectProblem != null">reflectProblem,</if>
+           <if test="reflectingDept != null">reflectingDept,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="id != null">#{id},</if>
+            <if test="causeId != null">#{causeId},</if>
+           <if test="reflectingName != null">#{reflectingName},</if>
+           <if test="tell != null">#{tell},</if>
+           <if test="reflectProblem != null">#{reflectProblem},</if>
+           <if test="reflectingDept != null">#{reflectingDept},</if>
+        </trim>
+    </insert>	
+    
+    
+	 <!-- 修改反映人 --> 	
+	 <update id="updateReflectingPerson" parameterType="com.alphasta.model.ReflectingPerson">
+	  	          update ReflectingPerson  
+     <set >  
+      <if test="reflectingName != null" >  
+        reflectingName = #{reflectingName,jdbcType=VARCHAR},  
+      </if>  
+      <if test="tell != null" >  
+        tell = #{tell,jdbcType=DECIMAL},  
+      </if>  
+      <if test="reflectProblem != null" >  
+        reflectProblem = #{reflectProblem,jdbcType=VARCHAR},  
+      </if>  
+      <if test="reflectingDept != null" >  
+        reflectingDept = #{reflectingDept,jdbcType=VARCHAR},  
+      </if>  
+    </set>  
+        where id= #{id,jdbcType=VARCHAR}  
+	  	
+	  	</update>
+	  	<!-- 删除反映人 -->
+	  	
+	  	<delete id="delReflecting" parameterType="java.lang.String" >
+         delete from  ReflectingPerson where id in(#{id})
+        </delete>
+</mapper>

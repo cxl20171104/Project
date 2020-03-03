@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.GroupMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Group">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="groupName" property="groupName" jdbcType="VARCHAR"/>
+        <result column="groupIdentity" property="groupIdentity" jdbcType="VARCHAR"/>
+        <result column="causeId" property="causeId" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="paramList">
+        id,state,groupIdentity,causeId,groupName
+    </sql>
+    
+    <insert id="addGroup" parameterType="com.alphasta.model.Group" >
+     insert into group2(id,state,groupName,groupIdentity,causeId,time)
+     values(#{id},#{state},#{groupName},#{groupIdentity},#{causeId},now(3))
+    
+    </insert>
+    
+    <delete id="deleteGroup" parameterType="java.lang.String">
+      
+      delete from group2 where id=#{id}
+    
+    </delete>
+    
+    <update id="updateGroup" parameterType="com.alphasta.model.Group"  >
+    
+    update group2
+    
+   <set>
+    <if test='state !=null and state !=""'>
+          state=#{state},    
+    </if>
+    <if test='groupName !=null and groupName !=""'>
+          groupName=#{groupName},
+    </if>
+    <if test='groupIdentity !=null and groupIdentity !=""'>
+    
+          groupIdentity=#{groupIdentity},
+    </if>
+    <if test='causeId !=null and causeId !=""'>
+    
+          causeId=#{causeId},
+    </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+    </update>
+    
+    
+    <select id="findGroupById" parameterType="java.lang.String" resultType="com.alphasta.model.Group">
+    
+      select  <include refid="paramList"/> from  group2 where id=#{id}  
+    
+    </select>
+    <select id="findGroupByRid" parameterType="java.lang.String" resultType="com.alphasta.model.Group">
+      
+      select  id,state,groupName,groupIdentity,causeId
+      
+      
+      from  group2 p where p.causeId=#{rid}
+    
+    </select>
+  
+    
+    <select id="findGroup" parameterType="com.alphasta.model.Group" resultType="com.alphasta.model.Group">
+      
+      select  <include refid="paramList"/>
+      
+      from  group2  p
+		 <where>         
+	         <if test='id != null and id != ""'>
+		 		and p.id  = #{id}
+		 	</if>
+		 	<if test='state !=null and state !=""'>
+         and p.state=#{state} 
+    </if>
+    <if test='groupName !=null and groupName !=""'>
+         and p.groupName=#{groupName}
+    </if>
+    <if test='groupIdentity !=null and groupIdentity !=""'>
+    
+        and p.groupIdentity=#{groupIdentity}
+    </if>
+    <if test='causeId !=null and causeId !=""'>
+    
+         and p.causeId=#{causeId}
+    </if>
+    and p.time in (select max(time) from group2 t  
+    where 1=1        
+	         <if test='id != null and id != ""'>
+		 		and t.id  = #{id}
+		 	</if>
+		 	<if test='state !=null and state !=""'>
+         and t.state=#{state} 
+    </if>
+    <if test='groupName !=null and groupName !=""'>
+         and t.groupName=#{groupName}
+    </if>
+    <if test='groupIdentity !=null and groupIdentity !=""'>
+    
+        and t.groupIdentity=#{groupIdentity}
+    </if>
+    <if test='causeId !=null and causeId !=""'>
+    
+         and t.causeId=#{causeId}
+    </if>
+     group by t.groupIdentity,t.state
+)
+
+    	</where>
+    	group by p.groupIdentity,p.state
+    </select>
+    </mapper>
+    

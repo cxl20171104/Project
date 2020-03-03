@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.StateMapper" >
+  <resultMap id="BaseResultMap" type="com.alphasta.model.State" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="czbm" property="czbm" jdbcType="VARCHAR" />
+    <result column="updateime" property="updateime" jdbcType="TIMESTAMP" />
+    <result column="dtime" property="dtime" jdbcType="TIMESTAMP" />
+    <result column="ajnum" property="ajnum" jdbcType="VARCHAR" />
+    <result column="updateName" property="updatename" jdbcType="VARCHAR" />
+    <result column="ATTCOUNT" property="attcount" jdbcType="INTEGER" />
+    <result column="ajxsId" property="ajxsid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, czbm, updateime, dtime, ajnum, updateName, ATTCOUNT, ajxsId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.alphasta.model.State" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from state
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from state
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from state
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.alphasta.model.State" >
+    delete from state
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.alphasta.model.State" >
+    insert into state (id, name, czbm, 
+      updateime, dtime, ajnum, 
+      updateName, ATTCOUNT, ajxsId
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{czbm,jdbcType=VARCHAR}, 
+      #{updateime,jdbcType=TIMESTAMP}, #{dtime,jdbcType=TIMESTAMP}, #{ajnum,jdbcType=VARCHAR}, 
+      #{updatename,jdbcType=VARCHAR}, #{attcount,jdbcType=INTEGER}, #{ajxsid,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.alphasta.model.State" >
+    insert into state
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="czbm != null" >
+        czbm,
+      </if>
+      <if test="updateime != null" >
+        updateime,
+      </if>
+      <if test="dtime != null" >
+        dtime,
+      </if>
+      <if test="ajnum != null" >
+        ajnum,
+      </if>
+      <if test="updatename != null" >
+        updateName,
+      </if>
+      <if test="attcount != null" >
+        ATTCOUNT,
+      </if>
+      <if test="ajxsid != null" >
+        ajxsId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="czbm != null" >
+        #{czbm,jdbcType=VARCHAR},
+      </if>
+      <if test="updateime != null" >
+        #{updateime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dtime != null" >
+        #{dtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ajnum != null" >
+        #{ajnum,jdbcType=VARCHAR},
+      </if>
+      <if test="updatename != null" >
+        #{updatename,jdbcType=VARCHAR},
+      </if>
+      <if test="attcount != null" >
+        #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test="ajxsid != null" >
+        #{ajxsid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update state
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.czbm != null" >
+        czbm = #{record.czbm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateime != null" >
+        updateime = #{record.updateime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dtime != null" >
+        dtime = #{record.dtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ajnum != null" >
+        ajnum = #{record.ajnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatename != null" >
+        updateName = #{record.updatename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attcount != null" >
+        ATTCOUNT = #{record.attcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.ajxsid != null" >
+        ajxsId = #{record.ajxsid,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update state
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      czbm = #{record.czbm,jdbcType=VARCHAR},
+      updateime = #{record.updateime,jdbcType=TIMESTAMP},
+      dtime = #{record.dtime,jdbcType=TIMESTAMP},
+      ajnum = #{record.ajnum,jdbcType=VARCHAR},
+      updateName = #{record.updatename,jdbcType=VARCHAR},
+      ATTCOUNT = #{record.attcount,jdbcType=INTEGER},
+      ajxsId = #{record.ajxsid,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alphasta.model.State" >
+    update state
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="czbm != null" >
+        czbm = #{czbm,jdbcType=VARCHAR},
+      </if>
+      <if test="updateime != null" >
+        updateime = #{updateime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dtime != null" >
+        dtime = #{dtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ajnum != null" >
+        ajnum = #{ajnum,jdbcType=VARCHAR},
+      </if>
+      <if test="updatename != null" >
+        updateName = #{updatename,jdbcType=VARCHAR},
+      </if>
+      <if test="attcount != null" >
+        ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      </if>
+      <if test="ajxsid != null" >
+        ajxsId = #{ajxsid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.alphasta.model.State" >
+    update state
+    set name = #{name,jdbcType=VARCHAR},
+      czbm = #{czbm,jdbcType=VARCHAR},
+      updateime = #{updateime,jdbcType=TIMESTAMP},
+      dtime = #{dtime,jdbcType=TIMESTAMP},
+      ajnum = #{ajnum,jdbcType=VARCHAR},
+      updateName = #{updatename,jdbcType=VARCHAR},
+      ATTCOUNT = #{attcount,jdbcType=INTEGER},
+      ajxsId = #{ajxsid,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectStateList" parameterType="java.util.Map" resultType="com.alphasta.model.State">
+     select  s.id,      
+    (IF(s.name,(select  d1.name from dict d1 where s.name=d1.value and  d1.dictPid='0103'),"移交承办")) as name, 
+     oo.name as czbm, s.updateime, s.dtime, s.ajnum, o.name as updateName, s.ATTCOUNT, s.ajxsId  from state s  join organization o on s.updateName =o.id  
+    left join organization oo on s.czbm =oo.id
+     <where>1=1
+         <if test="ajxsid!=null">
+             and  s.ajxsid=#{ajxsid}
+         </if>  
+         <if test="ajnum!=null">
+             and  s.ajnum=#{ajnum}
+         </if>    
+     </where>
+     order by s.updateime  desc
+  </select>
+</mapper>
