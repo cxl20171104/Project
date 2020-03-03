@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.HonorMapper">
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Honor">
+     <id column="id" jdbcType="VARCHAR" property="id" />
+     <result column="userid" jdbcType="BIGINT" property="userid" />
+     <result column="organ_id" jdbcType="BIGINT" property="organ_id" />
+     <result column="dictid"  jdbcType="BIGINT" property="dictid"/>
+     <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+     <result column="lruser" jdbcType="BIGINT" property="lruser" />
+     <result column="imgurl" jdbcType="VARCHAR" property="imgurl" />
+     <result column="userName" jdbcType="VARCHAR" property="userName" />
+     <result column="organName" jdbcType="VARCHAR" property="organName" />
+     <result column="lrrName" jdbcType="VARCHAR" property="lrrName" />
+     <result column="dictName" jdbcType="VARCHAR" property="dictName" />
+     <result column="yearly" jdbcType="VARCHAR" property="yearly"/>
+     <result column="countNum" jdbcType="VARCHAR" property="countNum"/>
+     <result column="xtdsName" jdbcType="VARCHAR" property="xtdsName"/>
+  </resultMap>
+  <sql id="basesql">
+     id,userid,organ_id,ctime,lruser,imgurl,dictid,honorname,type
+  </sql>
+  <sql id="baseAllsql">
+     h.id,h.userid,h.organ_id,h.ctime,h.dictid,h.lruser,h.imgurl,h.honorname,h.type,u.name as userName,o.name as organName,
+     x.name as xtdsName, us.name as lrrName,d.name as dictName,h.gettime,h.yearly
+  </sql>
+  <select id="findByid" parameterType="java.util.Map" resultMap="BaseResultMap">
+         select 
+         <include refid="baseAllsql"/>  
+         from honor h 
+          <if test='type!=null and type=="1"'>
+         left join user u on h.userid=u.id
+         </if>
+         <if test='type!=null and type=="2"'>
+         left join organization  u on h.userid=u.id
+         </if>
+         left join user us  on h.lruser=us.id
+         left join organization o on h.organ_id=o.id
+         left join dict  d on d.id=h.dictid
+         <where>
+            h.id=#{id}
+         </where>
+  </select>
+  <select id="findByPageInfo" parameterType="com.alphasta.commons.utils.PageInfo" resultMap="BaseResultMap">
+        select 
+         h.id,h.userid,h.organ_id,h.ctime,h.dictid,h.lruser,h.imgurl,h.honorname,h.type,u.name as userName,o.name as organName,
+          <if test='condition!=null and condition.type=="2"'>
+         x.name as xtdsName, 
+          </if>
+         
+         us.name as lrrName,d.name as dictName,h.gettime,h.yearly
+         from honor h 
+         <!-- 市局的个人荣誉 -->
+         <if test='condition!=null and  condition.level!="2" and  condition.type=="1"'>
+         left join user u on h.userid=u.id
+         left join user us  on h.lruser=us.id
+         left join organization o on h.organ_id=o.id
+         
+         </if>
+         <!-- 区县的个人荣誉 -->
+         <if test='condition!=null and  condition.level=="2" and  condition.type=="1"'>
+         left join user u on h.userid=u.id 
+         left join user us  on h.lruser=us.id
+         left join organization oo  on oo.id=#{condition.oid}
+         join organization o on o. CODE LIKE concat(oo.`code`, '%') and h.organ_id=o.id
+         </if>
+         <!-- 集体荣誉 -->
+         <if test='condition!=null and condition.type=="2"'>
+          left join xtdsj x on x.id=h.organ_id
+         left join organization  u on h.userid=u.id
+         left join user us  on h.lruser=us.id
+         left join organization o on h.organ_id=o.id
+         </if>
+         
+         
+         
+         
+         left join dict  d on d.id=h.dictid
+         where 1=1 
+         <!-- 姓名查询 -->
+         <if test="condition!=null and condition.userName!=null">
+             and  u.name=#{condition.userName}        
+         </if>
+          <!-- 年度查询 -->
+         <if test="condition!=null and condition.yearly!=null">
+             and  h.yearly=#{condition.yearly}        
+         </if>
+          <!-- 个人 -->
+         <if test='condition!=null and condition.level!=null and condition.type=="1"'>
+             and  o.level=#{condition.level}
+         </if>
+          <!-- 集体-->
+         <if test='condition!=null and condition.level!=null and  condition.type=="2"'>
+             and (u.level=#{condition.level} or x.level=#{condition.level} )      
+         </if>
+          <!-- 部门 -->
+         <if test="condition!=null and condition.organid!=null">
+             and  h.organ_id=#{condition.organid}        
+         </if>
+          <!-- 获奖人查询 -->
+         <if test="condition!=null and condition.userid!=null">
+             and  u.id=#{condition.userid}        
+         </if>  
+          <!-- 个人  集体 -->    
+         <if test="condition!=null and condition.type!=null">
+             and h.type=#{condition.type}         
+         </if>
+         <if test="condition!=null and condition.jb!=null">
+             and h.dictid=#{condition.jb}
+         </if>
+  </select>
+  
+  
+  
+  
+  
+  
+  <select id="getCountHonor" parameterType="java.util.Map" resultMap="BaseResultMap">                                       <!--统计个人和集体荣誉-->
+      select h.yearly,d.name as dictName, d.id as dictid, count(h.id) as countNum from honor h  
+      
+      join dict d on h.dictid=d.id
+      <!-- 市局 集体统计   -->
+      <if test='type!=null and type=="2" and level!=null and level=="1"'>
+           left join organization o on h.organ_id=o.id 
+           left join xtdsj x on x.id=h.organ_id 
+      </if>
+      <!-- 市局 个人统计   -->
+      <if test='type!=null and type=="1" and level!=null and level=="1"'>
+           left join organization o on h.organ_id=o.id 
+        
+      </if>
+       <!-- 区县个人统计   -->
+      <if test='type!=null and type=="1" and level!=null and level=="2"'>
+           join organization o on o.id=#{oid}
+           join organization oo on oo. CODE LIKE concat(o.`code`, '%') and h.organ_id=oo.id 
+           and h.type=#{type}
+           and h.yearly >= #{stime}
+      </if>
+       <!-- 区县集体统计   -->
+      <if test='type!=null and type=="2" and level!=null and level=="2"'>
+           join organization o on h.organ_id=o.id and o.level=#{level}
+           and h.type=#{type}
+           and h.yearly >= #{stime}
+      </if>
+      
+      <if test='type!=null and type=="2" and level!=null and level=="1"'>
+      
+         where h.type=#{type} AND h.yearly >= #{stime} AND o.level=#{level} or x.level=#{level}
+      
+      </if>
+       <if test='type!=null and type=="1" and level!=null and level=="1"'>
+      
+         where h.type=#{type} AND h.yearly >= #{stime}  AND o.level=#{level} 
+      
+      </if>
+      
+          group by h.yearly desc,d.id
+  </select>
+  
+  
+  
+  
+  
+  
+  
+   <insert id="insertOne" parameterType="com.alphasta.model.Honor">
+         insert  into  honor 
+          (id,userid,honorname,type,organ_id,ctime,lruser,imgurl,dictid,yearly,gettime) 
+          values
+          (#{id, jdbcType=VARCHAR},
+          #{userid, jdbcType=BIGINT},
+          #{honorname,jdbcType=VARCHAR},
+          #{type,jdbcType=VARCHAR},
+          #{organ_id, jdbcType=BIGINT},
+          #{ctime, jdbcType=TIMESTAMP},
+          #{lruser, jdbcType=BIGINT},
+          #{imgurl, jdbcType=VARCHAR},
+          #{dictid,jdbcType=BIGINT},
+          #{yearly,jdbcType=VARCHAR},
+          #{gettime,jdbcType=TIMESTAMP})
+   </insert>
+   <update id="updateOne" parameterType="com.alphasta.model.Honor">
+       update honor 
+       <set>
+          <if test="userid!=null">
+           userid=#{userid, jdbcType=BIGINT},  
+          </if>
+          <if test="organ_id!=null">
+          organ_id=#{organ_id, jdbcType=BIGINT},
+          </if>
+          <if test="ctime!=null">
+          ctime= #{ctime, jdbcType=TIMESTAMP},
+          </if>
+          <if test="lruser!=null">
+          lruser=#{lruser, jdbcType=BIGINT},
+          </if>
+          <if test="imgurl!=null">
+          imgurl=#{imgurl, jdbcType=VARCHAR},
+          </if>
+          <if test="dictid!=null">
+          dictid=#{dictid, jdbcType=VARCHAR},
+          </if>
+          <if test="honorname!=null">
+          honorname=#{honorname, jdbcType=VARCHAR},
+          </if>
+          <if test="yearly!=null">
+          yearly=#{yearly, jdbcType=VARCHAR},
+          </if>
+          <if test="gettime!=null">
+          gettime=#{gettime, jdbcType=TIMESTAMP},
+          </if>
+       </set>
+       <where>
+           id=#{id, jdbcType=VARCHAR}
+       </where>
+   </update>
+    <delete id="deleteOne" parameterType="java.lang.String">
+         delete from honor
+	    where id = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper>

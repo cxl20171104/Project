@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.StatisticsMapper" >
+      <resultMap  id="Base_list" type="com.alphasta.model.Statistics" >
+          <id column="ID" property="id" jdbcType="VARCHAR" />
+          <result column="USERID" property="userId"  jdbcType="VARCHAR"  />
+          <result column="NAME" property="name" jdbcType="VARCHAR"/>
+          <result  column="IDCARD" property="idcard" jdbcType="VARCHAR"/>           
+          <result column="SCORES"  property="scores" jdbcType="VARCHAR"/>
+          <result column="CTIME"  property="ctime" jdbcType="TIMESTAMP"/>
+          <result column="TYPE"  property="type" jdbcType="INTEGER"/>
+      </resultMap>
+      <select id="getStatList" parameterType="java.util.Map"  resultMap="Base_list">
+         select a.id,a.scores,a.ctime,a.type,a.userid ,u.name,u.idcard  from statistics a join  user u  on  a.userid=u.id
+          <if test='level!=null and level=="1"'>
+              join  organization o on o.id=u.organization_id and  o.level=#{level}   
+            </if>
+           <if test='level!=null and level=="2" and oid !=null'>
+              join organization o on o.id=#{oid} and o.level=#{level}
+              join organization oo on oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id
+            </if>
+         <if test="userName!=null and userName!='' ">
+             and u.name=#{userName}  
+         </if>
+         <if test='nd !=null and nd!="" and ( yf==null or  yf=="")'>
+             and YEAR(a.ctime)=#{nd}  and  type=1
+         </if> 
+         <if test='yf !=null and yf !="" and (nd==null or nd=="" )'>
+             and  MONTH(a.ctime)= #{yf} and type=2
+         </if>    
+         <if test='nd !=null and nd!="" and  yf!=null and yf!=""'>
+             and YEAR(a.ctime)=#{nd} and  MONTH(a.ctime)= #{yf} and  type=2
+         </if> 
+         <if test='sort!=null  and sort!="" and  order!=null  and order!=""'>
+             order by cast(${sort} as decimal) ${order}
+         </if>   
+      </select>
+      <select id="getStatResult" parameterType="java.util.Map" resultMap="Base_list">
+          select u.id,a.scores,a.ctime,a.type,a.userid ,u.name,u.idcard  from statistics a join  user u  on  a.userid=u.id  and u.organization_id!=1
+          <if test='level!=null and level!=""'>
+               join organization o on u.organization_id=o.id and o.level=#{level}
+          </if>
+          <if test='type =="1" and  users!=null'>
+                 and a.type=#{type}  and a.userid=#{users}  and  YEAR(a.ctime)=#{year}                
+          </if>
+          <if test='type =="2" and  users!=null and Months==null and ctime==null'>
+                 and a.type=#{type}  and a.userid=#{users} and  MONTH(a.ctime)=MONTH(now())  and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="2" and  users!=null and Months==null and ctime!=null'>
+                 and a.type=#{type}  and a.userid=#{users} and  MONTH(a.ctime)=MONTH(#{ctime})  and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="2" and  users!=null and  Months!=null'>
+                 and a.type=#{type}  and a.userid=#{users} and   MONTH(now()) >= MONTH(a.ctime)  and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="1" and  users==null and organ==null'>
+                 and a.type=#{type}  and  YEAR(a.ctime)=#{year}   
+          </if>
+          <if test='type =="2" and  users==null  and ctime==null'>
+                 and a.type=#{type}   and  MONTH(a.ctime)=MONTH(now()) and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="2" and  users==null and ctime!=null'>
+                 and a.type=#{type}   and  MONTH(a.ctime)=MONTH(#{ctime}) and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="1" and  users==null and  organ !=null'>
+                 join  organization o  on  u.organization_id=o.id inner join organization oo on o.code like concat(oo.`code`,'%') and  oo.id=#{organ} and  a.type=#{type} and  YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="2" and  users==null and  organ !=null and ctime==null'>
+                 join  organization o  on  u.organization_id=o.id inner join organization oo on o.code like concat(oo.`code`,'%') and  oo.id=#{organ} and  a.type=#{type} and   MONTH(a.ctime)=MONTH(now()) and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='type =="2" and  users==null and  organ !=null and ctime!=null'>
+                 join  organization o  on  u.organization_id=o.id inner join organization oo on o.code like concat(oo.`code`,'%') and  oo.id=#{organ} and  a.type=#{type} and   MONTH(a.ctime)=MONTH(#{ctime}) and YEAR(a.ctime)=#{year}
+          </if>
+          <if test='sort=="scores"'>
+                ORDER BY cast(${sort} as decimal) ${order}
+          </if>
+          <if test='sort=="ctime"'>
+                ORDER BY ${sort} ${order}          
+          </if>
+          
+      
+      </select>
+
+      <select id="getlistByOrg"  parameterType="java.util.Map"  resultType="com.alphasta.model.Organization" >
+         select oo.id,sum(a.SCORES)as sum,round(avg(a.scores),2) as scores,  oo.name,
+         <if test="dept==null">
+               now() as ctime,
+         </if>
+         <if test="dept!=null">
+              DATE_FORMAT(a.ctime,'%Y-%m') as ctime,
+         </if>
+          a.type  from statistics a join  user u  on  a.userid=u.id and  u.organization_id!=1
+         join organization o  on u.organization_id=o.id
+         inner join organization oo on o.code like concat(oo.`code`,'%')
+         <if test='level!=null and level!=""'>
+           and oo.level=#{level}
+         </if>
+         <if test='organ!=null'>             
+            and oo.pid=#{organ}  and oo.id != 1
+         </if>
+         <if test="dept!=null">
+            and oo.id=#{dept} 
+         </if>
+         <if test='type == 1 and dept==null'>
+           and a.type=#{type} and YEAR(a.ctime)=#{year}
+         </if>
+         <if test='type == 2 and dept==null and ctime==null'>
+            and a.type=#{type} and  MONTH(a.ctime)=MONTH(now()) and YEAR(a.ctime)=#{year}
+         </if>
+         <if test='type == 2 and dept==null and ctime!=null'>
+            and a.type=#{type} and  MONTH(a.ctime)=MONTH(#{ctime}) and YEAR(a.ctime)=YEAR(#{ctime})
+         </if>
+         <if test="type==2 and dept!=null">
+             and a.type=#{type} and  MONTH(now())>=MONTH(a.ctime) and YEAR(a.ctime)=#{year}
+         </if>
+         <if test="dept==null">
+             group by oo.id  
+         </if>
+         <if test="dept!=null">
+              group by MONTH(a.ctime)
+         </if>     
+         ORDER BY cast(avg(a.scores) as decimal) ${order}
+      </select>
+
+</mapper>

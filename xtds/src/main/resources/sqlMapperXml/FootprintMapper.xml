@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.FootprintMapper">
+
+    <sql id="Base_Column_List">
+	    name,like,review,track,issue
+  	</sql>
+    <select id="findfootprintPageCondition" resultType="com.alphasta.model.Footprint" parameterType="PageInfo">
+		        SELECT
+			u. NAME,
+			(
+				SELECT
+					count(c.CTYPE)
+				FROM
+					COMMENT c
+				WHERE
+					c.ctype = 0
+				AND c.CUSER = u.id
+			) AS 'track' ,
+		  (
+				SELECT
+					count(c.CTYPE)
+				FROM
+					COMMENT c
+				WHERE
+					c.ctype = 1
+				AND c.CUSER = u.id
+			) AS 'like',
+		(
+				SELECT
+					count(c.CTYPE)
+				FROM
+					COMMENT c
+				WHERE
+					c.ctype = 2
+				AND c.CUSER = u.id
+			) AS 'review',(
+				SELECT count(*)
+				from article a
+				where a.INPUTER = u.id
+		) AS 'issue'
+		FROM
+			USER u where 1=1 
+			<if test="condition.organizationId != null">
+				and u.organization_id = #{condition.organizationId}
+			</if>
+        LIMIT #{from}, #{size}
+    </select>
+
+    <select id="findfootprintPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from USER 
+    </select>
+</mapper>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.CatalogMapper">
+ <resultMap id="ResultMap" type="com.alphasta.model.Catalog" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="ROOT" property="root" jdbcType="VARCHAR" />
+    <result column="DESCN" property="descn" jdbcType="VARCHAR" />
+    <result column="PARENTCATA" property="parentcata" jdbcType="VARCHAR" />
+    <result column="ACTIVITIES" property="activities" jdbcType="VARCHAR" />
+    <result column="PIC" property="pic" jdbcType="VARCHAR" />
+    <result column="PIC_WIDTH" property="picWidth" jdbcType="INTEGER" />
+    <result column="PIC_HEIGHT" property="picHeight" jdbcType="INTEGER" />
+    <result column="TEMPLATE" property="template" jdbcType="VARCHAR" />
+    <result column="ARTTEMPLATE" property="arttemplate" jdbcType="VARCHAR" />
+    <result column="SHOWONINDEX" property="showonindex" jdbcType="VARCHAR" />
+    <result column="ISENABLE" property="isenable" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="ISCOMMON" property="iscommon" jdbcType="INTEGER" />
+    <result column="SHOWNEXTCOLUMN" property="showNextColumn" jdbcType="VARCHAR" />
+    <result column="ORGAN" property="organ" jdbcType="BIGINT" />
+    
+  </resultMap>
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Catalog" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="PIC" property="pic" jdbcType="VARCHAR" />
+    <result column="SHOWNEXTCOLUMN" property="showNextColumn" jdbcType="VARCHAR" />
+  </resultMap>
+ <sql id="Base_Column_List" >
+    ID, NAME, ROOT, DESCN, PARENTCATA, ACTIVITIES, PIC, PIC_WIDTH, PIC_HEIGHT, TEMPLATE, 
+    ARTTEMPLATE, SHOWONINDEX, ISENABLE, CREATOR,ISCOMMON,SHOWNEXTCOLUMN,ORGAN
+  </sql>
+  <sql id="Show_Column_List">
+       ID,NAME,PIC,SHOWNEXTCOLUMN,TEMPLATE  
+  </sql>
+   <sql id="Base_Column_List2" >
+    c.ID, c.NAME, c.ROOT, c.DESCN, c.PARENTCATA, c.ACTIVITIES, c.PIC, c.PIC_WIDTH, c.PIC_HEIGHT, c.TEMPLATE, 
+    c.ARTTEMPLATE, c.SHOWONINDEX, c.ISENABLE, c.CREATOR,c.ISCOMMON,c.SHOWNEXTCOLUMN,c.ORGAN
+  </sql>
+   <sql id="Show_Column_List2">
+       c.ID,c.NAME,c.PIC,c.SHOWNEXTCOLUMN,c.TEMPLATE,c.ORGAN  
+  </sql>
+	<!-- 根据专题活动查询 -->
+  <select id="getByactivities" parameterType="java.lang.String" resultType="com.alphasta.model.Catalog">
+    select 
+    <include refid="Base_Column_List" />
+    from catalog
+    where activities = #{activities,jdbcType=VARCHAR}
+  </select>  
+  <select id="getAllCatalog" resultMap="BaseResultMap">
+    select id,name,pic,shownextcolumn,TEMPLATE from catalog 
+  </select> 
+  <select id="getIndexCatalog" parameterType="com.alphasta.commons.utils.PageInfo"  resultMap="BaseResultMap" >
+        select 
+        <if test="condition !=null and condition.showOnApp!=null">
+          <include refid="Show_Column_List2"></include>
+        </if>
+        <if test="condition.showOnApp ==null">
+          <include refid="Base_Column_List2"></include>
+        </if>
+         <if test="condition.artNum!=null">
+          <!-- ,(select count(*) from article a where a.CATALOGS=c.id and a.state=1 and  YEAR(a.CREATETIME)=year(now())) as artNum -->        
+        </if>
+         from catalog c where 1=1            
+	     <if test="condition.catalogId!=null">
+	      and c.PARENTCATA=#{condition.catalogId} 
+	    </if>         
+	     <if test="condition.isEnable !=null">
+	      and c.ISENABLE=#{condition.isEnable} 
+	    </if>                  
+	     <if test="condition.activities!=null">
+	      and c.ACTIVITIES=#{condition.activities}
+	    </if>                        
+	     <if test="condition.activities==null">
+	      and c.ACTIVITIES is null
+	    </if>
+	     order by c.TEMPLATE
+	     <if test="from>-1 and  size !=0">
+	      limit #{from},#{size}	    
+	     </if> 
+  </select> 
+  
+    <delete id="deleteByID" parameterType="java.lang.String">
+    delete from catalog
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertSelective" parameterType="com.alphasta.model.Catalog">
+    insert into catalog
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="root != null">
+        ROOT,
+      </if>
+      <if test="descn != null">
+        DESCN,
+      </if>
+      <if test="parentcata != null">
+        PARENTCATA,
+      </if>
+      <if test="activities != null">
+        ACTIVITIES,
+      </if>
+      <if test="pic != null">
+        PIC,
+      </if>
+      <if test="picWidth != null">
+        PIC_WIDTH,
+      </if>
+      <if test="picHeight != null">
+        PIC_HEIGHT,
+      </if>
+      <if test="template != null">
+        TEMPLATE,
+      </if>
+      <if test="arttemplate != null">
+        ARTTEMPLATE,
+      </if>
+      <if test="showonindex != null">
+        SHOWONINDEX,
+      </if>
+      <if test="isenable != null">
+        ISENABLE,
+      </if>
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="iscommon != null">
+        ISCOMMON,
+      </if>
+      <if test="showNextColumn != null">
+        SHOWNEXTCOLUMN,
+      </if>
+      <if test="organ != null">
+        ORGAN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="root != null">
+        #{root,jdbcType=VARCHAR},
+      </if>
+      <if test="descn != null">
+        #{descn,jdbcType=VARCHAR},
+      </if>
+      <if test="parentcata != null">
+        #{parentcata,jdbcType=VARCHAR},
+      </if>
+      <if test="activities != null">
+        #{activities,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="picWidth != null">
+        #{picWidth,jdbcType=INTEGER},
+      </if>
+      <if test="picHeight != null">
+        #{picHeight,jdbcType=INTEGER},
+      </if>
+      <if test="template != null">
+        #{template,jdbcType=VARCHAR},
+      </if>
+      <if test="arttemplate != null">
+        #{arttemplate,jdbcType=VARCHAR},
+      </if>
+      <if test="showonindex != null">
+        #{showonindex,jdbcType=VARCHAR},
+      </if>
+      <if test="isenable != null">
+        #{isenable,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="iscommon != null">
+        #{iscommon,jdbcType=INTEGER},
+      </if>
+      <if test="showNextColumn != null">
+        #{showNextColumn,jdbcType=VARCHAR},
+      </if>
+      <if test="organ != null">
+        #{organ,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.alphasta.model.Catalog">
+    update catalog
+    set NAME = #{name,jdbcType=VARCHAR},
+      ROOT = #{root,jdbcType=VARCHAR},
+      DESCN = #{descn,jdbcType=VARCHAR},
+      PARENTCATA = #{parentcata,jdbcType=VARCHAR},
+      ACTIVITIES = #{activities,jdbcType=VARCHAR},
+      PIC = #{pic,jdbcType=VARCHAR},
+      PIC_WIDTH = #{picWidth,jdbcType=INTEGER},
+      PIC_HEIGHT = #{picHeight,jdbcType=INTEGER},
+      TEMPLATE = #{template,jdbcType=VARCHAR},
+      ARTTEMPLATE = #{arttemplate,jdbcType=VARCHAR},
+      SHOWONINDEX = #{showonindex,jdbcType=VARCHAR},
+      ISENABLE = #{isenable,jdbcType=VARCHAR},
+      ISCOMMON = #{iscommon,jdbcType=INTEGER},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      ORGAN = #{organ,jdbcType=BIGINT}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+    <select id="getByID" parameterType="java.lang.String" resultType="com.alphasta.model.Catalog">
+    select 
+    <include refid="Base_Column_List" />
+    from catalog
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  
+     <select id="tree" resultType="com.alphasta.model.Catalog">
+        select 
+        <include refid="Base_Column_List"/>,name as text
+        ,(select case when count(*)=0 then 'open' else 'closed' end from cataLog d where d.parentcata = t.id  ) as state
+        from cataLog t where t.parentcata = #{id}
+    </select>
+    <select id="getByCondition" resultType="com.alphasta.model.Catalog" parameterType="com.alphasta.model.Catalog">
+    	  select 
+    <include refid="Base_Column_List" />
+    from catalog where 1=1
+    <if test="name !=null">
+    	and name like  concat('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="parentcata !=null">
+    	and parentCata = #{parentcata}
+    </if>
+    </select>
+    <select id="getCataNote" resultMap="ResultMap">
+        select  c.ID, c.NAME, c.DESCN, 
+         count(a.id) as SHOWONINDEX  from  cataLog c left join  article a  on a.catalogs=c.id WHERE c.PARENTCATA='112'   and  c.ISENABLE=0  group  by c.id   order by SHOWONINDEX desc 
+    </select>
+    <select id="getUserNote" resultType="com.alphasta.model.User" parameterType="java.lang.String">
+        select u.name,count(a.id) as liveness from user u join article a on u.id=a.inputer join catalog c on c.id=a.catalogs  and  
+         c.ID=#{0}   and c.iscommon=1  group by u.name  order by count(a.id) desc    
+    </select>
+    <select id="findCatalogByoid" resultMap="ResultMap" parameterType="java.lang.String">
+    	select * from cataLog where ORGAN = #{oid}
+    </select>
+ </mapper>

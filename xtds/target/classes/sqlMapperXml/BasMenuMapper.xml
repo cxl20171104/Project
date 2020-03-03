@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.BasMenuMapper">
+    <resultMap id="BaseResultMap" type="com.alphasta.model.BasMenuModel">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="pid" property="pid" jdbcType="BIGINT"/>
+        <result column="seq" property="seq" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="resourcetype" property="resourcetype" jdbcType="INTEGER"/>
+        <result column="text" property="text" jdbcType="VARCHAR"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		c.id, c.name, c.url, c.description, c.icon, 
+		c.pid, c.seq, c.status, c.resourcetype , c.createDate
+	</sql>
+	
+	<select id="selectByParentId" resultMap="BaseResultMap" parameterType="com.alphasta.model.MenuQueryMdoel">
+        select <include refid="Base_Column_List"/>,(
+		SELECT CASE
+			WHEN count(*) > 0 THEN
+				'closed'
+			ELSE
+				'open'
+			END
+			FROM
+				resource
+			WHERE pid = c.id and resourcetype = 0
+		) as state,c.name as text 
+		from role a 
+		inner join role_resource b on a.id=b.role_id
+		inner join resource c on b.resource_id=c.id and resourcetype=0
+		<where>
+			<if test="id != null and id != 0">
+				and pid = #{id}
+			</if>
+			<if test="id == null or id == 0">
+				and pid is null
+			</if>
+			<if test="userId != null and userId != 0">
+				and a.id in (${roleIds})
+			</if>
+		</where>
+		order by c.seq
+    </select>
+    
+    <select id="selectAdminByParentId" resultMap="BaseResultMap" parameterType="com.alphasta.model.MenuQueryMdoel">
+    	 select <include refid="Base_Column_List"/>,(
+		SELECT CASE
+			WHEN count(*) > 0 THEN
+				'closed'
+			ELSE
+				'open'
+			END
+			FROM
+				resource
+			WHERE pid = c.id and resourcetype = 0
+		) as state,c.name as text 
+		from resource c 
+		where resourcetype=0
+		<if test="id != null and id != 0">
+			and pid = #{id}
+		</if>
+		<if test="id == null or id == 0">
+			and pid is null
+		</if>
+		order by c.seq
+    </select>
+</mapper>

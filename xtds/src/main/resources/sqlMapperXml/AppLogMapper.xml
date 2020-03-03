@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.AppLogMapper">
+
+	<insert id="addLog" parameterType="com.alphasta.model.AppLog">
+		insert into sys_log(id,operater,otime,type,detail,liveness) values 
+		(#{id},#{operater},now(),#{type},#{detail},#{liveness})
+	</insert>
+	<select id="selectByCondition" parameterType="com.alphasta.model.AppLog" resultType="com.alphasta.model.AppLog">
+		select id,operater,operatername,otime,type,detail,liveness from sys_log where 1=1 
+			<if test="operaterName !=null">
+				and operaterName = #{operaterName} 
+			</if>
+			<if test="type !=null">
+				and type=#{type}
+			</if>
+	</select>
+	
+	
+	
+    <!-- 
+    
+    根据用户id 
+    
+     -->
+    <resultMap id="cxl" type="java.util.Map">
+        <result column="otime" property="day" jdbcType="TIMESTAMP"/>        
+    </resultMap>
+	<select id="searchCzlist"  parameterType="java.util.Map"  resultMap="cxl">
+   select date_format(t.otime,'%Y-%m-%d') as day from sys_log t where t.operater=#{operater} 
+   group by  day order by  day
+   desc limit #{start},#{end};
+  
+  
+  </select>
+  <select id="findCzByTimeAndOperater"  parameterType="java.util.Map"  resultType="com.alphasta.model.AppLog">
+  Select id,operater,otime,type,detail,liveness from sys_log where 1=1
+  <if test="otime!=null">
+    and date_format(otime,'%Y-%m-%d')=#{otime}
+  </if> 
+  <if  test="operater!=null">
+    and operater=#{operater}
+  </if>
+  </select>
+</mapper>

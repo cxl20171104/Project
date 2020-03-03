@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ConceptMapper">
+
+<select id="getUseing" resultType="com.alphasta.model.Concept" parameterType="java.util.Map">
+   select id,content,ctime,useing from concept 
+   <if test="useing !=null">
+     where useing=#{useing}
+   </if>
+     order by ctime desc
+</select>
+<update id="updateUseing" parameterType="com.alphasta.model.Concept">
+    update concept 
+    <set>
+           <if test="content!=null">
+             content=#{content},
+          </if>
+          <if test="useing!=null">
+              useing=#{useing},
+          </if>
+              ctime=now()
+    </set>
+      where id=#{id}
+</update>
+<insert id="addUseing" parameterType="com.alphasta.model.Concept">
+    insert into concept (id,content,ctime,useing) values(#{id},#{content},#{ctime},#{useing})
+</insert>
+   
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.QrcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.alphasta.model.Qrcode" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="USER" property="user" jdbcType="VARCHAR" />
+    <result column="CTIME" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="ETIME" property="etime" jdbcType="TIMESTAMP" />
+    <result column="INFO" property="info" jdbcType="VARCHAR"/>
+     <result column="NAME" property="name" jdbcType="VARCHAR" />
+     <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+     <result column="SCANNUM" property="scanNum" jdbcType="VARCHAR" />
+     <result column="ORGANID" property="organid" jdbcType="BIGINT" />
+     <result column="ONAME" property="oname" jdbcType="VARCHAR" />
+     
+  </resultMap>
+  <resultMap id="UserResultMapper" type="com.alphasta.model.QrcodeUser">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="QRCODEID" property="qrcodeid" jdbcType="VARCHAR" />
+        <result column="USER" property="user" jdbcType="VARCHAR" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="CTIME" property="ctime" jdbcType="TIMESTAMP" />
+        <result column="ONAME" property="oname" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <select id="findHasQrcodeUsers" parameterType="java.util.Map" resultMap="UserResultMapper">
+      select a.id,a.qrcodeid,a.user,u.name,o.name as oname,a.ctime from qrcodeuser a join  user u on a.user=u.id join organization o on u.organization_id=o.id
+      <if test="qrcodeid!=null">
+         and  a.qrcodeid=#{qrcodeid,jdbcType=VARCHAR} 
+      </if>
+      <if test="user!=null">
+          and a.user=#{user,jdbcType=VARCHAR}
+      </if>
+      <if test="date!=null">
+          and day(a.ctime)=day(#{date,jdbcType=TIMESTAMP})
+      </if>
+        order  by a.ctime desc
+  </select>
+  <select id="findQrcodelist" resultMap="BaseResultMap" parameterType="com.alphasta.model.Qrcode" >
+    select 
+      q.ID, q.URL, d.name as type, q.organid,q.USER, q.CTIME, q.ETIME,u.name,q.info,d.id as dictid,q.content,oo.name as oname,
+      (select count(*) from qrcodeuser r where r.qrcodeid=q.id ) as scannum
+    from qrcode q join  user u  on q.user=u.id join dict d  on d.id=q.type
+    join organization o on o.id=#{organid,jdbcType=BIGINT}
+    join organization oo on oo.code like concat(o.`code`, '%') and q.organid=oo.id    
+        <if test='id != null and id!=""' >
+        and  q.id=#{id,jdbcType=VARCHAR}
+      </if>
+       <if test='scanNum!=null and scanNum!=""'>
+        and  oo.level=#{scanNum,jdbcType=VARCHAR}      
+       </if>
+      <if test='info!= null and info!=""' >
+        and  q.info like concat('%',#{info,jdbcType=VARCHAR},'%')
+      </if>
+      <if test='type != null and type!=""' >
+        and  q.type=#{type,jdbcType=VARCHAR}
+      </if>
+      <if test='user!=null and user!=""'>
+        and  q.user=#{user,jdbcType=VARCHAR}
+      </if>
+      order by q.ctime desc
+  </select>
+  <delete id="delectQrcode" parameterType="java.lang.String" >
+    delete from qrcode
+    where ID = #{0}
+  </delete>
+  <insert id="insertQrcode" parameterType="com.alphasta.model.Qrcode" >
+    insert into qrcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="info != null" >
+        INFO,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="user != null" >
+        USER,
+      </if>
+      <if test="ctime != null" >
+        CTIME,
+      </if>
+      <if test="etime != null" >
+        ETIME,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="organid != null" >
+        ORGANID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null" >
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etime != null" >
+        #{etime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="organid != null" >
+        #{organid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateQrcode" parameterType="com.alphasta.model.Qrcode" >
+    update qrcode
+    <set >
+      <if test="url != null" >
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null" >
+        INFO = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        USER = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        CTIME = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="etime != null" >
+        ETIME = #{etime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="organid != null" >
+        ORGANID=#{organid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertQrcodeUser" parameterType="com.alphasta.model.QrcodeUser">
+       insert  into qrcodeuser
+       <trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="id">
+	           id,
+	       </if>
+	       <if test="qrcodeid">
+	           qrcodeid,
+	       </if>
+	       <if test="user">
+	          user,
+	       </if>
+	       <if test="ctime">
+	         ctime
+	       </if>
+       </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id">
+	           #{id,jdbcType=VARCHAR},
+	       </if>
+	       <if test="qrcodeid">
+	            #{qrcodeid,jdbcType=VARCHAR},
+	       </if>
+	       <if test="user">
+	           #{user,jdbcType=VARCHAR},
+	       </if>
+	       <if test="ctime">
+	            #{ctime,jdbcType=TIMESTAMP},
+	       </if>
+        </trim>
+  </insert>
+</mapper>

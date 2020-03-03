@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.alphasta.model.Article">
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TITLE" property="title" jdbcType="VARCHAR" />
+    <result column="SUBTITLE" property="subtitle" jdbcType="VARCHAR" />
+    <result column="SHORTTITLE" property="shorttitle" jdbcType="VARCHAR" />
+    <result column="INPUTER" property="inputer" jdbcType="VARCHAR" />
+    <result column="INPUTERNAME" property="inputerName" jdbcType="VARCHAR" />
+    <result column="INPUTERPIC" property="inputerpic" jdbcType="VARCHAR"/>
+    
+    <result column="AUTHOR" property="author" jdbcType="VARCHAR" />
+    <result column="AUTHORNAME" property="authorName" jdbcType="VARCHAR" />
+    
+    <result column="HITS" property="hits" jdbcType="INTEGER" />
+    <result column="THUMB" property="thumb" jdbcType="INTEGER" />
+    <result column="COMNUM" property="comnum" jdbcType="INTEGER" />
+    <result column="THUMBER" property="thumber" jdbcType="VARCHAR" />
+    
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="AREA" property="area" jdbcType="INTEGER" />
+    <result column="COMENTABLE" property="comentable" jdbcType="INTEGER" />
+    <result column="EXPIRE" property="expire" jdbcType="VARCHAR" />
+    <result column="CATALOGS" property="catalogs" jdbcType="VARCHAR" />
+    <result column="CATALOGNAME" property="catalogName" jdbcType="VARCHAR" />
+    
+    <result column="REFUSECONTENT" property="refusecontent" jdbcType="VARCHAR" />
+    <result column="AUDITUSER" property="audituser" jdbcType="VARCHAR" />
+    <result column="AUDITUSERNAME" property="audituserName" jdbcType="VARCHAR" />
+    <result column="ACTNAME" property="actname" jdbcType="VARCHAR"/>
+    
+    <result column="SCORETYPE" property="scoretype" jdbcType="INTEGER" />
+    <result column="SCORES" property="scores" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="INTEGER" />
+    <result column="REMAIND1" property="remaind1" jdbcType="VARCHAR" />
+    <result column="HEADPIC"  property="headpic" jdbcType="VARCHAR"/>
+  </resultMap>
+   <resultMap id="ResultMap" type="com.alphasta.model.Article" extends="BaseResultMap" >
+    <result column="CONTENT" property="content" jdbcType="LONGVARCHAR" />
+    <result column="ORGANID" property="organid" jdbcType="VARCHAR" />
+  </resultMap>
+     <sql id="Base_Column_List" >
+		    ID, TITLE, SUBTITLE, SHORTTITLE, INPUTER, AUTHOR, HITS, THUMB, COMNUM, THUMBER, CREATETIME, 
+		    AREA, COMENTABLE, EXPIRE, CATALOGS, REFUSECONTENT, AUDITUSER, SCORETYPE, SCORES, 
+		    STATE, REMAIND1
+     </sql>
+       <sql id="Blob_Column_List" >
+         CONTENT
+      </sql>
+      <select id="findById" resultType="com.alphasta.model.Article" parameterType="java.lang.String" >
+		   select  a.ID, a.TITLE, a.SUBTITLE, a.SHORTTITLE, a.INPUTER, a.AUTHOR, a.HITS, a.THUMB, a.COMNUM, a.THUMBER, a.CREATETIME, 
+		   a. AREA, a.COMENTABLE,a. EXPIRE,a. CATALOGS, a.REFUSECONTENT, a.AUDITUSER, a.SCORETYPE, a.SCORES, a.HEADPIC,
+		    a.STATE, a.REMAIND1,a.CONTENT,u.name as INPUTERNAME,  u.headpic as INPUTERPIC ,c.name as catalogName ,e.name as actname         
+		    from article a  
+		    left join   user u on a.inputer=u.id
+		    left join  catalog c  on  a.CATALOGS=c.id
+		    left join  activities e  on e.id=a.CATALOGS  		    
+		    where a.ID = #{id,jdbcType=VARCHAR}
+      </select>
+      <select id="page" resultType="com.alphasta.model.Article" parameterType="com.alphasta.model.Article">
+            select  a.ID, a.TITLE, a.SUBTITLE, a.SHORTTITLE, a.INPUTER, a.AUTHOR, a.HITS, a.THUMB, a.COMNUM, a.THUMBER, a.CREATETIME, 
+		   a. AREA, a.COMENTABLE,a. EXPIRE,a. CATALOGS, a.REFUSECONTENT, a.AUDITUSER, a.SCORETYPE, a.SCORES, 
+		    a.STATE, a.REMAIND1,a.CONTENT,u.name as INPUTERNAME,  u.headpic as INPUTERPIC ,t.name as audituserName ,c.name as catalogName,e.name as actname
+		    from article a  
+		    left join   user u on a.inputer=u.id left join  user t on a.AUDITUSER=t.id left join  catalog c on c.id=a.CATALOGS
+		    left join  activities e  on e.id=a.CATALOGS
+		    
+		    	 where 1=1 
+		     <if test="expire !=null">
+		         and expire =""
+		     </if>
+		    <if test="title !=null">
+		     and a.title like concat('%',#{title,jdbcType=VARCHAR},'%')
+		     or a.shorttitle like concat('%',#{shorttitle,jdbcType=VARCHAR},'%')
+		    </if>
+		    <if test="catalogs !=null">
+		    	and  LOCATE( #{catalogs,jdbcType=VARCHAR}, a.catalogs)>0
+		    </if>
+		    <if test="state !=null">
+		    	and a.state = #{state,jdbcType=VARCHAR}
+		    </if>
+		    <if test="inputer !=null">
+		    	and a.inputer = #{inputer,jdbcType=VARCHAR}
+		    </if>
+      </select>
+   <!-- 添加文章 -->
+   <insert id="addArt" parameterType="com.alphasta.model.Article" >
+        insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="title != null" >
+        TITLE,
+      </if>
+      <if test="subtitle != null" >
+        SUBTITLE,
+      </if>
+      <if test="shorttitle != null" >
+        SHORTTITLE,
+      </if>
+      <if test="inputer != null" >
+        INPUTER,
+      </if>
+      <if test="author != null" >
+        AUTHOR,
+      </if>
+      <if test="hits != null" >
+        HITS,
+      </if>
+      <if test="thumb != null" >
+        THUMB,
+      </if>
+      <if test="comnum != null" >
+        COMNUM,
+      </if>
+      <if test="thumber != null" >
+        THUMBER,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="area != null" >
+        AREA,
+      </if>
+      <if test="comentable != null" >
+        COMENTABLE,
+      </if>
+      <if test="expire != null" >
+        EXPIRE,
+      </if>
+      <if test="catalogs != null" >
+        CATALOGS,
+      </if>
+      <if test="refusecontent != null" >
+        REFUSECONTENT,
+      </if>
+      <if test="audituser != null" >
+        AUDITUSER,
+      </if>
+      <if test="scoretype != null" >
+        SCORETYPE,
+      </if>
+      <if test="scores != null" >
+        SCORES,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="remaind1 != null" >
+        REMAIND1,
+      </if>
+      <if test="headpic != null" >
+        HEADPIC,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="organid != null" >
+        ORGANID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shorttitle != null" >
+        #{shorttitle,jdbcType=VARCHAR},
+      </if>
+      <if test="inputer != null" >
+        #{inputer,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="hits != null" >
+        #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="thumb != null" >
+        #{thumb,jdbcType=INTEGER},
+      </if>
+      <if test="comnum != null" >
+        #{comnum,jdbcType=INTEGER},
+      </if>
+      <if test="thumber != null" >
+        #{thumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="comentable != null" >
+        #{comentable,jdbcType=INTEGER},
+      </if>
+      <if test="expire != null" >
+        #{expire,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogs != null" >
+        #{catalogs,jdbcType=VARCHAR},
+      </if>
+      <if test="refusecontent != null" >
+        #{refusecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="audituser != null" >
+        #{audituser,jdbcType=VARCHAR},
+      </if>
+      <if test="scoretype != null" >
+        #{scoretype,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        #{scores,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="remaind1 != null" >
+        #{remaind1,jdbcType=VARCHAR},
+      </if>
+      <if test="headpic != null" >
+        #{headpic,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="organid != null" >
+        #{organid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <select id="countArtList" parameterType="com.alphasta.commons.utils.PageInfo" resultType="java.lang.Integer" >
+		    select count(*) from article  where 1=1 
+		    <if test="condition.catalogId!=null">
+			     and   CATALOGS=#{condition.catalogId} 
+			</if>
+		    
+   </select>
+    <select id="searchArtList" parameterType="com.alphasta.commons.utils.PageInfo" resultMap="BaseResultMap" >
+		    select  a.ID as id, a.TITLE as TITLE, a.INPUTER as INPUTER, a.AUTHOR as AUTHOR, a.HITS as HITS, a.THUMB as THUMB, a.COMNUM as COMNUM, a.THUMBER as THUMBER, a.CREATETIME as CREATETIME, 
+		   a.AREA as AREA, a.COMENTABLE as COMENTABLE,a.CATALOGS as CATALOGS, a.REFUSECONTENT as REFUSECONTENT, a.AUDITUSER as AUDITUSER,a.HEADPIC as HEADPIC,
+		    a.STATE as STATE, a.REMAIND1 as REMAIND1,u.name as INPUTERNAME,  u.headpic as INPUTERPIC ,c.name as CATALOGNAME ,e.name as actname       
+		    from article a  
+		    left join   user u on a.inputer=u.id
+		    left join  catalog c  on  a.CATALOGS=c.id
+		    left join  activities e  on e.id=a.CATALOGS     
+		     where 1=1
+			    <if test="condition != null and condition.catalogId != null">
+			     and LOCATE(#{condition.catalogId}, a.CATALOGS)
+			    </if>
+			    <if test="condition != null and condition.state!= null">
+			     and  a.STATE=#{condition.state} 
+			    </if>
+			    <if test="condition !=null and condition.type!=null and condition.type!=''">
+			     and a.scores=#{condition.type}
+			    </if>
+			    <if test="condition !=null and condition.organid!=null and condition.organid!=''">
+			     and a.organid=#{condition.organid}
+			    </if>
+			    <if test="condition !=null and condition.title!=null and condition.title!=''">
+			     and a.title like  concat('%',#{condition.title},'%')
+			    </if>
+			       order by CREATETIME DESC
+			     <if test="from >-1 and size!=0">
+		           limit #{from}, #{size} 
+		        </if>
+   </select>
+   
+   <update id="addCommentNum" parameterType="java.util.Map">
+        update article 
+        <set>
+            <if test="ctype==0">
+                hits=hits+1,
+            </if>           
+           <if test="ctype==1">
+            thumb=thumb+1,
+           </if>
+           
+           <if test="thumname!=null">
+            THUMBER=concat(THUMBER,#{thumname},'，')
+           </if>
+           <if test="ctype==2">
+            comnum=comnum+1
+           </if>
+           <if test="ctype==-1">
+             comnum=comnum-1       
+           </if>               
+        </set>
+          where id=#{articleid}  
+   </update>
+   
+     <delete id="deletArt" parameterType="java.lang.String" >
+        delete from article
+        where ID = #{id,jdbcType=VARCHAR}
+   </delete>
+    <update id="update" parameterType="com.alphasta.model.Article" >
+    update article
+    <set >
+      <if test="title != null" >
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        SUBTITLE = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shorttitle != null" >
+        SHORTTITLE = #{shorttitle,jdbcType=VARCHAR},
+      </if>
+      <if test="inputer != null" >
+        INPUTER = #{inputer,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        AUTHOR = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="hits != null" >
+        HITS = #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="thumb != null" >
+        THUMB = #{thumb,jdbcType=INTEGER},
+      </if>
+      <if test="comnum != null" >
+        COMNUM = #{comnum,jdbcType=INTEGER},
+      </if>
+      <if test="thumber != null" >
+        THUMBER = #{thumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="area != null" >
+        AREA = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="comentable != null" >
+        COMENTABLE = #{comentable,jdbcType=INTEGER},
+      </if>
+      <if test="expire != null" >
+        EXPIRE = #{expire,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogs != null" >
+        CATALOGS = #{catalogs,jdbcType=VARCHAR},
+      </if>
+      <if test="refusecontent != null" >
+        REFUSECONTENT = #{refusecontent,jdbcType=VARCHAR},
+      </if>
+      <if test="audituser != null" >
+        AUDITUSER = #{audituser,jdbcType=VARCHAR},
+      </if>
+      <if test="scoretype != null" >
+        SCORETYPE = #{scoretype,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        SCORES = #{scores,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="remaind1 != null" >
+        REMAIND1 = #{remaind1,jdbcType=VARCHAR},
+      </if>
+      <if test="headpic != null" >
+         HEADPIC = #{headpic,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=LONGVARCHAR}
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+    <select id="findArticleByParam"  parameterType="java.util.Map"  resultType="com.alphasta.model.Article">
+    
+    select ID, TITLE, SUBTITLE, SHORTTITLE, INPUTER, AUTHOR, HITS, THUMB, COMNUM, THUMBER, CREATETIME, 
+		    AREA, COMENTABLE, EXPIRE, CATALOGS, REFUSECONTENT, AUDITUSER, SCORETYPE, SCORES, 
+		    STATE, REMAIND1 from article where 1=1
+    
+    <if  test="createtime!=null">
+        and date_format(createtime,'%Y-%m-%d')=#{createtime}
+    </if>
+    <if test="title!=null">   
+       and  title=#{title}
+    </if>    
+    </select>
+    <update id="updateArtCata">
+    	update article set CATALOGS = #{cataid} where INPUTER=#{uid} and length(CATALOGS)>5
+    </update>
+	</mapper>

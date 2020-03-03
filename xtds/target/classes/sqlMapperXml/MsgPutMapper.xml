@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.MsgPutMapper" >
+     <resultMap type="com.alphasta.model.MsgPut" id="msgPutResult">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="CONTENT" property="content"  jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type"  jdbcType="INTEGER"/>
+        <result column="GETERID" property="geterId"  jdbcType="VARCHAR"/>
+        <result column="CTIME" property="ctime"  jdbcType="TIMESTAMP"/>
+        <result column="ENDTIME" property="endTime"  jdbcType="TIMESTAMP"/>
+        <result column="CANREPLY" property="canReply"  jdbcType="INTEGER"/>
+        <result column="TOHREF" property="toHref"  jdbcType="VARCHAR"/>
+        <result column="HASREAD" property="hasRead" jdbcType="VARCHAR"/>
+        <association property="puter" javaType="com.alphasta.model.User">
+              <id column="UID" property="id" jdbcType="BIGINT" />
+              <result column="NAME" property="name" jdbcType="VARCHAR"/>
+              <result column="POST" property="post" jdbcType="VARCHAR"/>
+              <result column="HEADPIC" property="headpic" jdbcType="VARCHAR"/>  
+        </association>    
+     </resultMap>
+     
+     <resultMap type="com.alphasta.model.MsgReply" id="msgReply">
+         <id column="ID" property="id" jdbcType="VARCHAR" />
+         <result column="HASREAD" property="hasRead" jdbcType="VARCHAR"/>
+         <result column="MSGID" property="msgId" jdbcType="VARCHAR"/>  
+         <result column="READTIME" property="readTime" jdbcType="TIMESTAMP"/>  
+         <association property="user" javaType="com.alphasta.model.User">
+              <id column="UID" property="id" jdbcType="BIGINT" />
+              <result column="NAME" property="name" jdbcType="VARCHAR"/>
+          </association>  
+     </resultMap>
+
+     <sql id="MsgPutList">
+          a.id,a.content,a.type,a.geterid,a.ctime,a.endtime,a.canreply,u.id as uid,u.name,u.post,u.headpic 
+     </sql>
+     <select id="findMsgReply" resultMap="msgReply" parameterType="java.util.Map">
+          select a.id,a.hasread,a.msgid,a.readtime,u.id as uid,u.name from msg_reply a join user u  on a.userId=u.id
+          <if test="msgid !=null">
+             and a.msgid=#{msgid}
+          </if>
+          <if test="user !=null">
+            and a.userId=#{user}          
+          </if>
+     </select>
+
+     <select id="findMsgPut" resultMap="msgPutResult" parameterType="com.alphasta.commons.utils.PageInfo">
+          select <include refid="MsgPutList"/> 
+            <if test="condition !=null and condition.appUid!=null">
+               , r.hasread  as  hasRead
+            </if>
+           from sys_msgput a  join user u  on a.puter=u.id 
+           <if test="condition !=null and condition.appUid!=null">
+               join msg_reply r  on r.msgid=a.id   and  r.userid=#{condition.appUid}
+            </if>
+            <if test="condition!=null and condition.oid!=null">
+               join organization o on o.id=#{condition.oid}
+               join organization oo on oo.code like concat(o.`code`,'%') and u.organization_id=oo.id
+            </if>
+            <if test="condition !=null and condition.hasread!=null">           
+               and r.hasread=#{condition.hasread}
+            </if>      
+          <if test="condition != null and  condition.name != null">
+               and u.name=#{condition.name}
+          </if>
+          <if test=" condition != null and  condition.msgid != null">
+               and a.id=#{condition.msgid}
+          </if> 
+          <if test="condition !=null and condition.appUid!=null">
+               order  by r.hasread,a.ctime desc       
+          </if>
+           <if test="condition !=null and condition.appUid == null">
+               order by a.ctime  DESC 
+           </if>
+     </select>
+     <insert id="insetReply" parameterType="com.alphasta.model.MsgReply">
+         insert into msg_reply 
+          <trim prefix="(" suffix=")" suffixOverrides="," >
+         <if test="id">
+              ID,
+         </if>
+         <if test="hasRead">
+            HASREAD,
+         </if>
+         <if test="msgId">
+            MSGID,
+         </if>
+         <if test="readTime">
+           READTIME,
+         </if>
+         <if test="userId">
+           USERID,
+         </if>
+         </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides="," >
+             <if test="id">
+              #{id, jdbcType=VARCHAR},
+         </if>
+         <if test="hasRead">
+            #{hasRead, jdbcType=VARCHAR},
+         </if>
+         <if test="msgId">
+            #{msgId, jdbcType=VARCHAR},
+         </if>
+         <if test="readTime">
+           #{readTime, jdbcType=TIMESTAMP},
+         </if>
+         <if test="userId">
+           #{userId, jdbcType=VARCHAR},
+         </if>
+          </trim>
+     </insert>
+     <update id="replyMsg" parameterType="com.alphasta.model.MsgReply">
+         update   msg_reply  
+         <set>
+            <if test="hasRead !=null">
+               HASREAD=#{hasRead},
+            </if>
+            <if test="readTime !=null">
+               READTIME=#{readTime}
+            </if>
+         </set>
+         <where>
+           <if test="userId  !=null">
+               USERID=#{userId}
+           </if>
+           <if test="msgId !=null">        
+            and  MSGID=#{msgId}
+         </if>
+         </where>
+     </update>
+
+     <!-- 发布一条消息 -->
+     <insert id="putMsg" parameterType="com.alphasta.model.MsgPut">
+          insert into sys_msgput 
+          <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="id!=null">
+              ID,
+          </if>
+          <if test="content!=null">
+             CONTENT,
+          </if>
+          <if test="type!=null">
+             TYPE,
+          </if>
+          <if test="geterId!=null">
+             GETERID,
+          </if>
+          <if test="ctime!=null">
+             CTIME,
+          </if>
+          <if test="endTime!=null">
+             ENDTIME,
+          </if>
+          <if test="canReply!=null">
+             CANREPLY,
+          </if>
+          <if test="toHref!=null">
+             TOHREF,
+          </if>
+          <if test="puter!=null">
+              PUTER,
+          </if>
+          </trim>
+           <trim prefix="values (" suffix=")" suffixOverrides="," >
+             <if test="id!=null">
+              #{id,jdbcType=VARCHAR},
+          </if>
+          <if test="content!=null">
+            #{content,jdbcType=VARCHAR},
+          </if>
+          <if test="type!=null">
+             #{type,jdbcType=INTEGER},
+          </if>
+          <if test="geterId!=null">
+             #{geterId,jdbcType=VARCHAR},
+          </if>
+          <if test="ctime!=null">
+             #{ctime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="endTime!=null">
+             #{endTime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="canReply!=null">
+             #{canReply,jdbcType=INTEGER},
+          </if>
+          <if test="toHref!=null">
+             #{toHref,jdbcType=VARCHAR},
+          </if>
+          <if test="puter!=null">
+             #{puter.id,jdbcType=VARCHAR},
+          </if>           
+           </trim>
+     </insert>
+</mapper>

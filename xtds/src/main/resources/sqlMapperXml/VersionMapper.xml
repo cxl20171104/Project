@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.VersionMapper">
+     <select id="getLast" resultType="com.alphasta.model.Version" parameterType="java.lang.String">
+         select id,url,ctime,vernum from version where ctime=(select max(ctime) from version
+         
+          where
+         
+          <if test='_parameter!=null and _parameter!=""'>
+         
+           vernum like '%.1'
+         
+         </if>
+         <if test='_parameter==null or _parameter==""'>
+         
+          vernum not like '%.1'
+         
+         </if>
+         
+         
+         
+         
+         ) 
+         
+         
+        
+     </select>
+     <select id="selectVersion" resultType="com.alphasta.model.Version" parameterType="java.lang.String">
+     
+     
+        select id,url,ctime,vernum from version 
+        
+        <if  test='which!=null and which!=""'>
+        
+        
+          where vernum=#{vernum,jdbcType=VARCHAR}+1+".1"
+        
+        </if>
+        <if  test='which==null or which==""'>
+        where vernum=#{vernum,jdbcType=VARCHAR}+1
+        </if>
+        
+        
+     </select>
+     <insert id="addVersion" parameterType="com.alphasta.model.Version">
+         insert into version (id,url,ctime,vernum) values (#{id,jdbcType=VARCHAR },#{url,jdbcType=VARCHAR},#{ctime,jdbcType=TIMESTAMP},#{verNum,jdbcType=VARCHAR})
+     </insert>
+</mapper>
+

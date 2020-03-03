@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.TaskInfoMapper" >
+     <insert id="insertTaskInfo" parameterType="com.alphasta.model.TaskInfo">
+         insert into taskinfo 
+         <trim prefix="(" suffix=")" suffixOverrides="," >
+             <if test=" id!=null">
+                  id,
+             </if>
+             <if test="creatTime!=null">
+                  creatTime ,
+             </if>
+             <if test="creator!=null">
+                  creator,
+             </if>
+             <if test="content!=null">
+                  content,
+             </if>
+             <if test="dept!=null">
+                dept,
+             </if>
+             <if test="deptName!=null">
+                 deptName,
+             </if>
+             <if test="status!=null">
+                status,
+             </if>
+             <if test="isComplete!=null">
+              isComplete,
+             </if>
+             <if test="title!=null">
+               title,
+             </if>
+         </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides="," >
+               <if test=" id!=null">
+                  #{id,jdbcType=VARCHAR},
+             </if>
+             <if test="creatTime!=null">
+                 #{creatTime,jdbcType=VARCHAR},
+             </if>
+             <if test="creator!=null">
+                  #{creator,jdbcType=VARCHAR},
+             </if>
+             <if test="content!=null">
+                  #{content,jdbcType=VARCHAR},
+             </if>
+             <if test="dept!=null">
+                   #{dept,jdbcType=VARCHAR},
+             </if>
+             <if test="deptName!=null">
+                   #{deptName,jdbcType=VARCHAR},
+             </if>
+             <if test="status!=null">
+                    #{status,jdbcType=VARCHAR},
+             </if>
+             <if test="isComplete!=null">
+                   #{isComplete,jdbcType=VARCHAR},
+             </if>
+             <if test="title!=null">
+                #{title,jdbcType=VARCHAR},
+             </if>
+          </trim>
+     </insert>
+      <insert id="insertTaskStatus" parameterType="com.alphasta.model.TaskStatus">
+        insert  into  taskstatus 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id!=null">
+                 id,
+           </if>
+           <if test="taskid!=null">
+              taskid,
+           </if>
+           <if test="receiver!=null">
+              receiver,
+           </if>
+           <if test="receiverName!=null">
+              receiverName,
+           </if>
+           <if test="rtime!=null">
+              rtime,
+           </if>
+           <if test="deptName!=null">
+            deptName,
+           </if>
+           <if test="status!=null">
+            status,
+           </if>
+           <if test="dept!=null">
+             dept,
+           </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+              <if test="id!=null">
+             #{id,jdbcType=VARCHAR},
+           </if>
+           <if test="taskid!=null">
+             #{taskid,jdbcType=VARCHAR},
+           </if>
+           <if test="receiver!=null">
+             #{receiver,jdbcType=VARCHAR},
+           </if>
+           <if test="receiverName!=null">
+             #{receiverName,jdbcType=VARCHAR},
+           </if>
+           <if test="rtime!=null">
+             #{rtime,jdbcType=VARCHAR},
+           </if>
+           <if test="deptName!=null">
+            #{deptName,jdbcType=VARCHAR},
+           </if>
+           <if test="status!=null">
+            #{status,jdbcType=VARCHAR},
+           </if>
+           <if test="dept!=null">
+            #{dept,jdbcType=VARCHAR}
+           </if>
+        </trim>
+      </insert>
+      <update id="updateTaskStatus" parameterType="com.alphasta.model.TaskStatus">
+        update  taskstatus 
+        <set>
+           
+           <if test="receiver!=null">
+              receiver=#{receiver,jdbcType=VARCHAR},
+           </if>
+           <if test="receiverName!=null">
+              receiverName=#{receiverName,jdbcType=VARCHAR},
+           </if>
+           <if test="rtime!=null">
+              rtime=#{rtime,jdbcType=VARCHAR},
+           </if>
+           <if test="status!=null">
+              status=#{status,jdbcType=VARCHAR}
+           </if> 
+        </set>
+         where  1=1
+              <if test="taskid!=null and  dept!=null">
+                and  taskid=#{taskid,jdbcType=VARCHAR}  and dept=#{dept,jdbcType=VARCHAR}
+              </if>
+      </update>
+      <!-- 公告列表 app端 -->
+      <select id="searchTaskInfoList" parameterType="java.util.Map"  resultType="com.alphasta.model.TaskInfo">
+         select a.id,a.creatTime,a.creator,a.content,a.dept,a.deptName,a.status,a.title
+         <if test="oid!=null">
+           ,t.status as isComplete,(select count(*) from taskstatus b  where a.id=taskid  and status='0') as unRead,(select count(*) from taskstatus b   where a.id=taskid  and status='1') as hasRead
+         </if>
+         from taskInfo a  
+         <if test="oid!=null">
+              join taskstatus t  on a.id= t.taskid  and t.dept=#{oid}
+              order by isComplete, a.creatTime desc
+         </if> 
+         <if test="oid==nul">
+               order by a.creatTime desc
+         </if>                 
+      </select>     
+     <!-- 通知签到列表 -->
+      <select id="searhTaskStatus" parameterType="java.util.Map" resultType="com.alphasta.model.TaskStatus">
+        select  t.id,t.taskid,t.receiver,t.receiverName,t.rtime,o.name as deptName,t.dept,t.status from taskstatus t join organization o on t.dept=o.id where 1=1
+        <if test="taskid!=null">
+             and t.taskid=#{taskid}
+        </if>
+        <if test="userid!=null">
+             and t.receiver=#{userid}        
+        </if>     
+      </select>
+      <!-- 查看公告 -->
+      <select id="searchTaskInfo" parameterType="java.lang.String" resultType="com.alphasta.model.TaskInfo">
+        select id,creatTime,creator,content,dept,deptName,status,isComplete,title from taskInfo
+         where id=#{id}      
+      </select>
+      <!-- 公告未读数量 --> 
+      <select id="countUnTaskNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+           select count(*) from taskInfo a  join taskstatus t  on a.id= t.taskid  and  t.dept=#{oid} and t.status='0'      
+      </select>  
+      
+      
+      
+      <delete id="delete"  parameterType="java.lang.String">
+        delete from  taskinfo  where id=#{id}    
+      </delete>
+</mapper>

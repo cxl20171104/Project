@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ScoreMapper" >
+   <resultMap id="BaseResultMap" type="com.alphasta.model.Score" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="USERID" property="userid" jdbcType="VARCHAR" />
+    <result column="SCORESOURCE" property="scoresource" jdbcType="VARCHAR" />
+    <result column="DESCR" property="descr" jdbcType="VARCHAR" />
+    <result column="QGPEND" property="qgpend" jdbcType="VARCHAR" />
+    <result column="CTIME" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="SCOREVALUE" property="scorevalue" jdbcType="VARCHAR" />
+  </resultMap>
+  
+   <resultMap id="ResultMap" type="com.alphasta.model.AnswerLog" >
+    <result column="userid" jdbcType="BIGINT" property="userid" />
+    <result column="scores" jdbcType="VARCHAR" property="scores" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="answertime" jdbcType="TIMESTAMP" property="answertime" />
+	<result column="name" jdbcType="VARCHAR" property="name" /> 
+	<result column="questionId" jdbcType="VARCHAR" property="id"/>
+  </resultMap>
+  
+  <select  id="getMyScore" parameterType="java.lang.String" resultType="java.lang.String" >
+     select scores from statistics where userId=#{userId} 
+  </select>  
+   <select id="getScoreList"  parameterType="com.alphasta.commons.utils.PageInfo"  resultMap="BaseResultMap">
+      select ID,DESCR,CTIME,SCOREVALUE from score where 1=1
+        <if test="condition !=null and condition.userId!=null">
+		  and USERID = #{condition.userId}  
+		 </if>
+         <if test='condition !=null and  condition.nd !=null and condition.nd!="" and ( condition.yf==null or  condition.yf=="")'>
+             and YEAR(ctime)=#{condition.nd}
+         </if> 
+         <if test=' condition !=null and condition.yf !=null and condition.yf !="" and (condition.nd==null or condition.nd=="" )'>
+             and  MONTH(ctime)= #{condition.yf}
+         </if>    
+         <if test=' condition !=null and condition.nd !=null and condition.nd!="" and  condition.yf!=null and condition.yf!=""'>
+             and YEAR(ctime)=#{condition.nd} and  MONTH(ctime)= #{condition.yf}
+         </if>  
+	      order by  CTIME desc
+	     <if test="from>-1 and  size !=0">
+	      limit #{from},#{size}	    
+	     </if> 
+   </select>
+   <select id="getAllHasSeenArt"  parameterType="java.util.Map" resultType="java.lang.String">
+      select SCORESOURCE from score where USERID=#{userid} 
+      <if test="ctype == 0">
+         and TYPE=#{ctype} 
+      </if>
+      <if test="ctype == 1">
+         and TYPE=#{ctype} 
+      </if>
+      <if test="ctype == 2 or ctype ==3">
+         and (TYPE= 2 or TYPE= 3 ) 
+      </if>          
+   </select>
+   <select id="getScoresByMonth" parameterType="java.util.Map" resultType="com.alphasta.model.Score">
+        select a.id,a.descr,a.ctime,a.SCOREVALUE as scores,u.name,a.url from score a join user u on a.userid=u.id 
+        where Month(a.ctime)=Month(#{ctime}) and YEAR(a.ctime)=YEAR(#{ctime})  and u.id=#{user}   ORDER BY ${sort} ${order}
+   
+   </select>
+   <insert id="addScore" parameterType="com.alphasta.model.Score" >
+    insert into score
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="scoresource != null" >
+        SCORESOURCE,
+      </if>
+      <if test="qgpend != null" >
+        QGPEND,
+      </if>
+      <if test="ctime != null" >
+        CTIME,
+      </if>
+      <if test="scorevalue != null" >
+        SCOREVALUE,
+      </if>
+      <if test="descr != null" >
+        DESCR,
+      </if>
+      <if test="url !=null">
+        URL,
+      
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="scoresource != null" >
+        #{scoresource,jdbcType=VARCHAR},
+      </if>
+      <if test="qgpend != null" >
+        #{qgpend,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scorevalue != null" >
+        #{scorevalue,jdbcType=VARCHAR},
+      </if>
+      <if test="descr != null" >
+        #{descr,jdbcType=VARCHAR},
+      </if>
+      <if test="url!=null">
+        #{url,jdbcType=VARCHAR},     
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="findScoreByParam"  parameterType="java.util.Map"  resultType="com.alphasta.model.Score">
+  
+      select ID,DESCR,CTIME,SCOREVALUE,SCORESOURCE,Type from score where 1=1
+      <if test="userid!=null">
+      
+         and userid=#{userid}
+      </if>
+      <if test="ctime!=null">
+         and ctime  like concat(#{ctime}, '%')
+      </if>
+      <if test="startTime!=null">
+         <![CDATA[and ctime>=#{startTime}]]> 
+      </if>
+      <if test="endTime!=null">
+         <![CDATA[and ctime<=#{endTime}]]> 
+      </if>
+  </select>
+</mapper>

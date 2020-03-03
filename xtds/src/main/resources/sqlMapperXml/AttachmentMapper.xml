@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.AttachmentMapper">
+	 <insert id="save" parameterType="com.alphasta.model.Attachment" >
+    insert into attachment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="filetype != null" >
+        FILETYPE,
+      </if>
+      <if test="owner != null" >
+        OWNER,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="uploader != null" >
+        UPLOADER,
+      </if>
+      <if test="utime != null" >
+        UTIME,
+      </if>
+      <if test="asize != null" >
+        ASIZE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="descn != null" >
+        DESCN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="filetype != null" >
+        #{filetype,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="uploader != null" >
+        #{uploader,jdbcType=VARCHAR},
+      </if>
+      <if test="utime != null" >
+        #{utime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="asize != null" >
+        #{asize,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="descn != null" >
+        #{descn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+	<select id="page" resultType="com.alphasta.model.Attachment" parameterType="com.alphasta.model.Attachment">
+		select * from attachment 
+		<if test="name !=null">
+			where name like concat('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		   order by utime  desc
+	</select>
+	<select id="getArtUrls" resultType="java.lang.String" parameterType="java.lang.String">
+	    select url from attachment where owner=#{0}	
+	</select>
+	<delete id="delete">
+		delete from attachment where id=#{id}
+	</delete>
+	<delete id="deleteattbyOwner" parameterType="java.lang.String">
+		delete from attachment where owner=#{owner}
+	</delete>
+	
+	
+	
+	
+	<select id="getAppIndexImg" resultType="java.lang.String" parameterType="java.util.Map">
+	     select  url  from  attachment where 1=1 
+	     <if test="filetype!=null">
+	       and filetype=#{filetype}	     
+	     </if>
+	     <if test="type!=null">
+	      and  type=#{type}	     
+	     </if>
+	     <if test="owner!=null">
+	      and   owner=#{owner}	     
+	     </if>
+	</select>
+	
+	
+	
+</mapper>

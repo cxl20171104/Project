@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ExchangeMapper">
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Exchange">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERID" jdbcType="VARCHAR" property="userId" />
+    <result column="GIFTID" jdbcType="VARCHAR" property="giftId" />
+    <result column="CREATIME" jdbcType="TIMESTAMP" property="creaTime" />
+    <result column="GIFTNAME" jdbcType="VARCHAR" property="giftName" />
+    <result column="GIFTPIC" jdbcType="VARCHAR" property="giftPic" />
+  </resultMap>
+  
+  
+   <insert id="addExchange" parameterType="com.alphasta.model.Exchange">
+        insert into EXCHANGE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id != null">id,</if>
+           <if test="userId != null">USERID,</if>
+           <if test="giftId != null">GIFTID,</if>
+           <if test="creaTime != null">CREATIME,</if>
+           <if test="giftName != null">GIFTNAME,</if>
+           <if test="giftPic != null">GIFTPIC,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+           <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+           <if test="giftId != null">#{giftId,jdbcType=VARCHAR},</if>
+           <if test="creaTime != null">#{creaTime,jdbcType=TIMESTAMP},</if>
+           <if test="giftName != null">#{giftName,jdbcType=INTEGER},</if>
+           <if test="giftPic != null">#{giftPic,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+  
+    
+    
+     <delete id="deleteExchange" parameterType="java.lang.String">
+	    delete from EXCHANGE
+	    where id = #{_parameter} 
+  	</delete>
+  	
+  	
+  	
+  	
+  	<update id="updateExchage" parameterType="com.alphasta.model.Exchange" >  
+    update EXCHANGE
+    <set >  
+      <if test="userid != null" >  
+        USERID = #{userid,jdbcType=VARCHAR},  
+      </if>  
+      <if test="giftPic != null" >  
+        GIFTPIC = #{giftPic,jdbcType=VARCHAR},  
+      </if>  
+      <if test="creaTime != null" >  
+        CREATIME = #{creaTime,jdbcType=TIMESTAMP},  
+      </if>  
+      <if test="giftName!= null" >  
+        GIFTNAME = #{giftName,jdbcType=INTEGER},  
+      </if>  
+      <if test="giftId!= null" >  
+        GIFTID = #{giftId,jdbcType=VARCHAR},  
+      </if>  
+       
+    </set>  
+    where id = #{id,jdbcType=VARCHAR}  
+  </update>
+  
+  
+  
+  
+  <select id="findExchangePageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT ID,USERID,GIFTID,CREATIME,GIFTNAME,GIFTPIC
+        FROM
+        EXCHANGE     
+        <where>
+        
+            <if test=" condition.userId != null and condition.userId != '' ">
+                USERID =#{condition.userId}
+            </if>
+              <if test="condition.startTime != null">
+                <![CDATA[
+            and startTime >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+            and endTime <= #{condition.endTime}
+            ]]>
+            </if>
+        </where>
+        order by ${sort} ${order}
+        LIMIT #{from}, #{size}
+    </select>  
+    
+     <select id="findExchangePageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count from EXCHANGE 
+         <where>
+            <if test=" condition.userId != null and condition.userId != '' ">
+                USERID =#{condition.userId}
+            </if>
+              <if test="condition.startTime != null">
+                <![CDATA[
+                and startTime >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+                and endTime <= #{condition.endTime}
+            ]]>
+            </if>
+        </where>
+    </select>
+    
+    <select id="findExchangeByid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT ID,USERID,GIFTID,CREATIME,GIFTNAME,GIFTPIC FROM EXCHANGE WHERE ID = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ActivitiesMapper">
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Activities">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="TOPIC" jdbcType="VARCHAR" property="topic" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="DEPT" jdbcType="VARCHAR" property="dept" />
+    <result column="ETIME" jdbcType="VARCHAR" property="etime" />
+    <result column="USEABLE" jdbcType="INTEGER" property="useable" />
+    <result column="picture" jdbcType="VARCHAR" property="picture"/>
+  </resultMap>
+  <insert id="save" parameterType="com.alphasta.model.Activities">
+    insert into activities
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="topic != null">
+        TOPIC,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="dept != null">
+        DEPT,
+      </if>
+      <if test="etime != null">
+        ETIME,
+      </if>
+      <if test="useable != null">
+        USEABLE,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null">
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null">
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="etime != null">
+        #{etime,jdbcType=VARCHAR},
+      </if>
+      <if test="useable != null">
+        #{useable,jdbcType=INTEGER},
+      </if>
+      <if test="picture !=null">
+      	#{picture,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   <update id="updateByPrimaryKeySelective" parameterType="com.alphasta.model.Activities">
+    update activities
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null">
+        TOPIC = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="dept != null">
+        DEPT = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="etime != null">
+        ETIME = #{etime,jdbcType=VARCHAR},
+      </if>
+      <if test="useable != null">
+        USEABLE = #{useable,jdbcType=INTEGER},
+      </if>
+      <if test="picture !=null">
+      	picture =#{picture,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+    <sql id="Base_Column_List">
+    ID, NAME, TOPIC, TYPE, DEPT, ETIME, USEABLE,picture
+  </sql>
+    <select id="selectByID" parameterType="java.lang.String" resultType="com.alphasta.model.Activities">
+    select 
+    <include refid="Base_Column_List" />
+    from activities
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="page" parameterType="com.alphasta.model.Activities" resultType="com.alphasta.model.Activities">
+  	select  <include refid="Base_Column_List" />
+    from activities where 1=1
+    <if test="name !=null">
+				 and name like  concat('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+    <if test="dept !=null">
+				 and dept = #{dept}
+	</if>
+ </select>	
+	<!-- app分页显示 -->
+	  <select id="apppage" parameterType="java.lang.String" resultType="com.alphasta.model.Activities">
+  	select  
+  		<include refid="Base_Column_List"/>
+    from activities where 1=1
+		and etime >= now()
+		and useable = "1"
+			order by ctime desc
+		  		 <if test="from >-1 and size!=0">
+		           limit #{from}, #{size}
+		         </if>
+  </select>
+  <delete id="deleteByID">
+  	delete from activities  where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <select id="getByCondition" resultType="com.alphasta.model.Activities">
+  	select    
+  		<include refid="Base_Column_List" />  
+  	from activities where 1=1 
+  	<if test="name !=null">
+  		and name = #{name}
+  	</if>
+  	<if test="id != null">
+  		and etime>now()
+  	</if>
+  </select>
+</mapper>

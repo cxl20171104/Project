@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.PayMapper">
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Pay">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="organization_id" jdbcType="VARCHAR" property="organization_id" />
+    <result column="paytime" jdbcType="VARCHAR" property="payTime" />
+     <result column="paytype" jdbcType="VARCHAR" property="payType" />
+     <result column="money" jdbcType="VARCHAR" property="money" />
+     <result column="year"  jdbcType="VARCHAR" property="year"/>
+     <result column="month" jdbcType="VARCHAR" property="month"/>
+     <result column="quarter" jdbcType="VARCHAR" property="quarter"/> 
+     <result column="state" jdbcType="VARCHAR" property="state"/>
+     <result column="paybase" jdbcType="VARCHAR" property="paybase"/>
+     <result column="payscale" jdbcType="VARCHAR" property="payscale"/>
+   <association property="organization" column="organization_id"  javaType="com.alphasta.model.Organization" select="com.alphasta.mapper.OrganizationMapper.findOrganizationById"></association>
+   <association property="user" column="userid"  javaType="com.alphasta.model.User" select="com.alphasta.mapper.UserMapper.findUserById"></association>
+  </resultMap>
+  <resultMap type="com.alphasta.model.Pay" id="PayResultMap">
+       <id column="ID" jdbcType="VARCHAR" property="id" />
+       <result column="userid" jdbcType="VARCHAR" property="userid" />
+       <result column="uname" jdbcType="VARCHAR" property="uname"/>
+       <result  column="oname" jdbcType="VARCHAR" property="oname"/>
+       <result  column="month" jdbcType="VARCHAR" property="month"/>
+       <result  column="year" jdbcType="VARCHAR" property="year"/>
+       <result column="state" jdbcType="VARCHAR" property="state"/>
+       
+  </resultMap>
+  <resultMap type="com.alphasta.model.Pay" id="OutResultMap">
+       <id column="ID" jdbcType="VARCHAR" property="id" />
+       <result column="userid" jdbcType="VARCHAR" property="userid" />
+       <result column="uname"  jdbcType="VARCHAR" property="uname"/>
+       <result column="oname"  jdbcType="VARCHAR" property="oname"/>
+       <result column="paybase" jdbcType="VARCHAR" property="paybase"/>
+       <result column="payscale" jdbcType="VARCHAR" property="payscale"/>
+       <result column="money"    jdbcType="VARCHAR" property="money" />
+       <result column="paytime"  jdbcType="VARCHAR" property="payTime" />
+       <result column="month"    jdbcType="VARCHAR" property="month"/>
+  </resultMap>
+  
+    <select id="getByMonth" parameterType="java.util.Map" resultMap="PayResultMap">
+        select
+            p.id,p.userid,u.name as uname,oo.name as oname,p.month,p.year,p.state
+        from pay p 
+        join organization o on o.id=#{oid}
+        join organization oo on oo.code like concat(o.`code`,'%') and p.organization_id=oo.id
+        join user u on p.userid=u.id
+         where p.year=#{year} and p.month=#{month} 
+         <if test="state!=null and state!=''">
+         and p.state=#{state}
+         </if>
+    </select>
+    <select id="getByQuarter"  parameterType="java.util.Map" resultMap="OutResultMap" >
+         select
+            p.id,p.userid,u.name as uname,oo.name as oname,p.paybase,p.payscale,p.paytime,p.money
+         from pay p 
+        join organization o on o.id=#{oid}
+        join organization oo on oo.code like concat(o.`code`,'%') and p.organization_id=oo.id
+        join user u on p.userid=u.id
+         where p.year=#{year} and p.quarter=#{quarter}
+         group by u.id,p.month
+    </select>
+    <select id="findByUseridAndMonth" parameterType="java.util.Map" resultMap="OutResultMap" >
+          select  <include refid="Base_Column_List" />  from pay  
+          where  userid=#{userid} and month=#{month} and year=#{year}
+    </select>
+  <insert id="save" parameterType="com.alphasta.model.Pay">
+    insert into pay
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="organization_id != null">
+        organization_id,
+      </if>
+      <if test="payTime != null">
+        payTime,
+      </if>
+      <if test="payType != null">
+        payType,
+      </if>
+      <if test="money != null">
+        money,
+      </if> 
+      <if test="year != null">
+        year,
+      </if> 
+      <if test="month != null">
+        month,
+      </if> 
+      <if test="state != null">
+        state,
+      </if> 
+      <if test="quarter != null">
+        quarter,
+      </if> 
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="organization_id != null">
+        #{organization_id,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+       #{money,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+       #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="month != null">
+       #{month,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+       #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="quarter != null">
+       #{quarter,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <!-- 删 -->
+     <delete id="deleteByIds" parameterType="java.lang.String">
+	    delete from pay
+	    where id = #{id,jdbcType=VARCHAR}
+  	</delete>
+  <!-- 改 -->
+  <update id="update" parameterType="com.alphasta.model.Pay">
+    update pay
+    <set>
+         <if test="userid!=null and userid!=''">
+           userid=#{userid},
+         </if>
+         <if test="organization_id!=null and organization_id!=''">
+           organization_id=#{organization_id},
+         </if>
+         <if test="payTime!=null and payTime!=''">
+           paytime=#{payTime},
+         </if>
+         <if test="payType!=null and payType!=''">
+           paytype=#{payType},
+         </if>
+         <if test="money!=null and money!=''">
+           money=#{money},
+         </if>
+         <if test="year!=null and year!=''">
+           year=#{year},
+         </if>
+         <if test="month!=null and month!=''">
+           month=#{month},
+         </if>
+         <if test="state!=null and state!=''">
+           state=#{state},
+         </if>
+         <if test="quarter!=null and quarter!=''">
+           quarter=#{quarter},
+         </if>
+         <if test="paybase!=null and paybase !=''">
+           paybase=#{paybase},
+         </if>
+         <if test="payscale!=null and payscale!=''">
+           payscale=#{payscale},
+         </if>        
+    </set>
+    where id=#{id,jdbcType=VARCHAR}
+  </update>
+    <update  id="updatePay" parameterType="com.alphasta.model.Pay" >
+       update pay
+       <set>
+          <if test="userid!=null and userid!=''">
+           userid=#{userid},
+         </if>
+         <if test="payTime!=null and payTime!=''">
+           paytime=#{payTime},
+         </if>
+         <if test="money!=null and money!=''">
+           money=#{money},
+         </if>
+         <if test="state!=null and state!=''">
+           state=#{state},
+         </if>
+         <if test="paybase!=null and paybase!=''">
+           paybase=#{paybase},
+         </if>
+         <if test="payscale!=null and payscale!=''">
+           payscale=#{payscale},
+         </if>          
+       </set>
+        where userid=#{userid} and year=#{year} and month=#{month}
+    </update>
+  
+    <sql id="Base_Column_List">
+    id, userid, paytime,payType,organization_id,money,year,month,state,quarter,paybase,payscale
+    </sql>
+  
+   <select id="selectByID" parameterType="java.lang.String" resultType="com.alphasta.model.Pay">
+    select 
+    <include refid="Base_Column_List" />
+    from pay
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  
+	<!-- app分页显示 -->
+	 <select id="findPayPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        select
+       p.id, p.userid, p.paytime,p.payType,p.organization_id,u.name,o.name,p.money,p.year,p.month,p.quarter,p.state,p.paybase,p.payscale
+        from pay p,organization o,user u 
+        <where>
+        	<if test='condition.name!= null and condition.name != ""'>
+        		and u.name like '%${condition.name}%'
+        	</if>
+        	<if test='condition.userid!= null and condition.userid != ""'>
+        		and p.userid ='${condition.userid}'
+        	</if>
+        	<if test='condition.organization_id != null and condition.organization_id != ""'>
+        		and p.organization_id in ${condition.organization_id}
+        	</if>
+        	<if test="condition!=null and condition.year!=null">
+        	    and p.year=#{condition.year}
+        	</if>
+        	<if test="condition!=null and condition.month!=null">
+        	    and p.month=#{condition.month}
+        	</if>
+        	<if test="condition!=null and condition.quarter!=null">
+        	    and p.year=#{condition.year}
+        	</if>
+        	<if test='condition.start != null and condition.start!= ""'>
+        	      <![CDATA[
+        	     and  DATE_FORMAT(p.paytime, '%Y-%m-%d') >= DATE_FORMAT(#{condition.start} , '%Y-%m-%d')
+        	     ]]>     	     
+        	</if>
+        	<if test='condition.end != null and condition.end!= ""'>
+        	      <![CDATA[
+        	     and  DATE_FORMAT(p.paytime, '%Y-%m-%d') <= DATE_FORMAT(#{condition.end} , '%Y-%m-%d')
+        	     ]]>     	     
+        	</if>
+        and	p.userid=u.id and p.organization_id=o.id
+        </where>
+        order by  p.year desc,p.month desc
+        limit #{from}, #{size}
+    </select>
+
+  
+     <select id="findPayPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+	    select 
+	    count(*) count
+	    from pay p,organization o,user u 
+	    <where>
+        	<if test='condition.name!= null and condition.name != ""'>
+        		and u.name like '%${condition.name}%'
+        	</if>
+        	<if test='condition.payType!= null and condition.payType != ""'>
+        		and p.payType ='${condition.payType}'
+        	</if>
+        	<if test='condition.organization_id != null and condition.organization_id != ""'>
+        		and p.organization_id in ${condition.organization_id}
+        	</if>
+        	<if test='condition.start != null and condition.start!= ""'>
+        	      <![CDATA[
+        	     and  DATE_FORMAT(p.paytime, '%Y-%m-%d') >= DATE_FORMAT(#{condition.start} , '%Y-%m-%d')
+        	     ]]>     	     
+        	</if>
+        	<if test='condition.end != null and condition.end!= ""'>
+        	      <![CDATA[
+        	     and  DATE_FORMAT(p.paytime, '%Y-%m-%d') <= DATE_FORMAT(#{condition.end} , '%Y-%m-%d')
+        	     ]]>     	     
+        	</if>
+        and	p.userid=u.id and p.organization_id=o.id
+        </where>
+  	</select>
+  	<select id="findPayByUserId" resultMap="BaseResultMap" parameterType="PageInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from pay 
+        <where>
+            <if test='condition!=null and condition.userid!=null and condition.userid!=""'>
+  	          userid=#{condition.userid}
+  	       </if>
+        </where>
+        order by year desc,month desc
+        limit #{from}, #{size}
+    </select>
+</mapper>

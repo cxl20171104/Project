@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.alphasta.model.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="loginname" property="loginname" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+         <result column="seq" property="seq" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="age" property="age" jdbcType="TINYINT"/>
+        <result column="usertype" property="usertype" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="phone1" property="phone1" jdbcType="VARCHAR"/>
+        <result column="phone2" property="phone2" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="isAdmin" property="isAdmin" jdbcType="INTEGER"/>
+        <result column="positionId" property="positionId" jdbcType="INTEGER"/>
+        <result column="qrcode" property="qrcode" jdbcType="VARCHAR"/>
+        <result column="liveness" property="liveness" jdbcType="VARCHAR"/>
+        <result column="intime"  property="intime" jdbcType="VARCHAR"/>
+        <result column="qrcode" property="qrcode" jdbcType="VARCHAR"/>
+        <result column="liveness" property="liveness" jdbcType="VARCHAR"/>
+        <result column="ecode" property="ecode" jdbcType="VARCHAR"/>
+   		<result column="post" property="post" jdbcType="VARCHAR"/>
+   		<result column="idcard" property="idcard" jdbcType="VARCHAR"/>
+   		<result column="motto" property="motto" jdbcType="VARCHAR"/>
+   		<result column="headpic" property="headpic" jdbcType="VARCHAR"/>
+   		<result column="dept" property="dept" jdbcType="VARCHAR"/>
+   		<result column="token" property="token" jdbcType="VARCHAR"/>
+		<result column="logintime" property="logintime" jdbcType="DATE"/>
+		<result column="postname" property="postName" jdbcType="VARCHAR"/>   		    		 
+		 
+    </resultMap>
+
+    <resultMap id="userVoResultMap" type="com.alphasta.commons.result.UserVo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="loginname" property="loginname" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+         <result column="seq" property="seq" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="TINYINT"/>
+        <result column="age" property="age" jdbcType="TINYINT"/>
+        <result column="usertype" property="usertype" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="organization_id" property="organizationId" jdbcType="INTEGER"/>
+        <result column="createdate" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="phone1" property="phone1" jdbcType="VARCHAR"/>
+        <result column="phone2" property="phone2" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+		<result column="isAdmin" property="isAdmin" jdbcType="INTEGER"/>
+        <result column="positionId" property="positionId" jdbcType="INTEGER"/>
+        <result column="positionTwoId" property="positionTwoId" jdbcType="INTEGER"/>
+        <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
+        <result column="positionName" property="positionName" jdbcType="VARCHAR"/>
+        <result column="positionTwoName" property="positionTwoName" jdbcType="VARCHAR"/>
+        <result column="intime"  property="intime" jdbcType="VARCHAR"/>
+        <result column="workingTime" property="workingTime" jdbcType="VARCHAR"/>
+        <result column="xue_li" property="xue_li" jdbcType="VARCHAR"/>
+        <result column="love" property="love" jdbcType="VARCHAR"/>
+		<result column="qrcode" property="qrcode" jdbcType="VARCHAR"/>
+         <result column="liveness" property="liveness" jdbcType="VARCHAR"/>
+        <result column="ecode" property="ecode" jdbcType="VARCHAR"/>
+   		<result column="post" property="post" jdbcType="VARCHAR"/>
+   		<result column="idcard" property="idcard" jdbcType="VARCHAR"/>
+   		<result column="motto" property="motto" jdbcType="VARCHAR"/>
+   		<result column="headpic" property="headpic" jdbcType="VARCHAR"/>
+   		<result column="dept" property="dept" jdbcType="VARCHAR"/>
+   		<result column="token" property="token" jdbcType="VARCHAR"/>
+		<result column="logintime" property="logintime" jdbcType="TIMESTAMP"/> 
+			
+        <collection property="rolesList" ofType="Role">
+            <id column="roleId" property="id"/>
+            <result column="roleName" property="name"/>
+        </collection>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+	    id, loginname, name, password, sex, age, usertype, status, organization_id, createdate, 
+	    phone,phone1,phone2,email,isAdmin,positionId,qrcode,liveness,post,idcard,
+	    motto,headpic,dept,token,logintime,intime
+  	</sql>
+  	
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        u.id, u.loginname, u.name, u.password, u.sex, u.age, u.usertype, u.status, u.organization_id, u.createdate, 
+	    u.phone,u.phone1,u.phone2,u.email,u.isAdmin,u.positionId,u.qrcode,u.liveness,u.post,u.idcard,
+	    u.motto,u.headpic,u.dept,u.token,u.logintime,u.intime,o.level as ecode
+        from user u join organization o on u.organization_id=o.id
+        where loginname = #{username}
+    </select>
+
+    <select id="findUserVoById" resultMap="userVoResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id,
+        loginname,
+        t.`name`,
+        `password`,
+        sex,
+        age,
+        usertype,
+        t.`status`,
+        organization_id,
+        t.createdate,
+        phone,phone1,phone2,email,positionId,positionTwoId,
+        s.`name` AS organizationName,
+        o.id AS roleId,
+        o.`name` AS roleName,
+        p.`name` AS positionName,
+        w.name AS positionTwoName,
+        t.motto,
+        t.intime,
+        t.xue_li,
+        t.xue_wei,
+        t.love,
+        t.seq
+        FROM
+        user t
+        LEFT JOIN user_role r ON t.id = r.user_id
+        LEFT JOIN role o ON r.role_id = o.id
+        LEFT JOIN organization s ON s.id = t.organization_id
+        LEFT JOIN position p ON p.id = t.positionId
+        LEFT JOIN position w ON w.id = t.positionTwoId        
+        <where>
+            t.id = #{id}
+        </where>
+    </select>
+
+    <select id="findUserById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id}
+    </select>
+    <select id="findCidlistByIds" resultType="java.lang.String">
+        select cid  from user where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+            #{item}
+       </foreach>
+    </select>
+    <select id="getUserByToken" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+     <include refid="Base_Column_List"/>
+    from user
+    where token = #{token}
+    </select>
+
+    <select id="findUserPageCondition" resultMap="userVoResultMap" parameterType="PageInfo">
+        SELECT
+        t.id,
+        loginname,
+        t.seq,
+        t.`name`,
+        `password`,
+        sex,
+        age,
+        usertype,
+        t.`status`,
+        organization_id,
+        t.createdate,
+        t.intime,
+        phone,phone1,phone2,email,positionId,positionTwoId,
+        s.`name` AS organizationName,
+        o.id AS roleId,
+        o.`name` AS roleName,
+        p.name AS positionName,
+        w.name AS positionTwoName,
+        t.workingTime,
+        t.xue_wei,
+        d.name as xue_li,
+        di.name as love
+        FROM
+        user t
+        LEFT JOIN user_role r ON t.id = r.user_id
+        LEFT JOIN role o ON r.role_id = o.id
+        LEFT JOIN organization s ON s.id = t.organization_id
+        LEFT JOIN position p ON p.id = t.positionId
+        LEFT JOIN position w ON w.id = t.positiontwoId
+        LEFT JOIN DICT  d ON d.id=t.xue_li and d.dictpid='09'
+        LEFT JOIN DICT  di ON di.id=t.love and di.dictpid='010'
+        
+        <where>
+            <if test=" condition.name != null and condition.name != '' ">
+                t.name LIKE '%${condition.name}%'
+            </if>
+            <if test=" condition.organizationId != null ">
+                t.organization_id = #{condition.organizationId}
+            </if>
+            <if test="condition.startTime != null">
+                <![CDATA[
+            and t.createdate >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+            and t.createdate <= #{condition.endTime}
+        ]]>
+            </if>
+            <if test="condition.xue_li!=null">
+             and t.xue_li=#{condition.xue_li}
+            </if>
+            <if test="condition.love!=null">
+             and t.love=#{condition.love}
+            </if>
+        </where>
+        order by ${sort} ${order}
+        LIMIT #{from}, #{size}
+    </select>
+
+    <select id="findUserPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from user t
+        <where>
+            <if test=" condition.name != null and condition.name != '' ">
+                t.name = #{condition.name}
+            </if>
+            <if test=" condition.organizationId != null ">
+                t.organization_id = #{condition.organizationId}
+            </if>
+             <if test="condition.xue_li!=null">
+             and t.xue_li=#{condition.xue_li}
+            </if>
+            <if test="condition.love!=null">
+             and t.love=#{condition.love}
+            </if>
+            <if test="condition.startTime != null">
+                <![CDATA[
+            and t.createdate >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+            and t.createdate <= #{condition.endTime}
+            ]]>
+            </if>
+        </where>
+    </select>
+    
+    <select id="findUser" resultMap="BaseResultMap" parameterType="com.alphasta.model.User">
+    	select
+        u.id, u.loginname, u.name, u.password, u.sex, u.age, u.usertype, u.status, u.organization_id, u.createdate, 
+	    u.phone,u.phone1,u.phone2,u.email,u.isAdmin,u.positionId
+		FROM user u
+		INNER JOIN organization o ON u.organization_id = o.id
+		inner join organization oo on o.code like concat(oo.`code`,'%')
+        <where>
+        	<if test="organizationId != null">
+        		and oo.id = #{organizationId}
+        	</if>
+        </where>
+    </select>
+    <select id="findUserByOrgid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    	select
+        u.id, u.loginname, u.name, u.password, u.sex, u.age, u.usertype, u.status, u.organization_id, u.createdate, 
+	    u.phone,u.phone1,u.phone2,u.email,u.isAdmin,u.positionId
+		FROM user u
+		INNER JOIN organization o ON u.organization_id = o.id
+		inner join organization oo on o.code like concat(oo.`code`,'%')
+        where oo.id = #{0}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+	    delete from user
+	    where id = #{id,jdbcType=BIGINT}
+  	</delete>
+
+    <insert id="insert" parameterType="com.alphasta.model.User">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user (loginname, name, password,seq,
+        sex, age, usertype,
+        status, organization_id, createdate,
+        phone,phone1,phone2,email,positionId,positionTwoId,isAdmin,qrcode,liveness,
+        ecode,post,idcard,motto,headpic,dept,token,logintime,intime,xue_li,xue_wei,love)
+        values (#{loginname,jdbcType=VARCHAR}, 
+       		    #{name,jdbcType=VARCHAR}, 
+		        #{password,jdbcType=VARCHAR},
+		        #{seq,jdbcType=VARCHAR},
+		        #{sex,jdbcType=TINYINT}, 
+		        #{age,jdbcType=TINYINT},
+		        #{usertype,jdbcType=TINYINT},
+		        #{status,jdbcType=TINYINT}, 
+		        #{organizationId,jdbcType=INTEGER}, 
+		        now(),
+		        #{phone,jdbcType=VARCHAR},
+		        #{phone1,jdbcType=VARCHAR},
+		        #{phone2,jdbcType=VARCHAR},
+		        #{email,jdbcType=VARCHAR},
+		        #{positionId,jdbcType=BIGINT},
+		        #{positionTwoId,jdbcType=BIGINT},
+		        0,
+		        #{qrcode,jdbcType=VARCHAR},
+		        #{liveness,jdbcType=VARCHAR},
+		        #{ecode,jdbcType=VARCHAR},
+		        #{post,jdbcType=VARCHAR},
+		        #{idcard,jdbcType=VARCHAR},
+		        #{motto,jdbcType=VARCHAR},
+		        #{headpic,jdbcType=VARCHAR},
+		        #{dept,jdbcType=VARCHAR},
+		        #{token,jdbcType=VARCHAR},
+		        now(),
+		        #{intime},
+		        #{xue_li},
+		        #{xue_wei},
+		        #{love}
+		        )
+    </insert>
+
+    <update id="updateUserPwdById">
+	    update user
+	    set password = #{pwd,jdbcType=VARCHAR},
+	    createdate = now()
+	    where id = #{userId,jdbcType=BIGINT}
+  	</update>
+  	
+
+    <update id="updateUser" parameterType="com.alphasta.model.User">
+        update user
+        <set>
+            <if test="loginname != null">
+                loginname = #{loginname,jdbcType=VARCHAR},
+            </if>
+            <if test="seq!=null">
+      		    seq=#{seq,jdbcType=VARCHAR},
+      		</if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=TINYINT},
+            </if>
+            <if test="usertype != null">
+                usertype = #{usertype,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="organizationId != null">
+                organization_id = #{organizationId,jdbcType=INTEGER},
+            </if>
+            <if test="createdate != null">
+                createdate = #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="phone1 != null">
+                phone1 = #{phone1,jdbcType=VARCHAR},
+            </if>
+            <if test="phone2 != null">
+                phone2 = #{phone2,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="positionId != null">
+                positionId = #{positionId,jdbcType=BIGINT},
+            </if>
+            <if test="positionTwoId != null">
+                positionTwoId = #{positionTwoId,jdbcType=BIGINT},
+            </if>
+            <if test="qrcode != null">
+                qrcode = #{qrcode,jdbcType=VARCHAR},
+            </if>
+            <if test="liveness != null">
+                liveness = #{liveness,jdbcType=VARCHAR},
+            </if>
+            <if test="ecode != null">
+                ecode = #{ecode,jdbcType=VARCHAR},
+            </if>
+            <if test="post != null">
+                post = #{post,jdbcType=VARCHAR},
+            </if>
+            <if test="idcard != null">
+                idcard = #{idcard,jdbcType=VARCHAR},
+            </if>
+            <if test="motto != null">
+                motto = #{motto,jdbcType=VARCHAR},
+            </if>
+            <if test="headpic != null">
+                headpic = #{headpic,jdbcType=VARCHAR},
+            </if>
+            <if test="dept != null">
+                dept = #{dept,jdbcType=VARCHAR},
+            </if>
+            <if test="token != null">
+                token = #{token,jdbcType=VARCHAR},
+            </if>
+      		<if test="logintime != null">
+      		    logintime = #{logintime,jdbcType=TIMESTAMP},
+      		</if>
+      		<if test="cid !=null">
+      		    cid=#{cid,jdbcType=VARCHAR},
+      		</if>
+      		<if test="intime !=null">
+      		    intime=#{intime,jdbcType=VARCHAR},
+      		</if>
+      		<if test="xue_li!=null">
+      		    xue_li=#{xue_li,jdbcType=VARCHAR},
+      		</if>
+      		<if test="love!=null">
+      		    love=#{love,jdbcType=VARCHAR}
+      		</if>
+      		
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="allResoureByUserid" resultType="java.lang.String" parameterType="java.lang.String">
+        select  re.url  from  user u ,user_role ur ,role_resource rr ,
+        resource re WHERE u.id=ur.user_id  and ur.role_id=rr.role_id and  re.id=rr.resource_id  AND  u.id=#{0}    
+    </select>
+    <select id="getAll" resultMap="BaseResultMap" parameterType="java.util.Map">
+         select  <include refid="Base_Column_List2"/> from user user 
+         <if test='level!=null and level=="1"'>
+             join organization o on user.organization_id=o.id and o.level=#{level} and user.organization_id!=1
+         </if>
+          <if  test='level!=null and level=="2" and oid!=null'>
+             join organization o on o.id=#{oid}
+             join organization oo ON oo. CODE LIKE concat(o.`code`, '%') and user.organization_id=oo.id and user.organization_id!=1
+          </if>
+    </select>
+    <sql id="Base_Column_List2">
+	      user.id,user.name,user.motto,user.headpic,user.intime,user.liveness
+  	</sql>
+     <select id="getUsers" resultMap="BaseResultMap"  parameterType="java.util.Map">
+         select   user.id,user.sex,user.intime,user.name,user.motto,user.headpic,user.intime,user.liveness, p.name as postName from user 
+               JOIN position p ON p.id = user.positionId and user.organization_id!=1
+             <if test='level!=null and level=="1"'>
+              join  organization o on o.id=user.organization_id and  o.level=#{level}   
+            </if>
+           <if test='level!=null and level=="2" and oid !=null'>
+              join organization o on o.id=#{oid} and o.level=#{level}
+              join organization oo on oo. CODE LIKE concat(o.`code`, '%') and user.organization_id=oo.id  and  oo.id=user.organization_id
+            </if>
+            <if test='userName!=null and userName!=""'>
+                and  user.name  like  concat('%', #{userName},'%')
+            </if>
+           <if test='organization_id !=null and organization_id !=""'>
+                and  user.organization_id =#{organization_id}        
+            </if>
+           <if test='sort!=null  and sort!="" and  order!=null  and order!=""'>
+             order by cast(user.liveness as decimal(9,2)) ${order}
+           </if> 
+           <if test="sort==null">
+             order by user.seq  desc       
+           </if>
+             
+    </select>
+    <!-- 党委领导 -->
+     <select id="getCenterUsers" resultMap="BaseResultMap"  parameterType="java.util.Map">
+           select  u.id, u.loginname, u.name, u.sex, u.age,u.phone,u.email,
+	               u.motto,u.headpic,u.dept,u.intime,p.name as postName  from user u
+                 join  position p ON (p.id = u.positionTwoId or p.id=u.post) and p.grade=#{grade} 
+                 join organization o on o.id=#{oid} and o.level=#{level}
+                 join organization oo ON oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id 
+             order by p.order+0
+    </select>
+    <select id="getCidsBydepts" resultType="java.lang.String">
+         select u.cid  from user u  
+         JOIN user_role r ON u.id = r.user_id
+         JOIN role o ON r.role_id = o.id  and o.id='9'
+         and u.organization_id  in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+            #{item}
+       </foreach>
+    </select>
+    <!-- 当天政治生日 -->
+    <select id="getBothers" resultType="com.alphasta.commons.result.BorthMsg" parameterType="java.util.Map">
+        select u.id,u.name,(YEAR(now())-YEAR(u.intime)) as ageNum,u.intime 
+         from user  u
+         <if test='level!=null and level=="1"'>
+              join organization o  on o.id=u.organization_id and o.level=#{level}         
+         </if> 
+         <if test='level!=null and level=="2"'>
+              join organization o  on o.id=#{oid}
+              join organization oo on  oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id        
+         </if> 
+         and MONTH(u.intime)=MONTH(now()) and DAY(u.intime)=DAY(now()) and u.organization_id!=1 
+          
+    </select>
+    <!-- 本月的政治生日 -->
+    <select id="getBothersByMonth" resultType="com.alphasta.commons.result.BorthMsg">
+          select id,name,(YEAR(now())-YEAR(intime)) as ageNum,intime  from user where MONTH(intime)=MONTH(now()) order by  DAY(intime) and user.organization_id!=1    
+    </select>
+    
+    <!-- app在线人数 -->
+    <select id="getOnlineNum" resultType="java.lang.String">
+           <![CDATA[
+        select count(*) from user where token is not null and token <> '' and user.organization_id!=1
+             ]]>
+    </select>
+    <select id="getUserPM"  resultType="com.alphasta.model.User" parameterType="java.util.Map">
+        select u.rowid as ecode,u.liveness,u.name,u.id from (select @rowid:=@rowid+1 as rowid,us.id,us.name,s.scores as liveness from user us join statistics s on us.id=s.userid  and s.userid!=1 
+         <if test='type!=null and type=="2"'>
+         and s.type=2  and Month(s.ctime)=Month(now())
+        </if>
+        <if test='type!=null and type=="1"'>
+        and s.type=1
+        </if>
+         and Year(s.ctime)=Year(now()) , (SELECT @rowid:=0) as init   order by cast(s.scores as decimal(9,2))  desc) as u where u.id=#{userid}
+    </select>
+    <!-- 
+    
+        县局和市局 个人 本年和本月 积分排名
+    
+     -->
+    <select id="getNdpm"  resultType="com.alphasta.model.User" parameterType="java.util.Map">
+        select u.id,u.name,s.scores as liveness  from user u join statistics s on u.id=s.userid
+         <if test='level!=null and level=="1"'>
+        join organization o on o.id=u.organization_id and o.level=#{level} and o.code not like '02%' and o.id !=1  
+        </if>
+        <if test='level!=null and level=="2"'>
+          join organization o on o.id=#{oid} and o.level=#{level}
+          JOIN organization oo ON oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id 
+        </if>
+        <if test='type!=null and type=="2"'>
+         and s.type=2 and Month(s.ctime)=Month(now())
+        </if>
+        <if test='type!=null and type=="1"' >
+        and s.type=1
+        </if>
+         and Year(s.ctime)=Year(now()) and u.organization_id !=1
+         order by cast(s.scores as decimal(9,2))  desc
+    </select>
+    <!-- 
+    
+    
+    县局和市局  本年和本月积分排名
+    
+    
+     -->
+     <select id="getNdpmByOrgan" resultType="com.alphasta.model.Organization" parameterType="java.util.Map">
+        select oo.id, avg(a.scores) as scores, oo.name   from statistics a join user u on a.userid=u.id join organization o on u.organization_id=o.id inner join organization oo on o.code like concat(oo.`code`,'%') and oo.pid='1' and oo.id!=1
+        <if test='level!=null'>
+          and oo.level=#{level}
+        </if> 
+        <if test='type!=null and type=="2"'>
+           and a.type=2  and Month(a.ctime)=Month(now())
+        </if>
+        <if test='type!=null and type=="1"' >
+          and a.type=1
+        </if>
+        and YEAR(a.ctime)=YEAR(now()) group by oo.id ORDER BY cast(avg(a.scores) as decimal(9,2)) desc      
+     </select>  
+     
+     
+     <!-- 
+     
+     
+     各部门用户 总分排名
+     
+     
+      -->
+     <select id="getZongji" resultType="com.alphasta.model.User" parameterType="java.util.Map">
+         select  u.liveness,u.name,u.id from user u
+         
+         
+            <if test='level!=null and level=="1"'><!-- 部门是市局的 -->
+                join organization o on o.id=u.organization_id and o.level=#{level}  and o.code not like '02%' and o.id !=1  
+            </if>
+             <if test='level!=null and level=="2"'>
+                join organization o on o.id=#{oid} and o.level=#{level}
+                JOIN organization oo ON oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id 
+             </if>
+               
+         
+           order by cast( u.liveness as decimal(9,2))  desc
+     
+     </select>
+     <!-- 
+     
+      各部门总分排名
+     
+      -->
+      
+      
+      <select id="getOzon" resultType="com.alphasta.model.Organization" parameterType="String">
+        select oo.id, avg(u.liveness) as scores, oo.name   from user u  join organization o on u.organization_id=o.id inner join organization oo on o.code like concat(oo.`code`,'%') and oo.pid='1' and oo.id!=1
+        <if test='_parameter!=null'><!-- 不管你的参数是什么，都要改成"_parameter"  -->
+          and oo.level=#{_parameter}
+        </if> 
+        group by oo.id ORDER BY cast(avg(u.liveness) as decimal(9,2)) desc      
+     </select>  
+     
+     
+     
+     <select id="grldhqlist" resultType="com.alphasta.model.User" parameterType="java.util.Map">
+            SELECT
+				us.id,us.`name`,st.SCORES as liveness,st.ctime
+			FROM
+				statistics st,
+				USER us,
+				organization org,
+				(
+					SELECT
+						max(s.scores+0) AS SCORES,
+						MONTH (s.ctime) AS CTIME
+					FROM
+						USER u
+					JOIN statistics s ON u.id = s.userid
+					<if test='level!=null and level=="1"'>
+					 JOIN organization o ON u.organization_id = o.id  AND o.LEVEL = #{level}
+					</if>
+					 <if test='level!=null and level=="2"'>
+					  JOIN organization o ON  o.id=#{oid}  AND o. LEVEL = #{level}
+					  JOIN organization oo ON oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id 
+					 </if>
+					AND s.type = 2
+					AND YEAR (s.ctime) = YEAR (now())
+					AND u.organization_id != 1
+					GROUP BY
+						MONTH (s.ctime)
+				) AS m
+			WHERE
+				st.USERID = us.id
+			AND org.id = us.organization_id
+			AND org.`level` =#{level}
+			AND st.TYPE = '2'
+			AND YEAR (st.CTIME) = YEAR (NOW())
+			AND st.SCORES=m.SCORES
+			AND m.CTIME=MONTH(st.CTIME)
+			AND us.organization_id!=1
+			GROUP BY st.CTIME
+			ORDER BY m.CTIME DESC
+     </select>
+     <select id="grldhqpm" resultType="com.alphasta.model.User" parameterType="java.util.Map">
+         select u.id,u.name,s.scores as liveness,s.ctime  from user u 
+         join statistics s on u.id=s.userid
+         <if test='level!=null and level=="1"'>
+         join organization o on u.organization_id=o.id and o.level=#{level}        
+         </if>
+         <if test='level!=null and level=="2"'>
+         join organization o on  o.level=#{level}  and o.id=#{oid}
+         JOIN organization oo ON oo. CODE LIKE concat(o.`code`, '%') and u.organization_id=oo.id 
+         </if>
+         and s.type=2
+         and Year(s.ctime)=Year(now()) and u.organization_id !=1
+         and  Month(s.ctime)=#{time}
+         order by  cast(s.scores as decimal(9,2)) desc
+     </select>
+     <select id="dwldhqlist" resultType="com.alphasta.model.Organization" parameterType="java.lang.String">  
+      SELECT
+			keng.id,
+			keng.`name`,
+			keng.scores,
+			keng.ctime
+		FROM
+			(
+				SELECT
+					MAX(w.scores+0) AS scores,
+					MONTH (w.ctime) AS ctime
+				FROM
+					(
+						SELECT
+							oo.id AS id,
+							avg(a.scores) AS scores,
+							oo. NAME AS NAME,
+							a.ctime AS ctime
+						FROM
+							statistics a
+						JOIN USER u ON a.userid = u.id
+						JOIN organization o ON u.organization_id = o.id
+						INNER JOIN organization oo ON o. CODE LIKE concat(oo.`code`, '%')
+						AND oo.pid = '1'
+						AND oo.id != 1
+						AND oo. LEVEL = #{0}
+						AND a.type = 2
+						AND YEAR (a.ctime) = YEAR (now())
+						GROUP BY
+							MONTH (a.ctime),
+							oo.id
+					) w
+				GROUP BY
+					MONTH (w.ctime)
+			) ws,
+			(
+				SELECT
+					oob.id AS id,
+					avg(ab.scores) AS scores,
+					oob. NAME AS NAME,
+					ab.ctime AS ctime
+				FROM
+					statistics ab
+				JOIN USER ub ON ab.userid = ub.id
+				JOIN organization ob ON ub.organization_id = ob.id
+				INNER JOIN organization oob ON ob. CODE LIKE concat(oob.`code`, '%')
+				AND oob.pid = '1'
+				AND oob.id != 1
+				AND oob. LEVEL = #{0}
+				AND ab.type = 2
+				AND YEAR (ab.ctime) = YEAR (now())
+				GROUP BY
+					MONTH (ab.ctime),
+					oob.id
+			) AS keng
+		WHERE
+			MONTH (keng.ctime) = ws.ctime
+		AND keng.scores = ws.scores
+		GROUP BY
+			MONTH (keng.ctime)
+		ORDER BY
+			MONTH (keng.ctime) DESC
+     </select>
+     <select id="dwldhqpm" resultType="com.alphasta.model.Organization" parameterType="java.lang.String">  
+      	SELECT
+			oo.id  AS id,
+			avg(a.scores) AS scores,
+			oo. NAME as name,
+			a.ctime  as ctime
+		FROM
+			statistics a
+		JOIN USER u ON a.userid = u.id
+		JOIN organization o ON u.organization_id = o.id
+		INNER JOIN organization oo ON o. CODE LIKE concat(oo.`code`, '%')
+		AND oo.pid = '1'
+		AND oo.id != 1
+		AND oo.level=#{0}
+		AND a.type = 2
+		AND YEAR (a.ctime) = YEAR (now())
+		AND MONTH (a.ctime) =#{1} 
+		GROUP BY oo.id
+		ORDER BY cast(avg(a.scores) as decimal(9,2)) DESC
+     </select>
+      <select id="findUserByUserNameAndOrganizationName" parameterType="java.util.Map" resultType="com.alphasta.model.User">
+       select  u.id,u.name 
+		,u.organization_id as organizationId from user u,organization o where o.id=u.organization_id and  u.loginname like '%${loginName}%' and o.name 
+		 like '%${organizaName}%'    and u.organization_id!=1 
+     </select>
+     
+     
+     
+    <resultMap  id="cxl" type="java.util.Map">
+    <result property="organName" column="organName" jdbcType="VARCHAR" javaType="string" />
+    <result property="count" column="count" jdbcType="VARCHAR" javaType="string" />
+    </resultMap>
+    <select id="groupUser"  resultMap="cxl">
+    select oo.`name` as organName,count(oo.`name`)as count from(SELECT
+		o.code as code,o.id as oid,o.name as oname,u.loginname as uname
+	FROM
+		`user` u
+	JOIN organization o ON u.organization_id = o.id
+	AND o. CODE NOT LIKE '02%'
+	AND u.liveness != 0
+	AND u.organization_id != '1'
+    ) a join organization oo on a.code like concat(oo.`code`,'%') and oo.pid='1' and oo.id!=1  group by oo.`name` order by a.oid
+    </select>
+     <select id="countUser" resultType="java.lang.Integer">
+     
+     SELECT count(*) FROM `user` u  join organization o on o.id=u.organization_id and o.`code` not like '02%' and u.liveness!=0 and u.organization_id!='1' 
+     
+     </select>
+</mapper>

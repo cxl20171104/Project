@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alphasta.mapper.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.alphasta.model.Question">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="METHOD" jdbcType="INTEGER" property="method" />
+    <result column="TOPIC" jdbcType="VARCHAR" property="topic" />
+    <result column="QUESTIONNAIRE" jdbcType="VARCHAR" property="questionnaire" />
+    <result column="SCORE" jdbcType="VARCHAR" property="score" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="ANSWER" jdbcType="VARCHAR" property="answer" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, METHOD, TOPIC, QUESTIONNAIRE, SCORE, TYPE, ANSWER
+  </sql>
+  <select id="selectByExample" parameterType="com.alphasta.model.QuestionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from question
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from question
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete> 
+  <delete id="deleteByExample" parameterType="com.alphasta.model.QuestionExample">
+    delete from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.alphasta.model.Question">
+    insert into question (ID, METHOD, TOPIC, 
+      QUESTIONNAIRE, SCORE, TYPE, 
+      ANSWER)
+    values (#{id,jdbcType=VARCHAR}, #{method,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR}, 
+      #{questionnaire,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{answer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.alphasta.model.Question">
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="method != null">
+        METHOD,
+      </if>
+      <if test="topic != null">
+        TOPIC,
+      </if>
+      <if test="questionnaire != null">
+        QUESTIONNAIRE,
+      </if>
+      <if test="score != null">
+        SCORE,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="answer != null">
+        ANSWER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        #{method,jdbcType=INTEGER},
+      </if>
+      <if test="topic != null">
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="questionnaire != null">
+        #{questionnaire,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.alphasta.model.QuestionExample" resultType="java.lang.Integer">
+    select count(*) from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update question
+    <set>
+      <if test="record.id != null">
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.method != null">
+        METHOD = #{record.method,jdbcType=INTEGER},
+      </if>
+      <if test="record.topic != null">
+        TOPIC = #{record.topic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.questionnaire != null">
+        QUESTIONNAIRE = #{record.questionnaire,jdbcType=VARCHAR},
+      </if>
+      <if test="record.score != null">
+        SCORE = #{record.score,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        TYPE = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.answer != null">
+        ANSWER = #{record.answer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update question
+    set ID = #{record.id,jdbcType=VARCHAR},
+      METHOD = #{record.method,jdbcType=INTEGER},
+      TOPIC = #{record.topic,jdbcType=VARCHAR},
+      QUESTIONNAIRE = #{record.questionnaire,jdbcType=VARCHAR},
+      SCORE = #{record.score,jdbcType=VARCHAR},
+      TYPE = #{record.type,jdbcType=INTEGER},
+      ANSWER = #{record.answer,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.alphasta.model.Question">
+    update question
+    <set>
+      <if test="method != null">
+        METHOD = #{method,jdbcType=INTEGER},
+      </if>
+      <if test="topic != null">
+        TOPIC = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="questionnaire != null">
+        QUESTIONNAIRE = #{questionnaire,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        SCORE = #{score,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="answer != null">
+        ANSWER = #{answer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+	<!-- 根据所属专题查询 -->
+	<select id="findByQuestionnate" parameterType="java.util.Map" resultMap="BaseResultMap">
+	select
+	<include refid="Base_Column_List"/>
+	from question
+	<where> 
+	questionnaire = #{questionnaire,jdbcType=VARCHAR}
+	<if test="answer != null">
+	and	answer=#{answer,jdbcType=VARCHAR}
+	</if>
+	</where> 
+	</select>
+	  
+
+
+  
+</mapper>

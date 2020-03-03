@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.ScoreOrganMapper">
+
+  <resultMap id="BaseResultMap" type="com.alphasta.model.Score_organization" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="ORGANIZATION_ID" property="organization_id" jdbcType="VARCHAR" />
+    <result column="SCORESOURCE" property="scoresource" jdbcType="VARCHAR" />
+    <result column="DESCR" property="descr" jdbcType="VARCHAR" />
+    <result column="QGPEND" property="qgpend" jdbcType="VARCHAR" />
+    <result column="CTIME" property="ctime" jdbcType="VARCHAR" />
+    <result column="SCOREVALUE" property="scorevalue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="basesql">
+    s.ID,s.DESCR,s.CTIME,s.SCOREVALUE,s.SCORESOURCE,s.ORGANIZATION_ID
+  </sql>
+    <select id="getScoreOrgan" resultMap="BaseResultMap" parameterType="java.util.Map">
+       select
+        <include refid="basesql"/> o.name,h.honorname 
+        from Score_organization s 
+        join organization o on s.ORGANIZATION_ID=o.id 
+        join honor  h  on  s.SCOREVALUE=h.id
+        <if test="organid!=null">
+         and o.id=#{organid}
+        </if>
+    </select>
+   <insert id="insertOne" parameterType="com.alphasta.model.Score_organization" >
+       insert into score_organization
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="organization_id != null" >
+        ORGANIZATION_ID,
+      </if>
+      <if test="scoresource != null" >
+        SCORESOURCE,
+      </if>
+      <if test="qgpend != null" >
+        QGPEND,
+      </if>
+      <if test="ctime != null" >
+        CTIME,
+      </if>
+      <if test="scorevalue != null" >
+        SCOREVALUE,
+      </if>
+      <if test="descr != null" >
+        DESCR,
+      </if>
+      <if test="url !=null">
+        URL,      
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="organization_id != null" >
+        #{organization_id,jdbcType=VARCHAR},
+      </if>
+      <if test="scoresource != null" >
+        #{scoresource,jdbcType=VARCHAR},
+      </if>
+      <if test="qgpend != null" >
+        #{qgpend,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=VARCHAR},
+      </if>
+      <if test="scorevalue != null" >
+        #{scorevalue,jdbcType=VARCHAR},
+      </if>
+      <if test="descr != null" >
+        #{descr,jdbcType=VARCHAR},
+      </if>
+      <if test="url!=null">
+        #{url,jdbcType=VARCHAR},     
+      </if>
+    </trim>
+  </insert>
+</mapper>

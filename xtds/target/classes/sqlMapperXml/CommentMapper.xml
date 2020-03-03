@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.CommentMapper" >
+    <resultMap id="BaseResultMap" type="com.alphasta.model.Comment" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ARTICLEID" property="articleid" jdbcType="VARCHAR" />
+    <result column="CTIME" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="CTYPE" property="ctype" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="CUSER" property="cuser" jdbcType="VARCHAR" />
+    <result column="CUSERPIC" property="cuserpic" jdbcType="VARCHAR" />
+    <result column="HASCOMMENT" property="hascomment" jdbcType="VARCHAR" />
+    <result column="CUSERNAME" property="cusername" jdbcType="VARCHAR" />
+    <result column="ONUSER" property="onuser" jdbcType="VARCHAR" />
+    <result column="ONUSERNAME" property="onusername" jdbcType="VARCHAR" />
+    <result column="REPLYARTID" property="replyartid" jdbcType="VARCHAR" />
+    <result column="SHOWABLE" property="showable" jdbcType="VARCHAR"/>
+  </resultMap>
+  <select id="commentNum" resultType="java.lang.Integer">
+     select count(*)  from comment where ARTICLEID=#{0} and ctype=#{1}
+  </select>
+  <select id="getNums" parameterType="java.lang.Long" resultType="com.alphasta.commons.result.CommentNum">
+    select (select count(*) from comment where ctype='0' and CUSER=#{0} and YEAR(ctime)=YEAR(now())) as seeNum,
+           (select count(*) from comment where ctype='1' and CUSER=#{0} and YEAR(ctime)=YEAR(now())) as greatNum,
+           (select count(*) from comment where ctype='2' and CUSER=#{0} and YEAR(ctime)=YEAR(now())) as commentNum from dual 
+  </select>
+  <select id="searchComForArt" parameterType="com.alphasta.commons.utils.PageInfo"  resultMap="BaseResultMap">
+      select c.ID,c.ARTICLEID,c.CTIME,c.CTYPE,c.CONTENT,c.CUSER,c.HASCOMMENT,c.CUSERNAME,c.ONUSER,c.ONUSERNAME,c.SHOWABLE,
+      c.REPLYARTID,u.HEADPIC AS CUSERPIC   
+      from COMMENT c join user u  on c.CUSER=u.ID                
+       where 1=1
+      <if test="condition.articleId!=null">
+          and (c.ARTICLEID=#{condition.articleId} or c.REPLYARTID=#{condition.articleId})
+      </if>
+       <if test="condition.ctype == 4">
+           and (c.CTYPE=2 or c.CTYPE=3)
+       </if>
+       <if test="condition.ctype != 4">
+            and c.CTYPE=#{condition.ctype}
+       </if>
+       <if test="condition.cusername != null">
+            and c.cusername=#{condition.cusername}
+       </if>
+         order by c.CTIME 
+         
+          <if test="from != null  and size != null ">
+          limit #{from},#{size}
+          </if>
+          
+  </select>
+     <select id="getHasComArt"  parameterType="java.util.Map" resultType="java.lang.String">
+      select ARTICLEID from COMMENT where CUSER=#{userid} 
+      <if test="ctype == 0 and articleID !=null">
+         and CTYPE=#{ctype} and ARTICLEID=#{articleID}
+      </if>
+      <if test="ctype == 0 and articleID ==null">
+         and CTYPE=#{ctype}
+      </if>
+      <if test="ctype == 1 and articleID !=null ">
+         and CTYPE=#{ctype} and ARTICLEID=#{articleID}
+      </if>
+      <if test="ctype == 1 and articleID ==null">
+         and CTYPE=#{ctype}
+      </if>
+      <if test="ctype == 2 or ctype ==3">
+         and (CTYPE= 2 or CTYPE= 3 )  and ( ARTICLEID=#{articleID}  or  REPLYARTID=#{articleID} )
+      </if>         
+   </select>
+  <update id="commentAnther" parameterType="java.lang.String">
+    update comment  set HASCOMMENT="1" where id=#{commentId}
+  </update>
+  <update id="deletComment" parameterType="java.lang.String">
+    update comment  set showable = "0" where id=#{commentId}
+  </update>
+  <insert id="comForArt" parameterType="com.alphasta.model.Comment">
+         insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="articleid != null" >
+        ARTICLEID,
+      </if>
+      <if test="ctime != null" >
+        CTIME,
+      </if>
+      <if test="ctype != null" >
+        CTYPE,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="cuser != null" >
+        CUSER,
+      </if>
+      <if test="hascomment != null" >
+        HASCOMMENT,
+      </if>
+      <if test="cusername!=null">
+          CUSERNAME,
+      </if>
+      <if test="onuser !=null">
+          ONUSER,
+      </if>
+      <if test=" onusername !=null">
+         ONUSERNAME,
+      </if>
+      <if test="replyartid !=null">
+         REPLYARTID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="articleid != null" >
+        #{articleid,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctype != null" >
+        #{ctype,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="cuser != null" >
+        #{cuser,jdbcType=VARCHAR},
+      </if>
+      <if test="hascomment != null" >
+        #{hascomment,jdbcType=VARCHAR},
+      </if>
+      <if test="cusername !=null" >
+        #{cusername,jdbcType=VARCHAR},
+      </if>
+      <if test="onuser !=null" >
+        #{onuser,jdbcType=VARCHAR},
+      </if>
+      <if test="onusername !=null" >
+        #{onusername,jdbcType=VARCHAR},
+      </if>
+      <if test="replyartid !=null" >
+        #{replyartid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+   <select id="findByCondition"  parameterType="com.alphasta.model.Comment" resultType="com.alphasta.model.Comment">
+   	select * from comment where 1=1 
+   	<if test="id !=null">
+   		and id= #{id,jdbcType=VARCHAR}
+   	</if>
+   	<if test="articleid !=null">
+   		and articleid= #{articleid,jdbcType=VARCHAR}
+   	</if>
+   	<if test="ctype !=null">
+   		and ctype= #{ctype,jdbcType=INTEGER}
+   	</if>
+   	<if test="replyartid !=null">
+   		and replyartid= #{replyartid,jdbcType=INTEGER}
+   	</if>
+   </select>
+   <!-- 修改评论 -->
+   <update id="editCom"  parameterType="com.alphasta.model.Comment">
+   update comment set content=#{content} where id=#{id};
+   </update>
+</mapper>

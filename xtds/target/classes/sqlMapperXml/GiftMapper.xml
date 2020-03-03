@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alphasta.mapper.GiftMapper">
+ <resultMap id="BaseResultMap" type="com.alphasta.model.Gift">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="startTime" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="endTime" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="DETAIL" jdbcType="VARCHAR" property="detail" />
+  </resultMap>
+  
+  
+   <insert id="addGift" parameterType="com.alphasta.model.Gift">
+        insert into gift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="id != null">id,</if>
+           <if test="name != null">name,</if>
+           <if test="pic != null">pic,</if>
+           <if test="startTime != null">startTime,</if>
+           <if test="endTime != null">endTime,</if>
+           <if test="score != null">score,</if>
+           <if test="detail != null">detail,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+           <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+           <if test="pic != null">#{pic,jdbcType=VARCHAR},</if>
+           <if test="startTime != null">#{startTime,jdbcType=TIMESTAMP},</if>
+           <if test="endTime != null">#{endTime,jdbcType=TIMESTAMP},</if>
+           <if test="score != null">#{score,jdbcType=INTEGER},</if>
+           <if test="detail != null">#{detail,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+  
+    
+    
+     <delete id="deleteGift" parameterType="java.lang.String">
+	    delete from gift
+	    where id = #{_parameter} 
+  	</delete>
+  	
+  	
+  	
+  	
+  	<update id="updateGift" parameterType="com.alphasta.model.Gift" >  
+    update gift
+    <set >  
+      <if test="name != null" >  
+        name = #{name,jdbcType=VARCHAR},  
+      </if>  
+      <if test="pic != null" >  
+        pic = #{pic,jdbcType=VARCHAR},  
+      </if>  
+      <if test="startTime != null" >  
+        startTime = #{startTime,jdbcType=TIMESTAMP},  
+      </if>  
+      <if test="endTime != null" >  
+        endTime = #{endTime,jdbcType=TIMESTAMP},  
+      </if>  
+      <if test="score!= null" >  
+        score = #{score,jdbcType=INTEGER},  
+      </if>  
+      <if test="detail!= null" >  
+        detail = #{detail,jdbcType=VARCHAR},  
+      </if>  
+       
+    </set>  
+    where id = #{id,jdbcType=VARCHAR}  
+  </update>
+  
+  
+  
+  
+  <select id="findGiftPageCondition" resultMap="BaseResultMap" parameterType="PageInfo">
+        SELECT
+        ID,NAME,PIC,STARTTIME,ENDTIME,SCORE,DETAIL
+        FROM
+        gift     
+        <where>
+            <if test=" condition.name != null and condition.name != '' ">
+                name LIKE '%${condition.name}%'
+            </if>
+            <if test="condition.startTime != null">
+                <![CDATA[
+            and startTime >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+            and endTime <= #{condition.endTime}
+            ]]>
+            </if>
+           
+        </where>
+        order by ${sort} ${order}
+        LIMIT #{from}, #{size}
+    </select>  
+    
+     <select id="findGiftPageCount" resultType="java.lang.Integer" parameterType="PageInfo">
+        select count(*) count
+        from gift 
+        <where>
+            <if test=" condition.name != null and condition.name != '' ">
+                name = #{condition.name}
+            </if>
+            <if test="condition.startTime != null">
+           <![CDATA[
+            and startTime >= #{condition.startTime}
+           ]]>
+            </if>
+            <if test="condition.endTime != null">
+                <![CDATA[
+            and endTime <= #{condition.endTime}
+            ]]>
+            </if>
+        </where>
+    </select>
+    
+    <select id="findGiftByid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        ID,NAME,PIC,STARTTIME,ENDTIME,SCORE,DETAIL FROM GIFT
+        WHERE ID = #{id}
+    </select>
+</mapper>
